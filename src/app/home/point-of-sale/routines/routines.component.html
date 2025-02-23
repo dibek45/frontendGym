@@ -1,0 +1,65 @@
+<div class="routines-container" style="position: absolute; left: 400px;">
+  <!-- Exercise Types Section -->
+  <div class="exercise-types card">
+    <h2>Exercise Types</h2>
+    <div class="muscle-groups">
+      <div
+        class="chip"
+        *ngFor="let type of (exerciseTypes$ | async)"
+        [class.selected]="selectedType?.id === type.id"
+        (click)="selectType(type)"
+      >
+        {{ type.name }}
+      </div>
+    </div>
+
+    <!-- Error Message for Exercise Types -->
+    <div *ngIf="(exerciseTypeError$ | async) as error" class="error">
+      <p>Error loading exercise types: {{ error }}</p>
+    </div>
+  </div>
+
+  <!-- Routines Section -->
+  <div class="card routines" *ngIf="selectedType">
+    <h3>Routines for {{ selectedType.name }}</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Link</th>
+          <th>path</th>
+
+
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let routine of (routines$ | async)">
+          <td>{{ routine.name }}</td>
+          <td>{{ routine.description }}</td>
+          <td>{{ routine.link }}</td>
+          <td>{{ routine.path }}</td>
+
+
+          <td>
+            <button class="icon-button edit" (click)="editExercise(routine)">
+              ✏️ Edit
+            </button>
+            <button class="icon-button delete" (click)="deleteExercise(routine)">
+              ❌ Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Error Message for Routines -->
+    <div *ngIf="(routineError$ | async) as error" class="error">
+      <p>Error loading routines: {{ error }}</p>
+    </div>
+
+    <!-- Add Routine Button -->
+    <button class="btn primary" (click)="addExercise()">Add Routine</button>
+  </div>
+</div>

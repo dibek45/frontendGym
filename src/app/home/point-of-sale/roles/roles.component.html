@@ -1,0 +1,38 @@
+<div class="container" style="margin-left: 400px;">
+  <h2>Roles Management</h2>
+
+
+  <table mat-table [dataSource]="roles$" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let role">{{ role.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let role">{{ role.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="permissions">
+      <th mat-header-cell *matHeaderCellDef>Permissions</th>
+      <td mat-cell *matCellDef="let role">
+        <ul>
+          <li *ngFor="let perm of role.permissions">{{ perm.name }}</li>
+        </ul>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let role">
+        <button mat-button color="primary" (click)="openRoleDialog(role)">Edit</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id', 'name', 'permissions', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'permissions', 'actions'];"></tr>
+  </table>
+
+  <!-- 📌 Aquí se insertará la vista de permisos dentro de RolesComponent -->
+  <app-permissions></app-permissions>
+</div>

@@ -1,0 +1,180 @@
+/* Estilos de la tarjeta */
+.container {
+  width: 15em;
+  margin: 1em; /* Margen entre las tarjetas */
+  background-color: #ffffff;
+  border-radius: 1em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Open Sans Condensed', sans-serif;
+  position: relative;
+  overflow: hidden;
+  display: inline-block; /* Asegura que cada tarjeta sea independiente */
+  vertical-align: top;
+}
+
+/* Encabezado */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1em;
+  padding-top: .5em}
+
+.title {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+  position:absolute;
+  margin-left: 60px;
+  top: 10px;
+}
+
+.edit-icon {
+  background-color: #ffffff;
+  padding: 0.5em;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-icon i {
+  font-size: 1.2em;
+  color: #007BFF;
+}
+
+
+
+/* Imagen del usuario */
+.user-image {
+  padding: 2em 0;
+}
+
+.user-image img {
+
+  object-fit: cover;
+  height: 80px;
+  border-radius: 50%;
+  width: 90%;
+
+}
+
+/* Contenido */
+.content {
+  color: #565656;
+  padding: 1.5em;
+}
+
+.name {
+  font-size: 1em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+.username {
+  font-size: 0.7em;
+  color: #9e9e9e;
+  margin-bottom: 0.5em;
+}
+
+.details {
+  font-size: -0.1em;
+  color: #8c8c8c;
+}
+
+/* Botones */
+.actions {
+  margin-top: 1em;
+}
+
+button {
+  margin: 0.5em 0;
+  font-size: 0.9em;
+  padding: 0.5em 1em;
+  background-color: #f3f3f3;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+button mat-icon {
+  font-size: 1.2em;
+  margin-right: 0.5em;
+}
+
+button:hover {
+  background-color: #007BFF;
+  color: #ffffff;
+}
+
+
+.user-image img {
+  object-fit: cover;
+  border: 3px solid #000; /* Contorno negro */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contorno */
+}
+
+.content {
+  padding: 0.5em;
+  text-align: left; /* Alinear el contenido a la izquierda */
+}
+
+.name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: -0.5em;
+  margin-top: -60px;
+}
+
+.username{
+  margin-top: 10px;
+
+}
+.username, .details {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 0.3em;
+
+}
+
+.effect.effect-4 {
+  text-decoration: none;
+  color: #007BFF;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.effect.effect-4:hover {
+  color: #0056b3;
+}
+.custom-menu {
+  min-width: 150px !important;
+  max-width: 200px;
+  
+  button {
+    font-size: 16px !important;
+    padding: 10px 15px !important;
+  }
+}
+
+.mat-menu-panel {
+  border-radius: 8px !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+::ng-deep .mat-menu-panel {
+  background: white !important; /* Set background to white */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important; /* Light shadow for a clean look */
+  border-radius: 8px !important;
+}
+
+::ng-deep .mat-menu-item {
+  background: transparent !important; /* Remove any background color */
+  font-size: 16px;
+}
+
+::ng-deep .mat-menu-item:hover {
+  background: rgba(0, 0, 0, 0.05) !important; /* Light hover effect */
+}

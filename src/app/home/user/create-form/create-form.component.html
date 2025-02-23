@@ -1,0 +1,84 @@
+
+
+<div style="background-color: white;">
+  <div style="position: absolute;left: 400px;  z-index: 100;" >
+    <div *ngIf="llenarDatos">
+    <!-- Si llenarDatos es true, muestra el toolbar y el formulario -->
+    <mat-toolbar  style="background-color: white;">
+      <span style="background-color: white;">{{ form.controls['$key'].value ? "Create User" : "New User" }}</span>
+      <span class="fill-remaining-space"></span>
+      <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabindex="-1">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Otro componente (app-photo) si llenarDatos es true -->
+    <app-photo  (newItemEvent)="addItem($event)" (imgEmmit)="getImg($event)"></app-photo>
+
+    <!-- Formulario si llenarDatos es true -->
+    <form [formGroup]="form" class="normal-form" (submit)="onSubmit()" *ngIf="takePhoto" style="background-color: white;">
+      <div class="row-container single-column">
+        <div class="column">
+          <div class="controles-container">
+            <input type="hidden" formControlName="$key">
+            <mat-form-field>
+              <input formControlName="fullName" matInput placeholder="Full Name*">
+              <mat-error *ngIf="form.controls['fullName'].invalid && form.controls['fullName'].touched">This field is mandatory.</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input formControlName="email" matInput placeholder="Email">
+              <mat-error *ngIf="form.controls['email'].invalid && form.controls['email'].touched">Invalid email address.</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input formControlName="mobile" matInput placeholder="Mobile*">
+              <mat-error *ngIf="form.controls['mobile'].invalid && form.controls['mobile'].touched">This field is mandatory.</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="controles-container">
+            <div class="add-bottom-padding">
+              <mat-radio-group formControlName="gender">
+                <mat-radio-button value="1">Male</mat-radio-button>
+                <mat-radio-button value="2">Female</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-form-field>
+              <mat-select formControlName="department" placeholder="Membership type">
+                <mat-option value="basic">Basic</mat-option>
+                <mat-option value="premium">Premium</mat-option>
+                <mat-option value="vip">VIP</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input formControlName="birthDate" matInput [matDatepicker]="picker" placeholder="Date of birth">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+            
+
+            <div class="button-row">
+              <button mat-raised-button color="primary" class="btn-complete" type="submit" [disabled]="form.invalid">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div>
+    <h2>Ingresa tu huella 4 veces </h2>
+    <div style="display: flex;" *ngIf="!llenarDatos">
+      <button (click)="mas()">{{counter}}</button>
+      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 1 ? 1 : 0" [scanning]="counter == 0 ? 1 : 0"></app-register-huella>
+      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 2 ? 1 : 0" [scanning]="counter == 1 ? 1 : 0"></app-register-huella>
+      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 3 ? 1 : 0" [scanning]="counter == 2 ? 1 : 0"></app-register-huella>
+      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 4 ? 1 : 0" [scanning]="counter == 3 ? 1 : 0"></app-register-huella>
+      
+    </div>1
+  </div>
+  
+  </div>
+</div>

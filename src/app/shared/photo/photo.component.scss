@@ -1,0 +1,148 @@
+.add-photo-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+  margin: 20px;
+  cursor: pointer;
+  
+    mat-icon {
+      font-size: 150px;
+      color: #555555;
+      height: 150px;
+      width: 150px;
+    }
+  }
+
+  containerFOto{
+    margin: 20px;
+  }
+  
+  .profile-pic {
+    width: 200px;
+    max-height: 200px;
+    display: inline-block;
+}
+
+.file-upload {
+    display: none;
+}
+.circle {
+    border-radius: 100% !important;
+    overflow: hidden;
+    width: 128px;
+    height: 128px;
+    border: 2px solid #757575;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+.p-image {
+  position: absolute;
+  top: 167px;
+  right: 30px;
+  color: #666666;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.p-image:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.upload-button {
+  font-size: 1.2em;
+}
+
+.upload-button:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  color: #999;
+}
+
+.p-image {
+  position: relative;
+  margin-top: -250px;
+  background: white;
+  /* top: 167px; */
+  right: 30px;
+  color: #808080;
+  border-radius: 20px;
+  transition: all 0.3s
+}
+
+
+.photo-button {
+  width: 40px;
+  height: 40px;
+  
+}
+.circle-shoot {
+  top: 12%;
+  left: 12%;
+  bottom: 12%;
+  right: 12%;
+  border-radius: 100%;
+  background-color: #ffffff;
+  opacity: 0;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  z-index: 1;
+
+}
+.ring {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 90%;
+  left: 45%;
+  bottom: 0;
+  right: 0;
+  
+  border-radius: 100%;
+  border: 0.5em solid red;
+  opacity: 0.8;
+  z-index: 1;
+
+}
+.photo-button .circle-shoot, .photo-button .ring {
+  transition: all 0.25s;
+}
+.photo-button:hover .circle-shoot {
+  opacity: 1;
+}
+.photo-button:active .ring {
+  opacity: 1;
+}
+.photo-button:active .circle-shoot {
+  opacity: 0.5;
+}
+
+.menosuno{
+  z-index: -1;
+}
+.uno{
+  z-index: 1;
+}
+
+.iconRefresh{
+  font-size: 80px;
+    height: 80px;
+    width: 80px;
+    position: absolute;
+    z-index: 1;
+    left: 10%;
+    top: 88%
+}
+
+.iconCHeck{
+  font-size: 80px;
+  height: 80px;
+  width: 80px;
+  position: absolute;
+  z-index: 1;
+  left: 80%;
+  top: 88%
+}
+
+.profile{
+  max-width: 170px;
+}

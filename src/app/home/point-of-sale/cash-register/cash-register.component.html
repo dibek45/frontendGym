@@ -1,0 +1,66 @@
+<br>
+<br>
+<app-subarea-titulo [texto]="'Cajas abiertas'"></app-subarea-titulo>
+<app-add-button style="position: absolute;    left: 400px;
+    top: 330px;" (click)="openModal()"></app-add-button>
+
+    <div *ngIf="cashRegisters$ | async as cashRegisters">
+      <div *ngFor="let cashRegister of cashRegisters">
+        <app-card-cash-register-item [cashRegister]="cashRegister"></app-card-cash-register-item>
+      </div>
+    </div>  <br>
+  <br>
+  <app-subarea-titulo [texto]="'Historial'"></app-subarea-titulo>
+
+  <div *ngIf="showDetails"  class="details-modal">
+    <div class="modal-header">
+      <h3>Detalles de Caja #1</h3>
+      <button class="close-button" (click)="closeDetails()">X</button>
+    </div>
+    <div class="modal-body">
+      <h4>Información General</h4>
+      <p><strong>Cajero:</strong> Maria López</p>
+      <p><strong>Estado:</strong> Abierta</p>
+      <p><strong>Fecha de Apertura:</strong> 23/11/2024</p>
+  
+      <h4>Resumen Financiero</h4>
+      <p><strong>Total Ingresos:</strong> $5,000.00</p>
+      <p><strong>Total Egresos:</strong> $1,800.00</p>
+      <p><strong>Saldo Neto:</strong> $3,200.00</p>
+  
+      <h4>Transacciones</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>23/11/2024</td>
+            <td>Venta de producto</td>
+            <td>$200.00</td>
+          </tr>
+          <tr>
+            <td>23/11/2024</td>
+            <td>Devolución</td>
+            <td>-$50.00</td>
+          </tr>
+          <tr>
+            <td>23/11/2024</td>
+            <td>Gasto operativo</td>
+            <td>$30.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="modal-backdrop" *ngIf="isModalOpen"></div> <!-- Superposición oscura -->
+
+  <div class="modal-container" *ngIf="isModalOpen">
+    <app-add-cash-register [cashiers$]="cashers$" (closeModal)="handleModalClose($event)"></app-add-cash-register>
+  </div>

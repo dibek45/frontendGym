@@ -1,0 +1,39 @@
+<div class="chips-container">
+  <div *ngFor="let method of selectedAuthMethods" class="chip">
+    
+    <!-- Si el método es fingerprint, se ejecuta fingerprintClick al hacer clic en el icono 
+    <mat-icon *ngIf="method.icon" (click)="method.name === 'Fingerprint' ? compareFingerprints() : null">
+      {{ method.icon }}
+    </mat-icon>
+    
+    {{ method.name }}
+    -->
+    <!-- Si el método es fingerprint, ejecutar fingerprintClick 
+    <button mat-icon-button *ngIf="method.name === 'Fingerprint'; else defaultAction" (click)="compareFingerprints()">
+      <mat-icon>fingerprint</mat-icon>
+    </button>
+-->
+    <!-- Acción por defecto si no es fingerprint -->
+    <ng-template #defaultAction>
+      <button mat-icon-button (click)="remove(method)">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </ng-template>
+  </div>
+</div>
+
+<form *ngIf="availableAuthMethods.length > 0">
+  <mat-form-field class="example-chip-list">
+    <mat-label>Authentication Methods</mat-label>    
+    
+    <mat-form-field>
+      <mat-label>Add</mat-label>
+      <mat-select (selectionChange)="add($event.value)">
+        <mat-option *ngFor="let method of availableAuthMethods" [value]="method">
+          <mat-icon *ngIf="method.icon">{{ method.icon }}</mat-icon>
+          {{ method.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-form-field>
+</form>

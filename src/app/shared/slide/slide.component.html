@@ -1,0 +1,40 @@
+<div class="slider-menu">
+  <!-- Perfil -->
+  <div class="profile-section">
+    <img src="https://via.placeholder.com/50" alt="David Velázquez" />
+    <span>David Velázquez</span>
+  </div>
+
+  <!-- Menú de navegación -->
+  <div class="nav-container">
+    <!-- Usuarios -->
+    <div class="nav-item" (click)="user()">
+      <i class="fas fa-users"></i>
+      <span>Usuarios</span>
+    </div>
+
+    <!-- Productos -->
+    <div class="nav-item" (click)="product()">
+      <i class="fas fa-store"></i>
+      <span>Productos</span>
+    </div>
+
+    <!-- Carrito -->
+    <div class="nav-item" (click)="cart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Carrito</span>
+    </div>
+
+    <!-- Punto de Venta -->
+    <div class="nav-item" (click)="pointOfSale()">
+      <i class="fas fa-cash-register"></i>
+      <span >Administracion</span>
+    </div>
+
+    <!-- Salir -->
+    <div class="nav-item exit" (click)="exit()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Salir</span>
+    </div>
+  </div>
+</div>

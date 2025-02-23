@@ -1,0 +1,21 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    width: 500px; 
+    margin-left: 450px;
+    margin-bottom: -80px;
+    border-radius: 20px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .container {
+    background-image: url('../../assets/chat.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  

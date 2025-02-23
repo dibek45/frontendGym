@@ -1,0 +1,48 @@
+
+
+<div class="cash-register-card">
+    <div class="card-header">
+      <h2>Caja #{{ cashRegister.id }}</h2>
+      <p class="cashier">Cajero: {{ cashRegister.cashier.name}}</p>
+      <p class="total">$ {{ cashRegister.currentBalance }}</p>
+    </div>
+    <div class="card-details">
+      <div class="detail">
+        <span>Caja:</span> <span>#{{ cashRegister.id }}</span>
+      </div>
+      <div class="detail">
+        <span>Fecha:</span>
+        <span>{{ cashRegister.openingTime }}</span>
+      </div>
+      <div class="detail">
+        <span>Fondo:</span>
+        <span>$ {{ cashRegister.openingBalance  }}</span>
+      </div>
+      <div class="detail">
+        <span>Saldo Actual:</span>
+        <span>$ {{ cashRegister.currentBalance }}</span>
+      </div>
+      <div class="detail">
+        <span>Estado:</span> <span>{{ cashRegister.status }}</span>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="action-button open">
+        <i class="material-icons">lock_open</i>
+        Abrir Caja
+      </button>
+      <button class="action-button close">
+        <i class="material-icons">lock</i>
+        Cerrar Caja
+      </button>
+      <button class="action-button details">
+        <i class="material-icons">info</i>
+        Detalles
+      </button>
+    </div>
+  </div>
+  
+
+
+
+ 

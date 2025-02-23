@@ -1,0 +1,57 @@
+
+<div class="right-section">
+
+    <div class="main-container">
+
+      <div class="summary-section">
+        <div class="header-bar">
+          <div class="header-left">
+            <span>Cajero:</span>
+          </div>
+          <div class="header-right">
+            <span>David Velaz</span>
+          </div>
+        </div>
+    
+        <div class="content-box">
+          <p class="subtitle"><strong>SubTotal:</strong> ${{totalImput-(totalImput*.16)}}</p>
+          <p class="subtitle"><strong style="margin-left: 45px;">    Iva:</strong> ${{+(totalImput * 0.16).toFixed(2)}}</p>
+
+          <h1 class="total">$
+            {{totalImput}}
+          </h1>
+        </div>
+      </div>
+    
+      <app-card-cash></app-card-cash>
+      
+
+
+
+
+      <div class="summary-section" style="margin-top:15px;">
+        <div class="header-bar" style="background-color: white;color: black;">
+       
+          <div class="header-right " >
+            <span>{{name}}</span>
+          </div>
+        </div>
+    
+        <div class="content-box" style="background-color: white;    height: 41px;
+">
+          <p ><strong>Precio:</strong> ${{price}}</p>
+          <p ><strong style="margin-left: 30px;">Iva:</strong> ${{  +(price * 0.16).toFixed(2)      }}</p>
+
+        </div>
+      </div>
+
+
+     <div style="margin-top: -20px;">  
+      <button mat-flat-button style="margin-left: -15px;    background: #00a693;" (click)="finish() ">Finalizar</button>
+      <button mat-flat-button  style="width: 50px;" (click)="clearCart()">Cancelar</button>
+     </div>
+    </div>
+    
+   
+    
+</div>

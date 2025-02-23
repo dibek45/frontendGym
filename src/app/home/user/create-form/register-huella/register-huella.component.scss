@@ -1,0 +1,75 @@
+.scan .fingerprint {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: url(../../../../../shared/fingerprintgray.png); /* Huella gris */
+    background-size: 100px;
+    overflow: hidden; /* Asegura que la línea no se salga */
+}
+
+.scan .fingerprint.animate::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(../../../../../shared/fingerprintsuccess.png); /* Huella de éxito */
+    background-size: 100px;
+    opacity: 0;
+    animation: animate .5s ease-in-out forwards;
+}
+
+@keyframes animate {
+    0% { height: 0; opacity: 0; }
+    100% { height: 100%; opacity: 1; }
+}
+
+.scan .blue-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: #3fefef;
+    filter: drop-shadow(0 0 2px #13a1fa) drop-shadow(0 0 2px #4b9cde);
+    top: 0; /* Inicia en la parte superior */
+    opacity: 0; /* Se oculta por defecto */
+    transition: opacity 0.3s ease; /* Añade una transición suave */
+}
+
+.scan .blue-line.animate {
+    opacity: 1; /* Muestra la línea azul cuando está animando */
+    animation: animate_scan 1.5s linear infinite; /* Llamamos a la nueva animación */
+}
+
+@keyframes animate_scan {
+    0% {
+        top: 0; /* Comienza en la parte superior */
+    }
+    50% {
+        top: 100%; /* Baja a la parte inferior */
+    }
+    100% {
+        top: 0; /* Regresa a la parte superior */
+    }
+}
+
+/* Clase para ocultar la línea azul */
+.hidden {
+    opacity: 0; /* Mantiene oculta la línea azul */
+}
+
+.scan {
+    position: relative; /* Necesario para posicionar el texto relativo a la huella */
+  }
+  
+  .label {
+    position: absolute; /* Posiciona el texto de forma absoluta */
+    top: 10px; /* Ajusta según sea necesario */
+    left: 50%; /* Centra el texto horizontalmente */
+    transform: translateX(-50%); /* Ajusta para que esté centrado */
+    color: white; /* Cambia el color del texto según sea necesario */
+    font-weight: bold; /* Opcional: hace que el texto sea más destacado */
+    text-align: center; /* Centra el texto */
+  }
+  

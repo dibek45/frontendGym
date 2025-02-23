@@ -1,0 +1,16 @@
+<div class="product-card" (click)="addToCart(element)">
+  <!-- Contenedor de contenido -->
+  <h3 style="font-weight: 600;margin-top: 10px;">{{element.name }}</h3>
+
+  <div class="product-card-content">
+    <img src="{{ element.img }}" alt="{{ element.name }}">
+    <div class="product-info">
+      <p style="font-size: 25px;font-weight: 550;">${{element.price}}</p>
+      <p style="  font-size: 0.6rem;">Stock:</p>
+      <span style="margin-top: -10px;font-weight: 500;">
+             {{element.stock}}
+            </span>
+    </div>
+  </div>
+</div>
+

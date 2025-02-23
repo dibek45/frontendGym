@@ -1,0 +1,39 @@
+/* Contenedor de tarjetas */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    padding: 16px;
+  }
+  
+  /* Tarjeta individual */
+  .cashier-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    width: 250px;
+    text-align: center;
+  }
+  
+  /* Estilo para el título */
+  .cashier-card h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 20px;
+  }
+  
+  /* Estilo para los detalles */
+  .cashier-card p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Resaltar etiquetas */
+  .cashier-card p strong {
+    color: #000;
+  }
+  

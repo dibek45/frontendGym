@@ -1,0 +1,242 @@
+/* Main container for two sections */
+.main-container {
+    display: flex;
+    gap: 20px;
+    height: 300px;
+    max-width: 900px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Left section (table layout) */
+  .left-section {
+    flex: 2;
+    min-width: 600px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+ /* Table Container Styling */
+.table-container {
+    padding: 10px; /* Reduce padding around the table */
+
+  }
+  
+  /* Table Styling */
+  table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure borders are collapsed */
+  }
+  
+  /* Row Styling */
+  tr {
+    grid-template-columns: 2fr 1fr 1fr; /* Maintain column proportions */
+    align-items: center;
+    padding: 5px 0; /* Reduce row padding */
+  }
+  
+  tr:last-child {
+    border-bottom: none; /* Remove last row border */
+  }
+  
+  /* Center-align all table cells */
+td {
+    padding: 6px 5px; /* Adjust padding for compact spacing */
+    font-size: 14px; /* Font size for better readability */
+    line-height: 1.4; /* Adjust line height */
+    text-align: center; /* Horizontally center-align */
+    vertical-align: middle; /* Vertically center-align */
+  }
+  
+  thead th {
+    text-align: center; /* Center-align headers */
+    vertical-align: middle;
+  }
+  
+  
+  td:first-child {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Reduce space between icon and text */
+  }
+  
+  /* Icon Styling */
+  .icon {
+    width: 20px; /* Slightly smaller icons */
+    height: 20px;
+  }
+  
+  /* Header Container Styling */
+  .header-container {
+    display: flex;
+    align-items: center;
+    background-color: #00A693;
+    padding: 8px 12px; /* Reduce header padding */
+    color: white;
+    border-radius: 8px 8px 0 0; /* Rounded corners for the header */
+  }
+  
+  /* Header Title */
+  .header-title {
+    font-weight: bold;
+    font-size: 1.3em; /* Adjust font size */
+  }
+  
+  .numeros{
+    position: relative;
+    top: 30px;
+  }/* Table Container */
+.table-container {
+    width: 100%;
+    margin: auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Table Styling */
+  table {
+    width: 100%;
+    border-collapse: collapse; /* Remove gaps between borders */
+    font-family: Arial, sans-serif;
+  }
+  
+  thead th {
+    background-color: white; /* Header background */
+    color: black; /* Header text color */
+    font-weight: bold;
+    padding: 10px;
+    text-align: center; /* Center-align header */
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid #E0E0E0; /* Row separator */
+  }
+  
+  tbody td {
+    padding: 10px; /* Add space inside cells */
+    text-align: center; /* Center-align content */
+  }
+  
+  tbody td.numeros {
+    text-align: center; /* Center-align numbers */
+    vertical-align: middle; /* Align numbers vertically */
+  }
+  
+ 
+    
+  /* Numeric Keypad Styling */
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    margin-top: 20px;
+  }
+  
+  .img {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  .key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e0e0e0;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .key:hover {
+    background: #d6d6d6;
+  }
+  
+  .key.zero {
+    grid-column: span 2; /* Make '0' button wider */
+    text-align: center;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal.show {
+    display: block;
+    z-index: 1000; /* 🔥 Asegura que esté por encima de otros elementos */
+
+  }
+  
+  .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  button {
+    margin: 10px;
+  }
+  .custom-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .custom-select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .quantity-btn {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .quantity-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .quantity-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  

@@ -1,0 +1,42 @@
+
+<br>
+<h2 mat-dialog-title>
+Editar {{role.name}}
+</h2>
+
+<div mat-dialog-content class="permissions-container">
+  <!-- Assigned Permissions (Left Side) -->
+  <div class="assigned-permissions">
+    <h3>Assigned Permissions</h3>
+    <mat-chip-listbox aria-label="Assigned Permissions">
+      <mat-chip-option *ngFor="let permission of assignedPermissions" class="assigned-chip">
+        {{ permission.name }}
+        <button mat-icon-button matChipRemove (click)="moveToAvailable(permission)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-chip-option>
+    </mat-chip-listbox>
+  </div>
+
+  <!-- Controls (Centered Buttons) -->
+  <div class="permissions-controls">
+    <button mat-button class="assign-button" (click)="moveAllToAssigned()">Assign All ➡</button>
+    <button mat-button class="remove-button" (click)="moveAllToAvailable()">⬅ Remove All</button>
+  </div>
+
+  <!-- Available Permissions (Right Side) -->
+  <div class="available-permissions">
+    <h3>Available Permissions</h3>
+    <mat-chip-listbox aria-label="Available Permissions">
+      <mat-chip-option *ngFor="let permission of availablePermissions" class="available-chip"
+        (click)="moveToAssigned(permission)">
+        {{ permission.name }}
+      </mat-chip-option>
+    </mat-chip-listbox>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</div>

@@ -1,0 +1,44 @@
+.drag-over-container {
+    border: 2px dashed #6c757d; /* Bordes punteados */
+    border-radius: 10px; /* Bordes redondeados */
+    background-color: #f8f9fa; /* Fondo claro */
+    padding: 30px;
+    text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 50%;
+    margin-left: 140px;
+  }
+  
+  .drag-over-container.dragging {
+    background-color: #e8f0fe; /* Fondo azul claro al arrastrar */
+    border-color: #007bff; /* Color de borde azul al arrastrar */
+  }
+  
+  .drag-over-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mat-icon {
+    font-size: 48px; /* Tamaño del ícono */
+    color: #6c757d; /* Color por defecto */
+  }
+  
+  .drag-text {
+    font-size: 16px;
+    color: #6c757d; /* Color de texto */
+    margin-top: 10px;
+  }
+  
+  .drag-text-active {
+    font-size: 16px;
+    color: #007bff; /* Color de texto activo */
+    font-weight: bold; /* Negrita para destacar */
+  }
+  

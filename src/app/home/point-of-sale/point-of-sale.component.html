@@ -1,0 +1,17 @@
+{{menuService.menuselected$ | async}}
+
+<div *ngIf="(menuService.menuselected$ | async) === 'Menu'">
+  <app-horizontal-menu
+    [buttons]="menuButtons"
+    (buttonClick)="handleButtonClick($event)"
+  ></app-horizontal-menu>
+</div>
+
+<div class="back-button-container" *ngIf="(menuService.menuselected$ | async) !== 'Menu'">
+  <button mat-button color="primary" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    Regresar
+  </button>
+</div>
+
+<router-outlet></router-outlet>

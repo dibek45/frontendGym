@@ -1,0 +1,23 @@
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Espacio entre los chips */
+  }
+  
+  .chip {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    background-color: #f1f1f1;
+  }
+  
+  .chip mat-icon {
+    margin-right: 4px;
+  }
+  
+  .chip button {
+    margin-left: 8px;
+  }
+  

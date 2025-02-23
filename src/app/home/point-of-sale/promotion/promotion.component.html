@@ -1,0 +1,18 @@
+<div class="promotion-container" style="margin-left: 400px;">
+    <div class="promotion-header">
+      <h2>Promotion Types</h2>
+      <div class="type-buttons">
+        <button
+          *ngFor="let type of promotionTypes$ | async"
+          (click)="selectType(type)"
+          [class.active]="type.id === selectedType?.id"
+          title="{{ type.description }}"
+        >
+          {{ type.name }}
+        </button> <!-- Make sure this tag is properly closed -->
+      </div>
+    </div>
+  
+    <!-- Pass the selected type to PromotionDetailsComponent -->
+  </div>
+  <app-promotion-details *ngIf="selectedType" [type]="selectedType"></app-promotion-details>

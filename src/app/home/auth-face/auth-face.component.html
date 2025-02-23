@@ -1,0 +1,28 @@
+
+<button (click)="conectar()" [ngClass]="{
+    'blu': isConnected,
+    'no-transition': !isConnected
+  }"> 
+    <i class="fab fa-bluetooth-b"></i>
+  </button>
+  <app-type-authentication></app-type-authentication>
+  <div class="splash-container" *ngIf="showSplash">
+    <div class="scan" *ngIf="showContent">
+
+      <div class="face">
+      </div>
+      <h3>
+          Escaneando rostro
+      </h3>
+        
+  </div>
+  </div>
+  <div class="overlay" *ngIf="showSplash"></div>
+
+<div class="scan" [ngClass]="{'hidden': showSplash}" >
+       <h1 *ngIf="noConocido=='no reconocido'" style="color: red;">Acceso denegado</h1>
+       <app-image-result-check *ngIf="noConocido=='conocido'"></app-image-result-check> 
+       <app-image-capture-ia (faceDetected)="base64received($event)"></app-image-capture-ia>
+</div>
+
+

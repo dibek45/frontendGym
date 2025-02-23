@@ -1,0 +1,25 @@
+.row-container {
+    display: flex;
+    flex-direction: row;
+    //gap: 16px;
+  
+    &.single-column {
+      flex-direction: column;
+    }
+  
+    .column {
+      flex: 1;
+    }
+  }
+  .container {
+    position: absolute;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100vh; /* 100% del alto de la ventana */
+  }
+
+  .centered-div {
+    background-color: #E6E6E6;
+    padding: 20px;
+  }

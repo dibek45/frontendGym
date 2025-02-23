@@ -1,0 +1,70 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .face-recognition {
+    background-color: #dcdcdc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center;
+  }
+  
+  .video-container {
+    position: relative;
+    width: 80vw;
+    height: 80vw;
+    max-width: 600px;
+    max-height: 600px;
+    background-color: #fff;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .video-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .video-overlay video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .svg-overlay {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  
+  .verify-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .verify-button:hover {
+    background-color: #0056b3;
+  }
+  

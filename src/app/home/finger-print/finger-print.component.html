@@ -1,0 +1,44 @@
+<!--<button (click)="conectar()" [ngClass]="{
+  'blu': isConnected,
+  'no-transition': !isConnected
+}"> 
+  <i class="fab fa-bluetooth-b"></i>
+</button>-->
+
+<div class="scan">
+  <div class="text-center">
+    <div class="face">
+      <mat-card class="example-card">
+        <mat-card-content>
+          <!-- Mostrar la imagen de usuario si está disponible -->
+          <ng-container *ngIf="variable.img; else showAnimation">
+            <div>
+              <p>ACCESO</p>
+              <img [src]="variable.img" alt="Imagen de acceso">
+            </div>
+          </ng-container>
+
+          <!-- Mostrar animación si no hay imagen de usuario -->
+          <ng-template #showAnimation>
+            <div class="animation-container">
+              
+
+              <!-- Mostrar mensaje de DENEGADO si variable es '0' -->
+              <div *ngIf="variable === '0'">
+                <p>DENEGADO</p>
+              </div>
+
+              <!-- Mostrar mensaje de huella si variable no es '0', '1', o '2' -->
+              <div *ngIf="variable !== '0' && variable !== '1' && variable !== '2'">
+                <mat-icon class="example-icon">fingerprint</mat-icon>
+                <p class="example-description">Ingresa tu huella</p>
+              </div>
+            </div>
+          </ng-template>
+
+       
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,12 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
+  "cli": {
+  "schematicCollections": [
+    "@ngrx/schematics"
+  ],
+  "analytics": false
+},
   "projects": {
     "frontend": {
       "projectType": "application",
@@ -30,24 +36,25 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
+             "budgets": [
+              {
+                "type": "initial",
+                "maximumWarning": "1.2mb",
+                "maximumError": "1.5mb"
+              },
+  {
+    "type": "anyComponentStyle",
+    "maximumWarning": "4kb",
+    "maximumError": "8kb"
+  }
+],
               "outputHashing": "all"
             },
             "development": {
@@ -62,7 +69,11 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            
+          },
           "configurations": {
             "production": {
               "browserTarget": "frontend:build:production"
@@ -93,12 +104,20 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
           }
         }
       }
+
+
+
+
+
+
     }
   }
+  
 }

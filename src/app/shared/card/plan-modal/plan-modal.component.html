@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Selecciona el tipo de mensualidad</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Selecciona un Plan</mat-label>
+    <mat-select [(value)]="selectedPlan">
+      <mat-option *ngFor="let plan of plans" [value]="plan">
+        {{ plan.name }} - ${{ plan.price }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Mostrar el precio cuando un plan está seleccionado -->
+  <div *ngIf="selectedPlan" class="price-container">
+    <p>Precio: <strong>${{ selectedPlan.price }}</strong></p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-button color="accent" [disabled]="!selectedPlan" (click)="agregarAlCarrito()">Agregar al Carrito</button>
+</mat-dialog-actions>

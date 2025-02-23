@@ -1,0 +1,22 @@
+@media (min-width: 1200px) {
+    .pantalla {
+      position: absolute;
+      margin-left: -650px;
+      width: 1400px; /* Ancho fijo para pantallas grandes */
+    }
+
+      
+    textarea {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      resize: none;
+      background-color: #ffff;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      left: 70px;
+    }
+    
+  }

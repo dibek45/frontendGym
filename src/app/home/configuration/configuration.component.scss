@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#connectBleButton {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#disconnectBleButton {
+    background-color: #f44336;
+    color: white;
+}
+
+#onButton {
+    background-color: #008CBA;
+    color: white;
+}
+
+#offButton {
+    background-color: #e7e7e7;
+    color: black;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}

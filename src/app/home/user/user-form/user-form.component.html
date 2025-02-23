@@ -1,0 +1,76 @@
+<div class="container">
+  
+    
+  
+<div style="max-width: 800px;" class="centered-div">
+
+
+<mat-toolbar>
+  <span>{{ service.form.controls['$key'].value ? "Usuario" : "Ficha de membrecia" }}</span>
+  <span class="fill-remaining-space"></span>
+  <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1">
+    <mat-icon>clear</mat-icon>
+  </button>
+</mat-toolbar>
+<app-photo  (newItemEvent)="addItem($event)"></app-photo>
+
+<form [formGroup]="service.form" class="normal-form" (submit)="onSubmit()" *ngIf="takePhoto">
+  
+  <div class="row-container" [class.single-column]="true">
+    <div class="column">
+      <div class="controles-container">
+        <input type="hidden" formControlName="$key">
+        <mat-form-field>
+          <input formControlName="fullName" matInput placeholder="Full Name*">
+          <mat-error>This field is mandatory.</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input formControlName="email" matInput placeholder="Email">
+          <mat-error>Invalid email address.</mat-error>
+        </mat-form-field>
+        
+        <mat-form-field>
+          <input formControlName="mobile" matInput placeholder="Mobile*">
+          <!-- <mat-error *ngIf="service.form.controls['mobile'].errors?.required">This field is mandatory.</mat-error>
+            <mat-error *ngIf="service.form.controls['mobile'].errors?.minlength">Minimum 8 characters needed.</mat-error>
+          -->
+        </mat-form-field>
+   <!-- <mat-form-field>
+          <input formControlName="city" matInput placeholder="City">
+        </mat-form-field>
+        -->
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="controles-container">
+
+       
+        <div class="add-bottom-padding">
+          <mat-radio-group formControlName="gender">
+            <mat-radio-button value="1">Male</mat-radio-button>
+            <mat-radio-button value="2">Female</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <mat-form-field>
+          <mat-select formControlName="department" placeholder="Membership type">
+            <mat-option>None</mat-option>
+            
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input formControlName="birthDate" matInput [matDatepicker]="picker" placeholder="Date of birth">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        
+        <div class="button-row"  >
+          <button mat-raised-button color="primary" class="btn-complete" type="submit" [disabled]="service.form.invalid">Save</button>
+       <!-- <button mat-raised-button color="primary" (click)="onClear()">Clear</button> -->  
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+</div>

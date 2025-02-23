@@ -1,0 +1,60 @@
+<div class="add-cash-register-container">
+    <div class="form-card">
+      <h2>Nuevo cajero</h2>
+      <form (submit)="onSubmit()">
+        <!-- Campo para el nombre -->
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            type="text"
+            (input)="onInputChange('name', $event)"
+            required
+          />
+        </div>
+  
+        <!-- Campo para el email -->
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input
+            id="email"
+            type="email"
+            (input)="onInputChange('email', $event)"
+            required
+          />
+        </div>
+  
+        <!-- Campo para la contraseña -->
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input
+            id="password"
+            type="password"
+            (input)="onInputChange('password', $event)"
+            required
+          />
+        </div>
+         
+  
+        <!-- Campo para el tiempo de apertura -->
+        <div class="form-group">
+          <label for="openingTime">Hora de apertura</label>
+          <input
+            id="openingTime"
+            type="date"
+            (input)="onInputChange('openingTime', $event)"
+            [value]="cashRegister.openingTime"
+            required
+          />
+        </div>
+  
+        <!-- Botón de envío -->
+        <div class="form-group">
+          <button type="submit">Crear cajero</button>
+          <button type="button" (click)="onCancel()">Cancelar</button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,86 @@
+<div class="table-container">
+  <div class="search-container">
+    <div class="custom-search">
+      <input type="text" placeholder="Buscar..." (input)="applyFilter($event)" />
+      <mat-icon>search</mat-icon>
+    </div>
+  </div>
+
+  <!-- 🔹 Si hay datos, mostrar la tabla -->
+  <ng-container *ngIf="dataSource.data.length > 0; else noData">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-custom" matSort>
+
+      <!-- 🔥 Columna ID fija en primer lugar -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id Venta </th>
+        <td mat-cell *matCellDef="let row"> {{ row.id }} </td>
+      </ng-container>
+
+      <!-- 🔥 Generar dinámicamente las demás columnas excepto 'id', 'actions', 'img' y 'gym' -->
+      <ng-container *ngFor="let column of displayedColumns">
+        <ng-container *ngIf="column !== 'id' && column !== 'actions' && column !== 'img' && column !== 'gym'">
+      
+          <ng-container [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ column | titlecase }}
+            </th>
+            <td mat-cell *matCellDef="let row">
+
+              <!-- 🔹 Para cashRegister, mostrar "Caja" y abrir modal -->
+              <ng-container *ngIf="column === 'cashRegister'">
+                <span class="clickable-text" (click)="openDetailsModal(row[column], column)">
+                  Caja <mat-icon>info</mat-icon>
+                </span>
+              </ng-container>
+
+              <!-- 🔹 Para details, mostrar "Productos" y abrir modal -->
+              <ng-container *ngIf="column === 'details'">
+                <span class="clickable-text" (click)="openDetailsModal(row[column], column)">
+                  Productos <mat-icon>info</mat-icon>
+                </span>
+              </ng-container>
+
+              <!-- 🔹 Para otros objetos, abrir modal solo si es un objeto -->
+              <ng-container *ngIf="isObject(row[column]) && column !== 'cashRegister' && column !== 'details'; else textCell">
+                <button mat-button (click)="openDetailsModal(row[column], column)">
+                  {{ getDisplayValue(row[column]) }} <mat-icon>info</mat-icon>
+                </button>
+              </ng-container>
+
+              <!-- 🔹 Para valores normales -->
+              <ng-template #textCell>
+                {{ getDisplayValue(row[column]) }}
+              </ng-template>
+
+            </td>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- 🔹 Columna de Acciones -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="editItem(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteItem(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Definir filas -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </ng-container>
+
+  <!-- 🔹 Si no hay datos, mostrar este mensaje -->
+  <ng-template #noData>
+    <p class="no-data-message">No hay ventas registradas.</p>
+  </ng-template>
+</div>

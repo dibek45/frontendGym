@@ -1,0 +1,85 @@
+/* General */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Slider lateral */
+.slider-menu {
+  width: 280px; /* Ancho del slider */
+  background-color: #f5f6f8; /* Fondo similar */
+  padding: 16px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda la altura */
+}
+
+/* Sección de perfil */
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.profile-section img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Imagen circular */
+}
+
+.profile-section span {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* Color del texto */
+}
+
+/* Navegación */
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  gap: 12px;
+  cursor: pointer;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item:hover {
+  background-color: #e4e6eb; /* Fondo al pasar el cursor */
+}
+
+.nav-item i {
+  font-size: 20px;
+  color: #3f51b5;
+}
+
+.nav-item span {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Margen entre submenús */
+.nav-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaciado entre cada menú */
+}
+
+/* Opción de salida */
+.nav-item.exit {
+  background-color: #ffe6e6;
+}
+
+.nav-item.exit:hover {
+  background-color: #ffcccc;
+}
+
+.nav-item.exit i {
+  color: #f44336;
+}

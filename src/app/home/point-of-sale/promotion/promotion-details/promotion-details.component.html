@@ -1,0 +1,29 @@
+<div class="promotion-content">
+    <h3>Promotions for {{ type.name }}</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Description</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let promo of type.promotions">
+          <td>{{ promo.name }}</td>
+          <td>${{ promo.price }}</td>
+          <td>{{ promo.description }}</td>
+          <td>{{ promo.startDate | date }}</td>
+          <td>{{ promo.endDate | date }}</td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <button class="add-btn" (click)="openPromotionDialog()">➕ Add Promotion</button>
+  </div>
+  

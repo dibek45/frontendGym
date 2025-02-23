@@ -1,0 +1,63 @@
+<div [ngSwitch]="fly">
+  <!-- Sección de ícono inicial para agregar una foto -->
+  <div 
+    class="add-photo-button" 
+    *ngSwitchCase="'icon'" 
+    (click)="clickOutput(false, 'open')"
+  >
+    <div class="circle">
+      <img 
+        class="profile-pic" 
+        [src]="img || defaultImage" 
+        [ngClass]="{'profile': fly2 == true}" 
+        (click)="openCamera()"
+      >
+    </div>
+    <div class="p-image">
+      <mat-icon style="font-size: 30px; color: #555555; height: 26.5px; border-radius: 10px; width: 30px;">
+        photo_camera
+      </mat-icon>
+    </div>
+  </div>
+
+  <!-- Sección de la cámara abierta -->
+  <div *ngSwitchCase="'open'" style="display: flex; justify-content: center; align-items: center;">
+    <webcam 
+      style="text-align: center;" 
+      [trigger]="invokeObservable" 
+      [width]="screen" 
+      (imageCapture)="captureImg($event)"
+    ></webcam>
+
+    <div style="display: flex;" (click)="getSnapshot()">
+      <div class="photo-button">
+        <div class="circle-shoot"></div>
+        <div class="ring"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de imagen capturada -->
+  <div *ngSwitchCase="'isTaken'" style="display: flex; justify-content: center; align-items: center;">
+    <img [src]="img || defaultImage" height="300px" class="menouno" />
+    <mat-icon 
+      (click)="clickOutput(false, 'open')" 
+      *ngIf="!done" 
+      class="iconRefresh"
+    >
+      refresh
+    </mat-icon>
+    <mat-icon 
+      (click)="clickOutput(true, 'icon')" 
+      *ngIf="!done" 
+      class="iconCHeck"
+    >
+      check
+    </mat-icon>
+
+    <div class="photo-button">
+      <div class="circle-shoot"></div>
+      <div class="ring"></div>
+    </div>
+  </div>
+</div>

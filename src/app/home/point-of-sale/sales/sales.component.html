@@ -1,0 +1,9 @@
+
+<!-- Mostrar mensaje si no hay ventas -->
+<div *ngIf="data.length === 0" style="text-align: center; font-weight: bold; color: gray;">
+  No hay ventas registradas.
+</div>
+
+<!-- Tabla de Ventas con Angular Material -->
+<app-table-material-crud [data]="data" style="position: absolute;  left: 660px;
+  width: 500px;"></app-table-material-crud>

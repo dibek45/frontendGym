@@ -1,0 +1,129 @@
+<div 
+  style="
+    position: absolute;
+    left: 380px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 20px;
+    margin: 20px auto;
+    width: 500x;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  "
+>
+
+  <app-photo 
+    (newItemEvent)="addItem($event)"     
+    (imgEmmit)="getImageTaken($event)"
+    [imageUrl]="droppedImage"
+  ></app-photo>
+
+  <app-drag-over 
+    (imageDropped)="onImageDropped($event)"
+  ></app-drag-over>
+
+  <mat-form-field style="width: 400px; margin-left: 140px;">
+    <input
+      formControlName="img"
+      matInput
+      type="text"
+      placeholder="Image URL or Base64*"
+      required
+      readonly
+    />
+    <mat-error>Este campo es obligatorio.</mat-error>
+  </mat-form-field>
+
+  <!-- Vista previa de la imagen cargada -->
+  <form [formGroup]="form" class="normal-form" (submit)="onSubmit()" style="width: 650px;">
+    <div class="row-container" [class.single-column]="true" style="display: flex; flex-wrap: wrap;">
+      
+      <div class="column" style="flex: 1; min-width: 300px;">
+        <div class="controles-container">
+          
+          <!-- Input oculto para ID del producto -->
+          <input type="hidden" formControlName="id">
+
+          <!-- Nombre del producto -->
+          <mat-form-field class="custom-mat-form-field" >
+            <input formControlName="name" matInput placeholder="Product Name*" required>
+            <mat-error>This field is mandatory.</mat-error>
+          </mat-form-field>
+
+          <!-- Precio del producto -->
+          <mat-form-field class="custom-mat-form-field" >
+            <mat-label>Price*</mat-label>
+            <input formControlName="price" matInput type="number" placeholder="Price*" required>
+            <mat-error>This field is mandatory.</mat-error>
+          </mat-form-field>
+
+          <!-- Cantidad del producto -->
+          <mat-form-field class="custom-mat-form-field" >
+            <mat-label>Cantidad*</mat-label>
+            <input formControlName="stock" matInput type="number" placeholder="Stock Quantity*" required>
+            <mat-error>This field is mandatory.</mat-error>
+          </mat-form-field>
+          
+        </div>
+      </div>
+
+      <div class="column" style="flex: 1; min-width: 300px;">
+        <div class="controles-container">
+          
+          <!-- Categoría del producto -->
+          <mat-form-field>
+            <mat-select formControlName="categoriaId" placeholder="Category*" required>
+              <!-- Opción fija para agregar una nueva categoría -->
+              <mat-option (click)="openAddCategoryModal()" [value]="null">
+                <mat-icon>add</mat-icon> 
+                Agregar nueva categoría
+              </mat-option>
+              
+              <!-- Usar el observable categories$ y async para obtener la lista -->
+              <mat-option *ngFor="let category of categories$ | async" [value]="category.id">
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error>This field is mandatory.</mat-error>
+          </mat-form-field>
+          
+
+          <!-- Código de barras -->
+          <mat-form-field >
+            <input matInput placeholder="Código de barras" (keyup.enter)="onBarcodeScanned($event)" 
+                                                           (keydown.enter)="preventSubmit($event)"/>
+          </mat-form-field>
+
+          <!-- Disponibilidad -->
+          <mat-form-field >
+            <mat-label>Disponible</mat-label>
+            <mat-select formControlName="available" placeholder="Available*" required>
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+            <mat-error>This field is mandatory.</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Botón para enviar -->
+    <div class="button-row" style="text-align: right; margin-top: 20px;">
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="btn-complete" 
+        type="submit" 
+      
+      >
+        Save
+      </button>
+    </div>
+
+  </form>
+</div>

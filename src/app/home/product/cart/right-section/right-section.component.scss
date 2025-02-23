@@ -1,0 +1,89 @@
+/* Right section (summary card) */
+.right-section {
+    flex: 1;
+    border-radius: 8px;
+    min-width: 430px;
+    margin-left: -107px;
+  }
+  
+   /* Top bar styling */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 8px 8px 0 0;
+}
+
+.left-section,
+.right-section {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+ /* Main container */
+ .main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 400px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    padding: 25px;
+    border-radius: 8px;
+  }
+  
+  /* Header and content styling */
+  .summary-section {
+    background: #00a693;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    
+  }
+  
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -25px;
+    align-items: center;
+    background: #2c3e50;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .content-box {
+    padding: 20px;
+    border-radius: 0 0 8px 8px;
+     height: 220px;;
+  }
+  
+  .total {
+    font-size: 3.5em;
+    font-weight: bold;
+    margin: 20px 0;
+    color: white;
+  }
+  
+  .subtitle {
+    font-size: 1.2em;
+    margin: 5px 0;
+  }
+
+  .totalProduct {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 20px 0;
+    color: white;
+  }

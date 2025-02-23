@@ -1,0 +1,69 @@
+@media (min-width: 1200px) {
+    .pantalla {
+        position: absolute;
+        margin-left: 350px;
+    }
+    .search-div{
+        margin-left: 150px;
+    }
+
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      
+      .post-container {
+        width: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+      }
+      
+      textarea {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        resize: none;
+        background-color: #ffff;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      
+      .options {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+      
+      .option {
+        display: flex;
+        align-items: center;
+        background-color: #f0f2f5;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+      }
+      
+      .option:hover {
+        background-color: #ffff;
+      }
+      
+      .option .icon {
+        margin-right: 5px;
+        font-size: 18px;
+      }
+      
+  }
+

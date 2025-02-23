@@ -1,0 +1,470 @@
+.mat-toolbar {
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 90px;
+  }
+  
+  .mat-menu-trigger {
+    display: none;
+  }
+  
+  @media (max-width: 600px) {
+    .spacer {
+      display: none;
+    }
+    
+    .mat-menu-trigger {
+      display: block;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+   
+    
+    .slider-menu {
+      margin-top: 75px;
+    
+    display: flex;
+    flex-direction: column; /* Organiza los enlaces en columna */
+    padding: 16px;
+    position: relative; /* No fijo, fluye con el contenido */
+    z-index: 1; /* Asegura que esté sobre el contenido principal */
+    top: 0; /* Empieza desde la parte superior */
+    }
+  }
+
+//notification
+  /* Estilos base */
+  #notification {
+    visibility: hidden;
+    min-width: 250px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    right: -300px; /* Comienza fuera de la pantalla a la derecha */
+    bottom: 30px; /* Mantiene la posición en la parte inferior */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease-in-out, right 0.5s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo con un poco de transparencia */
+  }
+  
+  #notification.show {
+    visibility: visible;
+    opacity: 1;
+    right: 30px; /* Mueve hacia dentro de la pantalla */
+    transition: right 0.5s ease-in-out; /* Transición suave hacia dentro */
+  }
+  
+  
+  
+  .notification-row {
+    display: flex; /* Alineación horizontal */
+    align-items: center; /* Centra verticalmente los elementos */
+  }
+  
+  .circle {
+    width: 40px; /* Ancho del círculo */
+    height: 40px; /* Alto del círculo */
+    border-radius: 50%; /* Hace que sea circular */
+    overflow: hidden; /* Oculta el exceso de imagen */
+    margin-right: 10px; /* Espacio a la derecha del círculo */
+  }
+  
+  .circle img {
+    width: 30px; /* Ancho fijo de la imagen */
+    height: 30px; /* Alto fijo de la imagen */
+    object-fit: cover; /* Asegura que la imagen cubra el círculo sin deformarse */
+  }
+
+  /* Contenedor del escáner QR, centrado y con fondo */
+.scanner-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  background: white;
+  padding: 16px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Botón de cierre en la esquina superior derecha del escáner */
+.close-scanner-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+
+/* Contenedor del escáner QR con esquinas redondeadas */
+.scanner-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Flechas */
+.arrow {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: solid 10px transparent;
+  z-index: 10;
+}
+
+/* Flecha superior izquierda */
+.arrow-top-left {
+  top: -20px;
+  left: -20px;
+  margin-top: 5px;
+margin-left: 5px;
+  border-right-color: rgba(0, 0, 0, 0.6); /* Color de la flecha */
+  border-bottom-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Flecha superior derecha */
+.arrow-top-right {
+  top: -20px;
+  right: -25px;
+  margin-top: 15px;
+  border-left-color: rgba(0, 0, 0, 0.6);
+  border-bottom-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Flecha inferior izquierda */
+.arrow-bottom-left {
+  bottom: -25px;
+  left: -20px;
+  
+  border-right-color: rgba(0, 0, 0, 0.6);
+  border-top-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Flecha inferior derecha */
+.arrow-bottom-right {
+  bottom: -20px;
+  right: -20px;
+  border-left-color: rgba(0, 0, 0, 0.6);
+  border-top-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Línea de escaneo */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 255, 0, 0.7);
+  animation: scan-animation 4s infinite;
+  z-index: 5;
+}
+
+/* Animación de la línea de escaneo */
+@keyframes scan-animation {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+/* Ícono en el centro del escáner */
+.icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30rem;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Botón de cierre */
+.close-scanner-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #0e0505;
+}
+
+
+/* Ícono superpuesto en el centro del escáner */
+.icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+    font-size: 18rem;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 20;
+  pointer-events: none; /* Permite que los clics pasen al video */
+}
+
+/* Asegura que mat-icon adopte el tamaño */
+.icon-overlay mat-icon {
+  font-size: inherit; /* Hereda el tamaño de la clase contenedora */
+  width: 1em; /* Ajusta el ancho a escala */
+  height: 1em; /* Ajusta la altura a escala */
+}
+
+/* Contenedor del escáner QR centrado en la pantalla */
+.scanner-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  background: rgb(23, 5, 5);
+  border-radius: 5px;
+  padding: 2px;
+  height: 370px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box; /* Asegura que los bordes y padding no afecten el tamaño */
+}
+
+/* Bordes parciales en las esquinas */
+.corner-border {
+  position: absolute;
+  width: 20px; /* Longitud del borde en las esquinas */
+  height: 20px;
+  background: transparent;
+  border: 5px solid rgba(0, 0, 0, 0.6);
+  box-sizing: border-box; /* Asegura que el borde no afecte el tamaño */
+}
+
+/* Esquinas específicas */
+.top-left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+
+
+
+@media (min-width: 1024px) {
+  .menu-out {
+    margin-left: 500px;
+  }
+}
+/* Contenedor principal */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Evita scroll horizontal innecesario */
+}
+
+.app-container {
+  display: flex;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+}
+
+/* Slider lateral fijo */
+
+
+
+/* Enlaces del slider */
+.slider-menu nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.slider-menu span {
+  text-decoration: none;
+  color: black;
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.slider-menu span:hover {
+  background-color: #ddd;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+/* Contenido principal */
+.main-content {
+  margin-left: 250px; /* Reserva espacio para el slider */
+  flex: 1;
+  overflow-y: auto; /* Scroll si el contenido es grande */
+  height: 100%;
+  padding: 16px;  
+  background-color: #fff;
+}
+
+/* Estilo del toolbar */
+mat-toolbar {
+  margin-bottom: 16px;
+}
+
+/* Estilo general del toolbar */
+.custom-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white; /* Fondo blanco */
+  height: 56px; /* Altura estándar */
+  padding: 0 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border-bottom: 1px solid #ddd; /* Línea separadora */
+}
+
+/* Sección izquierda (logo e input) */
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  font-size: 24px;
+  color: #1877f2; /* Azul estilo Facebook */
+}
+
+.search-input {
+  border: none;
+  background-color: #f0f2f5; /* Fondo gris claro */
+  padding: 8px 12px;
+  border-radius: 50px;
+  outline: none;
+  font-size: 14px;
+  width: 200px;
+}
+
+/* Sección central (íconos de navegación) */
+.toolbar-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.toolbar-center button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.toolbar-center button:hover {
+  background-color: #f0f2f5; /* Fondo al pasar el mouse */
+}
+
+.toolbar-center .active {
+  color: #1877f2; /* Azul activo para la página seleccionada */
+  border-bottom: 2px solid #1877f2; /* Línea indicadora debajo del ícono */
+}
+
+/* Sección derecha (espacio adicional) */
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Contenedor de los íconos */
+.icon-bar {
+  font-size: 30px;
+
+  position: absolute;
+  display: flex;
+  justify-content: space-evenly; /* Espacio igual entre íconos */
+  align-items: center;
+  width: 100%; /* Ocupa todo el ancho */
+  padding: 10px 0;
+  margin-left: 70%;
+  margin-top: -30px;
+  background-color: #fff; /* Fondo blanco */
+}
+/* Estilo de los botones */
+.icon-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #666; /* Color gris para íconos no seleccionados */
+  font-size: 24px;
+  transition: color 0.3s, transform 0.3s; /* Transición suave */
+}
+
+/* Íconos seleccionados */
+.icon-button.active {
+  color: #1c7ed6; /* Azul para el ícono seleccionado */
+}
+
+.icon-button.active::after {
+  content: ''; /* Línea inferior al seleccionar */
+  display: block;
+  width: 24px;
+  height: 3px;
+  background-color: #1c7ed6;
+  margin-top: 5px;
+  border-radius: 2px;
+}
+
+/* Efecto de hover */
+.icon-button:hover {
+  transform: scale(1.1); /* Aumenta el tamaño ligeramente */
+}
+

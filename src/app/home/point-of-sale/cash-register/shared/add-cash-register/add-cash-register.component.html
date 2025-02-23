@@ -1,0 +1,29 @@
+<div class="add-cash-register-container">
+  <div class="form-card">
+    <h2>Agregar Nueva Caja Registradora</h2>
+    <form (submit)="onSubmit()">
+      <div class="form-group">
+        <label for="cashier">Cajero</label>
+        <select id="cashier" (change)="onInputChange('cashierId', $event)">
+          <option *ngFor="let cashier of (cashiers$ | async)" [value]="cashier.id">
+            {{ cashier.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="openingBalance">Fondo</label>
+        <input
+          id="openingBalance"
+          type="number"
+          (input)="onInputChange('openingBalance', $event)"
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">Crear</button>
+        <button type="button" class="cancel" (click)="onCancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

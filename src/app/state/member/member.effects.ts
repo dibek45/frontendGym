@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { map, catchError, exhaustMap } from 'rxjs/operators';
+import { map, catchError, exhaustMap, mergeMap } from 'rxjs/operators';
 import { of, EMPTY } from 'rxjs';
-import { loadMemberDetail, loadMemberDetailFailed, loadMembers, loadedMemberDetail, loadedMembers } from '../actions/member.actions';
-import { UserService } from 'src/app/home/user/user.service';
+import { loadMemberDetail, loadMemberDetailFailed, loadMembers, loadedMemberDetail, loadedMembers } from './member.actions';
+import { MemberService } from 'src/app/state/member/member.service';
+import * as MemberActions from './member.actions'; // <-- Make sure this path is correct
 
 @Injectable()
 export class MemberEffects {
   constructor(
     private actions$: Actions,
-    private _members: UserService // Servicio que llama al backend
+    private _members: MemberService // Servicio que llama al backend
 
   ) {}
 
@@ -33,6 +34,22 @@ export class MemberEffects {
     )
   ));
 
+// 2) Add an effect that calls your HTTP method to perform the GraphQL mutation
+updateAvailableDays$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(MemberActions.updateAvailableDays),
+    mergeMap(action =>
+      this._members.updateDays(action.memberId, action.days).pipe(
+        map(updatedDays =>
+          MemberActions.updateAvailableDaysSuccess({ days: updatedDays })
+        ),
+        catchError(error =>
+          of(MemberActions.updateAvailableDaysFailure({ error }))
+        )
+      )
+    )
+  )
+);
 
   
 }

@@ -31,15 +31,17 @@ import { setDetailProduct } from 'src/app/state/actions/product.actions';
   export class PlanModalComponent {
     selectedPlan: Plan | null = null; // Ahora almacena un objeto Plan
     plans: Plan[];
-  
+   userId:number=0;
+
     constructor(
       private notificationService: NotificationService,
       private store: Store<AppState>,
 
       public dialogRef: MatDialogRef<PlanModalComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: { plans: Plan[] }
+      @Inject(MAT_DIALOG_DATA) public data: { plans: Plan[],userId:number }
     ) {
       this.plans = data.plans;
+      this.userId=data.userId
     }
   
     close(): void {
@@ -48,7 +50,7 @@ import { setDetailProduct } from 'src/app/state/actions/product.actions';
   
     cobrar(): void {
       if (this.selectedPlan) {
-        this.dialogRef.close({ action: 'cobrar', plan: this.selectedPlan });
+        this.dialogRef.close({ action: 'cobrar', plan: this.selectedPlan,userId:this.userId });
       }
     }
   
@@ -59,12 +61,15 @@ import { setDetailProduct } from 'src/app/state/actions/product.actions';
     
       const gymMembership: CartItemModel = {
         product: {
-          id: Number(this.selectedPlan.id) + 5000
+          id: Number(this.selectedPlan.id)
 ,          name: this.selectedPlan.name,
           price: this.selectedPlan.price,
           img: 'assets/membership.png',
           available: true,
-          stock: 9999 
+          stock: 9999,
+          isMembership:true,
+          idClienteTOMembership:this.userId
+
         },
         quantity: 1,
         total: this.selectedPlan.price

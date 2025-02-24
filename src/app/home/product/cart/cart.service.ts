@@ -273,7 +273,10 @@ export class CartService {
       productId: Number(item.product.id),  
       name: item.product.name,  
       costo: item.product.price,  
-      quantity: item.quantity  
+      quantity: item.quantity,
+      isMembership:true,
+      idClienteTOMembership: Number(item.product.idClienteTOMembership)
+
     }));
   
     const graphqlQuery = `
@@ -298,6 +301,7 @@ export class CartService {
       }
     ).subscribe({
       next: (response) => {
+        console.log(response)
         const { id, paymentMethod, totalAmount } = response.data.createSale;
         this.notificationService.mostrarSnackbar(':: Venta registrada correctamente', 'success');
         this.printTicket(formattedCart, totalAmount);

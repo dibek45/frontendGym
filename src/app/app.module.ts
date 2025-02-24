@@ -19,7 +19,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ROOT_REDUCERS } from './state/app.state';
 import { EffectsModule } from '@ngrx/effects';
-import { MemberEffects } from './state/effects/member.effects';
+import { MemberEffects } from './state/member/member.effects';
 
 import { ProductEffects } from './state/effects/product.effects';
 //import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';

@@ -1,9 +1,10 @@
 // cart.state.ts
 
-import { CartProductModel } from "./product.interface";
+import { ProductModel } from "./product.interface";
+
 
 export interface CartItem {
-  product: CartProductModel;
+  product: ProductModel;
   quantity: number;
   total: number;
 

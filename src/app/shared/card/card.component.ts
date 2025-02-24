@@ -104,14 +104,14 @@ agregarAlCarrito(plan: any) {
   // Aquí puedes agregar la lógica para agregar al carrito
 }
 
-openRenovarModal(): void {
+openRenovarModal(userId:string): void {
   if (this.modalOpened) return; // 🔥 Evita que se abra más de una vez automáticamente
 
   this.plans$.pipe(take(1)).subscribe(plans => {
     const dialogRef = this.dialog.open(PlanModalComponent, {
       width: '400px',
       disableClose: true,
-      data: { plans } // Pasar los planes filtrados al modal
+      data: { plans,userId} // Pasar los planes filtrados al modal
     });
 
     this.modalOpened = true; // 🔥 Se marca como abierto para que no se vuelva a abrir solo

@@ -10,7 +10,8 @@ import {
   loadedMemberDetail,
   loadMemberDetailFailed,
   loadMembersFailed
-} from '../actions/member.actions';
+} from './member.actions';
+import * as MemberActions from './member.actions'; // <-- Make sure this path is correct
 
 // Estado inicial
 export const InitialState: MemberState = {
@@ -18,6 +19,7 @@ export const InitialState: MemberState = {
   members: [],
   searchTerm: '',
   selectedMember: null,  // Valor inicial
+  availableDays: 0 // Add this field
 
 };
 
@@ -53,6 +55,13 @@ export const MemberReducer = createReducer(
   on(loadMemberDetailFailed, (state, { error }) => ({
     ...state,
     error: error,
-  }))
+  })),
+  on(MemberActions.updateAvailableDaysSuccess, (state, { days }) => ({
+    ...state,
+    availableDays: days
+})),
+
+
+
   
 );

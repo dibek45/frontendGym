@@ -1,13 +1,13 @@
 import { ActionReducerMap } from '@ngrx/store';
 import { MemberState } from '../core/models/member.state';
-import { MemberReducer } from './reducers/member.reducer';
+import { MemberReducer } from './member/member.reducer';
 import { detailProductReducer, ProductReducer } from './reducers/product.reducer';
 import { HuellaReducer } from './reducers/huella.reducer';
 
 import {  ProductState } from '../core/models/product.state';
 import { HuellaState } from '../core/models/huella.state';
 import { UserState } from '../core/models/user.state';
-import { UserReducer } from './reducers/user.reducer';
+import { UserReducer } from './reducers/deleteuser.reducer';
 import { cartReducer } from './reducers/cart.reducer';
 import { CartState } from '../core/models/cart.state';
 import { categoryReducer, CategoryState } from './reducers/category.reducer';

@@ -36,6 +36,11 @@ export const selectSearchTerm = createSelector(
     }
   );
 
+  export const selectAvailableDays = createSelector(
+    SelectFeature,
+    (state) => state.availableDays
+  );
+  
 
   // Selector para obtener el miembro seleccionado
   export const selectSelectedMember = createSelector(

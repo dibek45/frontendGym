@@ -13,6 +13,7 @@ export const cartReducer = createReducer(
   on(addItemToCart, (state, { item }) => {
     const existingItem = state.items.find(i => i.product.id === item.product.id);
     if (existingItem) {
+      
       return {
         ...state,
         items: state.items.map(i =>

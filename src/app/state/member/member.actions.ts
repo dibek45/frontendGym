@@ -49,3 +49,19 @@ export const setSearchTerm = createAction(
         '[Load Members Failed]',
         props<{ error: any }>()
       );
+
+      // 1) Add new actions for updating available days
+      export const updateAvailableDays = createAction(
+        '[Member] Update Available Days',
+        props<{ memberId: number; days: number }>()
+      );
+
+      export const updateAvailableDaysSuccess = createAction(
+        '[Member] Update Available Days Success',
+        props<{ days: number }>()
+      );
+
+      export const updateAvailableDaysFailure = createAction(
+        '[Member] Update Available Days Failure',
+        props<{ error: any }>()
+      );

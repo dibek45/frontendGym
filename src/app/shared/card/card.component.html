@@ -27,7 +27,7 @@
         <h3 class="name">{{ element.name || 'User Name' | truncateName:15  }}</h3>
       
         
-        <button mat-button (click)="openRenovarModal()" class="menu-button" style="position: absolute;
+        <button mat-button (click)="openRenovarModal(element.id)" class="menu-button" style="position: absolute;
         margin-top: 145px;
         top: -20px;">
           <span class="material-symbols-outlined">date_range</span> Renovar

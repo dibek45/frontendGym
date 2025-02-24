@@ -6,7 +6,7 @@ import { WebcamImage } from 'ngx-webcam';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
-import { addMember } from 'src/app/state/actions/member.actions';
+import { addMember } from 'src/app/state/member/member.actions';
 import { Observable } from 'rxjs';
 import { selectItemsList } from 'src/app/state/selectors/huella.selectors';
 import { loadedHuella } from 'src/app/state/actions/huella.actions';

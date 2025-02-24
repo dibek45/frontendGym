@@ -10,14 +10,8 @@ export interface ProductModel{
   barcode?:string,
   gymId?:number
   isMembership?: boolean; // ✅ Se asegura de que esta propiedad existe
+  idClienteTOMembership?: number; // ✅ Se asegura de que esta propiedad existe
+
 
 }
 
-export interface CartProductModel{
-  id: number;
-  name: string;
-  categoriaId?:string;
-  price:number;
-  barcode?:string;
-
-}

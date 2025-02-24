@@ -10,7 +10,7 @@ import { SpeechService } from 'src/app/shared/speech.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class MemberService {
 
   private graphqlEndpoint = 'http://localhost:3000/graphql'; // Reemplaza con tu endpoint GraphQL
 
@@ -28,8 +28,10 @@ export class UserService {
         usersByGymId(gymId: $gymId) {
           id
           gymId
-          name, 
+          name
+          available_days
           img
+
         }
       }
     `;
@@ -88,4 +90,32 @@ export class UserService {
   getMemberDetail(gymId: number, memberId: number): Observable<MemberModel> {
     return this.http.get<MemberModel>(`/api/gym/${gymId}/members/${memberId}`);
   }
+
+
+
+  // member.service.ts (just showing the new method)
+updateDays(memberId: number, days: number) {
+  const gqlQuery = `
+    mutation Mutation($updateAvailableDaysInput: UpdateAvailableDaysDto!) {
+      updateAvailableDays(updateAvailableDaysInput: $updateAvailableDaysInput) {
+        id
+        available_days
+      }
+    }
+  `;
+  const variables = {
+    updateAvailableDaysInput: {
+      id: memberId,
+      available_days: days
+    }
+  };
+
+  return this.http.post<any>('YOUR_GRAPHQL_ENDPOINT', {
+    query: gqlQuery,
+    variables
+  }).pipe(
+    map(res => res?.data?.updateAvailableDays?.available_days)
+  );
+}
+
 }  

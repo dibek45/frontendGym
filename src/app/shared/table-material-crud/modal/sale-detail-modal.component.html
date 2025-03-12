@@ -1,41 +1,41 @@
-<h2 mat-dialog-title>Detalles de {{ data.columnName | titlecase }}</h2>
+<h2 mat-dialog-title>Detalles de la Venta #{{ data.sale.id }}</h2>
 
 <mat-dialog-content>
-  <ng-container *ngIf="dataSource.data.length > 0; else noData">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-custom">
-      
-      <!-- Columna Propiedad -->
-      <ng-container matColumnDef="property">
-        <th mat-header-cell *matHeaderCellDef> Propiedad </th>
-        <td mat-cell *matCellDef="let element"> {{ element.property }} </td>
-      </ng-container>
+  <p><strong>Caja ID:</strong> {{ data.sale.cashRegister?.id ?? 'N/A' }}</p>
+  <p><strong>Cajero:</strong> {{ data.sale.cashRegister?.cashier?.name ?? 'N/A' }}</p>
+  <p><strong>Método de Pago:</strong> {{ data.sale.paymentMethod }}</p>
+  <p><strong>Fecha:</strong> {{ data.sale.saleDate }}</p>
 
-      <!-- Columna Valor -->
-      <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef> Valor </th>
-        <td mat-cell *matCellDef="let element"> 
-            <ng-container *ngIf="isObject(element.value); else normalValue">
-                <pre>{{ element.value | json }}</pre> <!-- Mostrar objetos anidados como JSON -->
-          </ng-container>
-          <ng-template #normalValue>{{ element.value }}</ng-template>
-        </td>
-      </ng-container>
+  <table mat-table [dataSource]="data.sale.details" class="mat-elevation-z8 mat-table-custom">
+    <ng-container matColumnDef="item">
+      <th mat-header-cell *matHeaderCellDef>Producto/Membresía</th>
+      <td mat-cell *matCellDef="let detail">
+        {{ detail.isMembership ? detail.membershipName : detail.product?.name }}
+      </td>
+    </ng-container>
 
-      <!-- Encabezado y filas -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      
-    </table>
-  </ng-container>
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+      <td mat-cell *matCellDef="let detail">{{ detail.quantity }}</td>
+    </ng-container>
 
-  <!-- Si no hay datos, mostrar un mensaje -->
-  <ng-template #noData>
-    <p class="no-data-message">No hay información disponible.</p>
-  </ng-template>
+    <ng-container matColumnDef="unitPrice">
+      <th mat-header-cell *matHeaderCellDef>Precio Unitario</th>
+      <td mat-cell *matCellDef="let detail">${{ detail.product?.price ||detail.unitPrice }}</td>
+    </ng-container>
 
+    <ng-container matColumnDef="totalPrice">
+      <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+      <td mat-cell *matCellDef="let detail">${{ detail.quantity * detail.product?.price ||detail.totalPrice }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['item', 'quantity', 'unitPrice', 'totalPrice']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['item', 'quantity', 'unitPrice', 'totalPrice'];"></tr>
+  </table>
+
+  <h3>Total: ${{ data.sale.totalAmount }}</h3>
 </mat-dialog-content>
 
 <div mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cerrar</button>
-  </div>
-  
+  <button mat-button mat-dialog-close>Cerrar</button>
+</div>

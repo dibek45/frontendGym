@@ -118,4 +118,63 @@ updateDays(memberId: number, days: number) {
   );
 }
 
+
+
+createMember(member: MemberModel): Observable<MemberModel> {
+  const graphqlQuery = `
+    mutation CreateUser($createUser: CreateUser!) {
+      createUser(createUser: $createUser) {
+        id
+        name
+        actived
+        huella
+        img
+        gymId
+        available_days
+        username
+      }
+    }
+  `;
+
+  const userPayload = {
+    name: member.name,
+    actived: member.actived,
+    available_days: member.available_days,
+    img: member.img,
+    gymId: member.gymId,
+    huella: member.huella ?? '',
+    username:member.username
+
+  };
+  
+  console.log('🚀 Payload enviado al backend', userPayload);
+
+  // 🚀 DEBUG DIRECTO
+  this.http.post<any>('http://localhost:3000/graphql', {
+    query: graphqlQuery,
+    variables: { createUser: userPayload }
+  }).subscribe({
+    next: res => {
+      console.log('✅ Response directa:', res);
+    },
+    error: err => {
+      console.error('❌ Error directo:', err);
+    }
+  });
+
+  // 🔙 Deja el return si lo necesitas en el effect:
+  return this.http.post<any>('http://localhost:3000/graphql', {
+    query: graphqlQuery,
+    variables: { createUser: userPayload }
+  }).pipe(
+    map(response => {
+      if (!response.data || !response.data.createUser) {
+        throw new Error('No se pudo crear el usuario en backend');
+      }
+      return response.data.createUser;
+    })
+  );
+}
+
+
 }  

@@ -26,6 +26,8 @@ import { PromotionDetailsComponent } from './promotion/promotion-details/promoti
 import { FormsModule } from '@angular/forms';
 import { RolesModule } from './roles/roles.module';
 import { TableMaterialCrudComponent } from "../../shared/table-material-crud/table-material.component";
+import { NgChartsModule } from 'ng2-charts';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -48,6 +50,7 @@ import { TableMaterialCrudComponent } from "../../shared/table-material-crud/tab
     RolesModule,
     MatTableModule,
     PointOfSaleRoutingModule,
+    NgChartsModule,
     HorizontalMenuComponent,
     SubareaTituloComponent,
     AddButtonComponent,
@@ -59,7 +62,8 @@ import { TableMaterialCrudComponent } from "../../shared/table-material-crud/tab
     TableMaterialComponent,
     MatTableModule,
     FormsModule,
-    TableMaterialCrudComponent
+    TableMaterialCrudComponent,
+    MatCheckboxModule
 ],
   providers:[PointOfSaleService]
 })

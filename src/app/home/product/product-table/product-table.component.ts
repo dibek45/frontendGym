@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductModel } from 'src/app/core/models/product.interface';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppState } from 'src/app/state/app.state';
 import { Store } from '@ngrx/store';
 import { loadProducts, setSearchProduct } from 'src/app/state/actions/product.actions';
 import { selectFilteredProducts, selectLoading } from 'src/app/state/selectors/product.selectors';
-import { CartService } from '../cart/cart.service';
+import { CartService } from '../../../state/point-of-sale/cart/cart.service';
 import { ProductFormService } from 'src/app/shared/product.service';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
 
 @Component({
   selector: 'app-product-table',
@@ -25,6 +26,7 @@ export class ProductTableComponent implements OnInit {
   selectedProduct: ProductModel | undefined;
   currentQuantity: number =0;
   showModal: boolean=false;
+  gymIdFromStore: number=1;
 
   constructor(private service: ProductFormService,private store: Store<AppState>,  private cartService: CartService,   
      private router: Router, private _notification:NotificationService,) {}

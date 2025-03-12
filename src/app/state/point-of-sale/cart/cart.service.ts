@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, take } from 'rxjs';
-import { CartItemModel } from './cart-item.model';
+import { CartItemModel } from '../../../home/product/cart/cart-item.model';
 import { ProductModel } from 'src/app/core/models/product.interface';
 import { 
   addItemToCart, 
@@ -9,10 +9,10 @@ import {
   clearCart, 
   removeItemFromCart, 
   updateItemQuantity 
-} from 'src/app/state/actions/cart.actions';
-import { selectCartItems, selectCartTotal } from 'src/app/state/selectors/cart.selectors';
+} from 'src/app/state/point-of-sale/cart/cart.actions';
+import { selectCartItems, selectCartTotal } from 'src/app/state/point-of-sale/cart/cart.selectors';
 import { HttpClient } from '@angular/common/http';
-import { selectUser } from 'src/app/state/selectors/user.selectors';
+import { selectUser } from 'src/app/state/user/user.selectors';
 import { AppState } from 'src/app/state/app.state';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { PrinterService } from 'src/app/printer.service';
@@ -221,7 +221,8 @@ export class CartService {
         price: 500, // Precio de la mensualidad
         img: 'assets/images/membership.png', // Imagen opcional
         available: true, // La mensualidad siempre está disponible
-        stock: 9999 // Puedes asignar un número alto, ya que no hay un stock físico
+        stock: 9999, // Puedes asignar un número alto, ya que no hay un stock físico
+        isMembership:true,
       },
       quantity: 1,
       total: 500
@@ -254,63 +255,69 @@ export class CartService {
 
 
 
-
-
-
-
-
-
-
-  // ✅ Simulación de una función para abrir el modal de selección de cantidad
-
-
-
-
-
-  // ✅ Registrar la venta y enviar a la API
   async onSubmit(paymentMethod: string, cart: CartItemModel[]) {
     const formattedCart = cart.map(item => ({
-      productId: Number(item.product.id),  
-      name: item.product.name,  
-      costo: item.product.price,  
+      productId: Number(item.product.id),
+      name: item.product.name,
+      costo: item.product.price,
       quantity: item.quantity,
-      isMembership:true,
-      idClienteTOMembership: Number(item.product.idClienteTOMembership)
-
+      isMembership: item.product.isMembership || false,
+      idClienteTOMembership: item.product.isMembership ? Number(item.product.idClienteTOMembership) : null
     }));
   
     const graphqlQuery = `
-      mutation CreateSale($gymId: Float!, $paymentMethod: String!, $cart: [CartItemInput!]!) {
-        createSale(gymId: $gymId, paymentMethod: $paymentMethod, cart: $cart) {
+      mutation CreateSale($gymId: Int!, $paymentMethod: String!, $cart: [CartItemInput!]!, $cashRegisterId: Int!) {
+        createSale(gymId: $gymId, paymentMethod: $paymentMethod, cart: $cart, cashRegisterId: $cashRegisterId) {
           id
           paymentMethod
           totalAmount
+          cashRegisterId
         }
       }
     `;
   
-    await this.http.post<{ data: { createSale: { id: string, paymentMethod: string, totalAmount: number } } }>(
+    // 🔍 Agregar log para verificar valores antes de la petición
+    console.log("📤 Enviando a GraphQL:", {
+      gymId: 1,
+      paymentMethod,
+      cart: formattedCart,
+      cashRegisterId: 168
+    });
+  
+    await this.http.post(
       'http://localhost:3000/graphql', 
       {
         query: graphqlQuery,
         variables: {
-          "gymId": 1,
-          "paymentMethod": paymentMethod,
-          "cart": formattedCart
+          gymId: 1,
+          paymentMethod: paymentMethod,
+          cart: formattedCart,
+          cashRegisterId: 168
         }
       }
     ).subscribe({
-      next: (response) => {
-        console.log(response)
-        const { id, paymentMethod, totalAmount } = response.data.createSale;
-        this.notificationService.mostrarSnackbar(':: Venta registrada correctamente', 'success');
-        this.printTicket(formattedCart, totalAmount);
+      next: (response:any) => {
+        console.log("✅ Respuesta de la API:", response);
+        if (response.data && response.data.createSale) {
+          this.notificationService.mostrarSnackbar(':: Venta registrada correctamente', 'success');
+          this.printTicket(formattedCart, response.data.createSale.totalAmount);
+        } else {
+          console.error("⚠️ Respuesta inesperada de la API:", response);
+        }
       },
       error: (error) => {
-        console.error('GraphQL Error:', error);
+        console.error("❌ GraphQL Error:", error);
+        
+        // 🔥 Agregar logs detallados
+        if (error.error && error.error.errors) {
+          console.error("🔍 Detalles del error:", JSON.stringify(error.error.errors, null, 2));
+        }
       }
     });
+    
   }
+  
+  
   
   // ✅ Imprimir el ticket
   async printTicket(cart: any, totalAmount: number) {
@@ -323,8 +330,3 @@ export class CartService {
     this.clearCart();
   }
 }
-
-  
-  
-  
-

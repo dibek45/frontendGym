@@ -1,5 +1,4 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { MemberModel } from 'src/app/core/models/member.interface';
 import { AppState } from '../app.state';
 import { MemberState } from 'src/app/core/models/member.state';
  
@@ -47,3 +46,31 @@ export const selectSearchTerm = createSelector(
     SelectFeature,
     (state: MemberState) => state.selectedMember
   );
+
+
+
+
+export const selectMembersState = (state: AppState) => state.members;
+
+// 🔹 Todos los miembros
+export const selectAllMembers = createSelector(
+  selectMembersState,
+  (state: MemberState) => state.members
+);
+
+// 🔸 Solo sincronizados
+export const selectSyncedMembers = createSelector(
+  selectAllMembers,
+  members => members.filter(m => m.isSynced === true)
+);
+
+// 🔸 Solo pendientes de sincronización
+export const selectUnsyncedMembers = createSelector(
+  selectAllMembers,
+  members => members.filter(m => !m.isSynced)
+);
+
+export const selectMembersWithSyncError = createSelector(
+  selectAllMembers,
+  members => members.filter(m => m.syncError === true)
+);

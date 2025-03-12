@@ -6,5 +6,7 @@ export interface CartItemModel {
   quantity: number;
   total: number; // Required total for the item
   img?: string; // Ahora la propiedad img es opcional
+  selectedPlan?: number;
+
 }
   

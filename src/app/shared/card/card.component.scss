@@ -4,6 +4,8 @@
   margin: 1em; /* Margen entre las tarjetas */
   background-color: #ffffff;
   border-radius: 1em;
+  border: 8px solid white;
+ // z-index: 10;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-family: 'Open Sans Condensed', sans-serif;
@@ -67,10 +69,10 @@
 }
 
 .name {
+  position: absolute;
   font-size: 1em;
   text-transform: uppercase;
-  margin-top: 10px;
-}
+top: 40px;}
 
 .username {
   font-size: 0.7em;
@@ -112,6 +114,7 @@ button:hover {
 
 
 .user-image img {
+  margin-top: 20px;
   object-fit: cover;
   border: 3px solid #000; /* Contorno negro */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contorno */
@@ -177,4 +180,42 @@ button:hover {
 
 ::ng-deep .mat-menu-item:hover {
   background: rgba(0, 0, 0, 0.05) !important; /* Light hover effect */
+}
+.sync-container {
+  position: absolute;
+  top: -13px;   /* Distancia del borde superior */
+  right: 10px; /* Distancia del borde derecho */
+  z-index: 10; /* Para que quede encima del contenido */
+}
+.edit-container {
+  position: absolute;
+  top: -13px;   /* Distancia del borde superior */
+  right: 158px; /* Distancia del borde derecho */
+  
+}
+/* Ícono del botón editar */
+.edit-container mat-icon {
+  font-size: 16px;        // Tamaño del ícono
+  width: 16px;
+  height: 16px;
+}
+
+/* Ícono del botón sync */
+.sync-button .edit-container mat-icon {
+  font-size: 16px;
+  width: 12px;
+  height: 12px;
+}
+.sync-container  .edit-container button {
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+}
+
+.sync-container button:hover {
+  background-color: #f5f5f5;
+}
+
+.sync-container mat-icon {
+  color: #2275b0; /* Verde, pero puedes usar el que quieras */
 }

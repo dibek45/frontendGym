@@ -1,16 +1,23 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { SalesState } from './sale.reducer';
+import { SaleState } from './sale.state';
 
-// 🔹 Seleccionamos el estado de ventas correctamente
-export const selectSalesState = createFeatureSelector<SalesState>('sales');
+export const selectSalesState = createFeatureSelector<SaleState>('sales');
 
-// 🔹 Seleccionar el estado de ventas
-
-export const selectAllSales = createSelector(
+export const selectFilteredSales = createSelector(
   selectSalesState,
-  (state: SalesState) => {
-    console.log('📌 Estado de ventas en Redux:', state);
-    return state.sales; // 🔹 Devuelve todas las ventas sin filtrar
+  (state: SaleState) => {
+    const { sales, startDate, endDate, selectedCashierId, selectedCashRegisterId } = state;
+
+    return sales.filter(sale => {
+      const saleDate = sale.saleDate ? new Date(sale.saleDate) : null;
+
+      if (!saleDate) return false;
+      if (startDate && saleDate < new Date(startDate)) return false;
+      if (endDate && saleDate > new Date(endDate)) return false;
+      if (selectedCashRegisterId !== null && sale.cashRegister?.id !== selectedCashRegisterId) return false;
+      if (selectedCashierId !== null && sale.cashRegister?.cashier?.id !== selectedCashierId) return false;
+
+      return true;
+    });
   }
 );
-

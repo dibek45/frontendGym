@@ -22,24 +22,18 @@ query GetSales($gymId: Float!) {
         name
       }
     }
-    details {
+  details {
       id
+      quantity
+      isMembership
+      unitPrice
+      totalPrice 
+      membershipName
       product {
         id
         name
-        created_at
-        available
-        img
-        stock
         price
-        categoryId
-        gymId
-       
-        barcode
       }
-      quantity
-      unitPrice
-      totalPrice
     }
    
       id

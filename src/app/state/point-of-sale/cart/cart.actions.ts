@@ -6,7 +6,7 @@ import { CartItemModel } from 'src/app/home/product/cart/cart-item.model';
 
 export const addItemToCart = createAction(
   '[Cart] Add Item',
-  props<{ item: CartItem }>()
+  props<{ item: CartItemModel }>()
 );
 
 export const updateCart = createAction(

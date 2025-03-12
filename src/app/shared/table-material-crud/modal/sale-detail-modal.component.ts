@@ -1,34 +1,23 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
-import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
-import { MatTableDataSource } from '@angular/material/table';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-sale-detail-modal',
   standalone: true,
+  imports: [MatDialogModule, MatTableModule, MatButtonModule],
+  providers: [DatePipe], // 👈 Se agrega para poder usar el pipe 'date'
+
   templateUrl: './sale-detail-modal.component.html',
-  imports: [CommonModule, MaterialModuleModule],
 })
 export class SaleDetailModalComponent {
-  displayedColumns: string[] = ['property', 'value'];
-  dataSource = new MatTableDataSource<any>();
+  dialogRef = inject(MatDialogRef<SaleDetailModalComponent>);
+  data = inject(MAT_DIALOG_DATA);
 
-  constructor(
-    public dialogRef: MatDialogRef<SaleDetailModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { objectData: any[]; columnName: string }
-  ) {
-    // 🔥 Convertir objeto en un array de clave-valor para mostrarlo en una tabla
-    this.dataSource.data = data.objectData.map(obj => 
-      Object.entries(obj).map(([key, value]) => ({ property: key, value }))
-    ).flat();
-  }
-
-  close(): void {
+  closeModal(): void {
     this.dialogRef.close();
-  }
-
-  isObject(value: any): boolean {
-    return value && typeof value === 'object' && !Array.isArray(value);
   }
 }

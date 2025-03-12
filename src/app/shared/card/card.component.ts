@@ -4,7 +4,7 @@ import * as QRCode from 'qrcode';
 import { MatIconModule } from '@angular/material/icon';
 import * as JsBarcode from 'jsbarcode';
 import { AppState } from 'src/app/state/app.state';
-import { selectUser } from 'src/app/state/selectors/user.selectors';
+import { selectUser } from 'src/app/state/user/user.selectors';
 import { Store } from '@ngrx/store';
 import { PrinterService } from 'src/app/printer.service';
 import { Router } from '@angular/router';
@@ -13,27 +13,34 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanModalComponent } from './plan-modal/plan-modal.component';
-import { selectAllPlans, selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
-import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
 import { take } from 'rxjs';
+import { ProductModel } from 'src/app/core/models/product.interface';
+import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
+import { CartItemModel } from 'src/app/home/product/cart/cart-item.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   standalone:true,
-  imports:[MatIconModule,TruncateNamePipe, MatMenuModule,
+  imports:[
+    CommonModule,
+    MatIconModule,TruncateNamePipe, MatMenuModule,
     MatButtonModule,],
     encapsulation: ViewEncapsulation.None, // Apply styles globally
 
 
 })
 export class CardComponent {
-  plans$ = this.store.select(selectPlansByGymId(1)); // Filtra planes por gymId
+editUser(arg0: MemberModel) {
+throw new Error('Method not implemented.');
+}
+  @Input() plans: any[] | null = null;
 
   private modalOpened = false; // 🔥 Controla si el modal ya se abrió
 
-  @Input() element: MemberModel; // Asegúrate de tener esta entrada
+  @Input() user: MemberModel; // Asegúrate de tener esta entrada
   Data: string = ''; // Cambia este valor según tus necesidades
   gymIdFromStore: any;
 
@@ -42,23 +49,25 @@ export class CardComponent {
 
   ngOnInit():void{
 
-    this.store.dispatch(loadPlansByGym({ gymId: 1 })); // Carga los planes del gymId al iniciar
 
     this.store.select(selectUser).subscribe((users:any) => {
   //if (users.user.gymId!=undefined) {
     this.gymIdFromStore=users.user.gymId;
-  this.Data=this.gymIdFromStore+"-"+this.element.id
+  this.Data=this.gymIdFromStore+"-"+this.user.id
     });
    
    }
-constructor(public dialog: MatDialog,private store:Store<AppState>,private printerService:PrinterService,private router: Router,   
+constructor(public dialog: MatDialog,private store:Store<AppState>,private printerService:PrinterService,private router: Router,   private _cartService:CartService
 ){
-  this.element={
+  this.user={
     id: '0',
     name: "",
     createdAt: "",
     actived: false, 
-    img:""
+    available_days:0,
+    img:"",
+    gymId:0,
+    username:''
 }
 }
 
@@ -94,40 +103,70 @@ viewDetails(productId: string) {
 
 // Función para manejar la opción "Cobrar"
 cobrar(plan: any) {
-  console.log('Cobrar:', this.element);
+  console.log('Cobrar:', this.user);
   // Aquí puedes agregar la lógica para cobrar
 }
 
 // Función para manejar la opción "Agregar a carrito"
 agregarAlCarrito(plan: any) {
-  console.log('Agregar a carrito:', this.element);
+  console.log('Agregar a carrito:', this.user);
   // Aquí puedes agregar la lógica para agregar al carrito
 }
 
-openRenovarModal(userId:string): void {
-  if (this.modalOpened) return; // 🔥 Evita que se abra más de una vez automáticamente
 
-  this.plans$.pipe(take(1)).subscribe(plans => {
-    const dialogRef = this.dialog.open(PlanModalComponent, {
-      width: '400px',
-      disableClose: true,
-      data: { plans,userId} // Pasar los planes filtrados al modal
-    });
 
-    this.modalOpened = true; // 🔥 Se marca como abierto para que no se vuelva a abrir solo
+openRenovarModal(userId: string): void {
+  if (this.modalOpened) return;
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.modalOpened = false; // 🔥 Se restablece para permitir abrirlo manualmente después
+  // ✅ Verifica si hay planes antes de abrir el modal
+  if (!this.plans || this.plans.length === 0) {
+    console.warn('❗ No hay planes disponibles para mostrar en el modal.');
+    return;
+  }
 
-      if (result) {
-        if (result.action === 'cobrar') {
-          this.cobrar(result.plan);
-        } else if (result.action === 'agregarAlCarrito') {
-          this.agregarAlCarrito(result.plan);
-        }
-      }
-    });
+  // ✅ Abre el modal con los planes que te pasan por @Input()
+  const dialogRef = this.dialog.open(PlanModalComponent, {
+    width: '400px',
+    disableClose: true,
+    data: {
+      plans: this.plans, // <-- Usa el input
+      userId: userId
+    }
+  });
+
+  this.modalOpened = true;
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.modalOpened = false;
+
+    if (result) {
+      console.log('✅ Plan seleccionado en el modal:', result);
+
+      const membership: CartItemModel = {
+        product: {
+          id: Number(result.id),
+          name: result.name,
+          price: result.price,
+          img: 'assets/membership.png',
+          available: true,
+          stock: 9999,
+          isMembership: true,
+          idClienteTOMembership: userId ? Number(userId) : 0 // 🔥 Si `userId` es `null`, se envía `0`
+        },
+        quantity: 1,
+        total: result.price
+      };
+
+      console.log('📌 Agregando membresía al carrito:', membership);
+
+      this._cartService.addItem(membership.product, membership.quantity);
+    }
   });
 }
 
+
+retrySyncUnsyncedMembers() {
+  console.log('🔄 Reintentando sincronización de miembros...');
+  
+}
 }

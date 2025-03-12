@@ -8,7 +8,7 @@ import {  ProductState } from '../core/models/product.state';
 import { HuellaState } from '../core/models/huella.state';
 import { UserState } from '../core/models/user.state';
 import { UserReducer } from './reducers/deleteuser.reducer';
-import { cartReducer } from './reducers/cart.reducer';
+import { cartReducer } from './point-of-sale/cart/cart.reducer';
 import { CartState } from '../core/models/cart.state';
 import { categoryReducer, CategoryState } from './reducers/category.reducer';
 import { DetailProductState } from '../core/models/detail-product.state';

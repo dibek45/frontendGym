@@ -1,1 +1,58 @@
-<p>graphs works!</p>
+<div style="display: flex; gap: 10px; margin-bottom: 15px; margin-left: 500px;">
+    <!-- Selector de Fecha de Inicio -->
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <!-- Selector de Fecha de Fin -->
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="onEndDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <!-- Selector de Tipo (Ventas o Gastos) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo</mat-label>
+      <mat-select [(ngModel)]="selectedType" (selectionChange)="onTypeChange($event)">
+        <mat-option value="sales">Ventas</mat-option>
+        <mat-option value="expenses">Gastos</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <mat-checkbox [(ngModel)]="compareMode" (change)="applyFilters()" labelPosition="before">
+        Comparar Ventas y Gastos
+      </mat-checkbox>
+    </div>
+    
+    <button mat-button color="warn" (click)="resetFilters()">Limpiar Filtros</button>
+    <mat-button-toggle-group [(ngModel)]="selectedTimeRange" (change)="setDateRange($event.value)">
+      <mat-button-toggle value="today">Hoy</mat-button-toggle>
+      <mat-button-toggle value="week">Última Semana</mat-button-toggle>
+      <mat-button-toggle value="month">Último Mes</mat-button-toggle>
+    </mat-button-toggle-group>
+    
+   
+
+  </div>
+  <button mat-button color="primary" (click)="downloadCSV()">Descargar CSV</button>
+  <button mat-button color="primary" (click)="downloadPDF()">Descargar PDF</button>
+
+  <div *ngIf="barChartData[0].data.length === 0" class="no-data">
+    No hay datos disponibles para este rango de fechas.
+  </div>
+  
+  <!-- Gráfico -->
+  <div style="width: 600px; margin: auto;">
+    <canvas baseChart
+    [datasets]="barChartData"
+    [labels]="barChartLabels"
+    [options]="barChartOptions"
+    [type]="barChartType">
+</canvas>
+
+</div>

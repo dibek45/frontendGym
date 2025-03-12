@@ -72,12 +72,32 @@
     <h2>Ingresa tu huella 4 veces </h2>
     <div style="display: flex;" *ngIf="!llenarDatos">
       <button (click)="mas()">{{counter}}</button>
-      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 1 ? 1 : 0" [scanning]="counter == 0 ? 1 : 0"></app-register-huella>
-      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 2 ? 1 : 0" [scanning]="counter == 1 ? 1 : 0"></app-register-huella>
-      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 3 ? 1 : 0" [scanning]="counter == 2 ? 1 : 0"></app-register-huella>
-      <app-register-huella *ngIf="!llenarDatos" [rellene]="counter === 4 ? 1 : 0" [scanning]="counter == 3 ? 1 : 0"></app-register-huella>
-      
-    </div>1
+    
+      <app-register-huella
+        *ngIf="!llenarDatos"
+        [rellene]="counter === 1 ? 1 : 0"
+        [scanning]="counter === 0 ? 1 : 0"
+      ></app-register-huella>
+    
+      <app-register-huella
+        *ngIf="!llenarDatos"
+        [rellene]="counter === 2 ? 1 : 0"
+        [scanning]="counter === 1 ? 1 : 0"
+      ></app-register-huella>
+    
+      <app-register-huella
+        *ngIf="!llenarDatos"
+        [rellene]="counter === 3 ? 1 : 0"
+        [scanning]="counter === 2 ? 1 : 0"
+      ></app-register-huella>
+    
+      <app-register-huella
+        *ngIf="!llenarDatos"
+        [rellene]="counter === 4 ? 1 : 0"
+        [scanning]="counter === 3 ? 1 : 0"
+      ></app-register-huella>
+    </div>
+    
   </div>
   
   </div>

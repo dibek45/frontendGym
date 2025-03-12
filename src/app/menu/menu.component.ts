@@ -11,10 +11,10 @@ import { NotificationService } from '../shared/notification.service';
 import { SpeechService } from '../shared/speech.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BarcodeFormat } from '@zxing/library';
-import { selectCartTotal } from '../state/selectors/cart.selectors';
+import { selectCartTotal } from '../state/point-of-sale/cart/cart.selectors';
 import { ProductModel } from '../core/models/product.interface';
 import { selectAllProducts } from 'src/app/state/selectors/product.selectors';
-import { CartService } from '../home/product/cart/cart.service';
+import { CartService } from '../state/point-of-sale/cart/cart.service';
 import { setDetailProduct } from '../state/actions/product.actions';
 
 @Component({

@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { CartItemModel } from './cart-item.model';
-import { CartService } from './cart.service';
+import { CartService } from '../../../state/point-of-sale/cart/cart.service';
 import { Store } from '@ngrx/store';
-import { selectCartItems, selectCartTotal } from 'src/app/state/selectors/cart.selectors';
-import { calculateTotal, removeItemFromCart, updateCart } from 'src/app/state/actions/cart.actions';
+import { selectCartItems, selectCartTotal } from 'src/app/state/point-of-sale/cart/cart.selectors';
+import { calculateTotal, removeItemFromCart, updateCart } from 'src/app/state/point-of-sale/cart/cart.actions';
 import { AppState } from 'src/app/state/app.state';
 import { MemberService } from '../../../state/member/member.service';
 import { selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
@@ -171,7 +171,8 @@ export class CartComponent implements OnInit {
               ...item.product,
               available: true,
               img: '',
-              stock: 0
+              stock: 0,
+              isMembership:false
             }
           };
         })

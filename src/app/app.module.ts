@@ -29,8 +29,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SharedModule } from './shared/shared-module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SlideComponent } from './shared/slide/slide.component';
-import * as fromSaleDetail from './state/point-of-sale/sale-details/sale-detail.reducer';
-import { SaleDetailEffects } from './state/point-of-sale/sale-details/sale-detail.effects';
+
 import { SaleModule } from './state/point-of-sale/sale/sale.module';
 import { CashRegisterModule } from './state/point-of-sale/cash-register/cash-register.module';
 import { cashRegisterReducer } from './state/point-of-sale/cash-register/cash-register.reducer';
@@ -81,9 +80,8 @@ import { planReducer } from './state/plan/plan.reducer';
     StoreDevtoolsModule.instrument({
       name:'test2'
     }),
-    EffectsModule.forRoot([MemberEffects, ProductEffects,SaleDetailEffects,CashRegisterEffects]),
+    EffectsModule.forRoot([MemberEffects, ProductEffects,CashRegisterEffects]),
     ZXingScannerModule,
-    StoreModule.forFeature(fromSaleDetail.saleDetailsFeatureKey, fromSaleDetail.saleDetailReducer),
     SaleModule,
     StoreModule.forFeature('cashRegisters', cashRegisterReducer), // Registro del feature store
     CashRegisterModule,

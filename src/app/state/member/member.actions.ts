@@ -14,13 +14,18 @@ export const setSearchTerm = createAction(
     '[Set search term]', props<{ searchTerm: string }>());
 
 
-    export const addMember = createAction(
+export const addMember = createAction(
         '[Add Member]', 
         props<{ member: MemberModel }>()
       );
+
+export const updateMember = createAction(
+        '[Members] Update Member',
+        props<{ tempId: string, updatedMember: MemberModel }>()
+      );
       
       // Acciones del formulario (solo las necesarias)
-      export const FormActions = createActionGroup({
+ export const FormActions = createActionGroup({
         source: 'Form',
         events: {
           'Form Submitted': emptyProps(),  // No lleva datos adicionales
@@ -65,3 +70,32 @@ export const setSearchTerm = createAction(
         '[Member] Update Available Days Failure',
         props<{ error: any }>()
       );
+
+
+     
+      
+      export const syncMemberSuccess = createAction(
+        '[Members] Sync Member Success',
+        props<{ tempId: string; updatedMember: MemberModel }>()
+      );
+      
+      export const syncMemberFailure = createAction(
+        '[Members] Sync Member Failure',
+        props<{ tempId: string; error: any }>()
+      );
+
+    
+      
+      export const syncMember = createAction(
+        '[Members] Sync Member',
+        props<{ member: MemberModel }>()
+      );
+      
+      export const syncMemberUpdate = createAction(
+        '[Members] Sync Member Update',
+        props<{ member: MemberModel }>()
+      );
+   
+      
+   
+      

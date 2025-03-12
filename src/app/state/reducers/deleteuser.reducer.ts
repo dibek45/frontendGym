@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { loadUser,loadedUser, setUser } from '../actions/user.actions';
+import { loadUser,loadedUser, setUser } from '../user/user.actions';
 import { UserState } from 'src/app/core/models/user.state';
 
 export const InitialState: UserState={loading:false,user:{id:0,gymId:0}};

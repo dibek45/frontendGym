@@ -1,9 +1,56 @@
+<div style="display: flex; gap: 10px; margin-bottom: 15px; position: absolute; left: 660px; width: 500px;">
+    <!-- Selector de Fecha de Inicio -->
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <!-- Selector de Fecha de Fin -->
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="onEndDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <!-- Selector de Caja Registradora -->
+    <mat-form-field appearance="outline">
+      <mat-label>Caja Registradora</mat-label>
+      <mat-select [(ngModel)]="selectedCashRegisterId" (selectionChange)="onCashRegisterChange($event)">
+        <mat-option [value]="null">Todas</mat-option>
+        <mat-option *ngFor="let register of cashRegisters" [value]="register.id">
+          {{ register.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <!-- Selector de Cajero (Dinámico según la Caja) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Cajero</mat-label>
+      <mat-select [(ngModel)]="selectedCashierId" (selectionChange)="onCashierChange($event)" [disabled]="cashiers.length === 0">
+        <mat-option [value]="null">Todos</mat-option>
+        <mat-option *ngFor="let cashier of cashiers" [value]="cashier.id">
+          {{ cashier.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+  
 
-<!-- Mostrar mensaje si no hay ventas -->
-<div *ngIf="data.length === 0" style="text-align: center; font-weight: bold; color: gray;">
+  <button mat-button color="warn" (click)="resetFilters()">Limpiar Filtros</button>
+
+</div>
+
+<button mat-raised-button color="primary" (click)="generateReport()">
+  Generar Reporte
+</button>
+
+<div *ngIf="(sales$ | async)?.length === 0" style="text-align: center; font-weight: bold; color: gray;">
   No hay ventas registradas.
 </div>
 
-<!-- Tabla de Ventas con Angular Material -->
-<app-table-material-crud [data]="data" style="position: absolute;  left: 660px;
-  width: 500px;"></app-table-material-crud>
+<!-- Tabla de Ventas -->
+<app-table-material-crud [data]="(sales$ | async) || []" style="position: absolute; left: 660px; width: 500px; top: 280px;" *ngIf="(sales$ | async)?.length != 0" >
+</app-table-material-crud>

@@ -55,3 +55,25 @@ export const deleteSaleFailure = createAction(
   '[Sales] Delete Sale Failure',
   props<{ error: any }>()
 );
+
+export const setStartDate = createAction(
+  '[Sales] Set Start Date',
+  props<{ startDate: string | null }>()
+);
+
+export const setEndDate = createAction(
+  '[Sales] Set End Date',
+  props<{ endDate: string | null }>()
+);
+
+export const resetFilters = createAction('[Sales] Reset Filters');
+
+export const setCashierId = createAction(
+  '[Sales] Set Cashier Id',
+  props<{ cashierId: number | null }>()
+);
+
+export const setCashRegisterId = createAction(
+  '[Sales] Set Cash Register Id',
+  props<{ cashRegisterId: number | null }>()
+);

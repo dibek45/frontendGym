@@ -10,7 +10,8 @@ import {
   loadedMemberDetail,
   loadMemberDetailFailed,
   loadMembersFailed
-} from '../actions/member.actions';
+} from './member.actions';
+import * as MemberActions from './member.actions'; // <-- Make sure this path is correct
 
 // Estado inicial
 export const InitialState: MemberState = {
@@ -18,6 +19,7 @@ export const InitialState: MemberState = {
   members: [],
   searchTerm: '',
   selectedMember: null,  // Valor inicial
+  availableDays: 0 // Add this field
 
 };
 
@@ -53,6 +55,29 @@ export const MemberReducer = createReducer(
   on(loadMemberDetailFailed, (state, { error }) => ({
     ...state,
     error: error,
-  }))
+  })),
+  on(MemberActions.updateAvailableDaysSuccess, (state, { days }) => ({
+    ...state,
+    availableDays: days
+})),
+
+
+on(MemberActions.syncMemberSuccess, (state, { tempId, updatedMember }) => ({
+  ...state,
+  members: state.members.map(member =>
+    member.tempId === tempId
+      ? { ...member, ...updatedMember, syncError: false }
+      : member
+  )
+})),
+
+on(MemberActions.syncMemberFailure, (state, { tempId, error }) => ({
+  ...state,
+  members: state.members.map(member =>
+    member.tempId === tempId
+      ? { ...member, syncError: true }
+      : member
+  )
+}))
   
 );

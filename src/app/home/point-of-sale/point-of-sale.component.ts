@@ -16,10 +16,8 @@ export class PointOfSaleComponent implements OnInit {
     //{ label: 'Reservas', color: '#F4F4F4', icon: 'event' },
    // { label: 'Clases', color: '#F4F4F4', icon: 'fitness_center' },
    { label: 'Roles y Permisos', color: '#EADAFD', icon: 'lock_open' },
-   { label: 'Planes', color: '#EADAFD', icon: 'card_membership' },
 
     { label: 'Cajeros', color: '#F4F4F4', icon: 'supervisor_account' },
-    { label: 'Reportes', color: '#EAF6FF', icon: 'bar_chart' },
     { label: 'Gráficas', color: '#EAF6FF', icon: 'insert_chart' },
     { label: 'Rutinas', color: '#FFE5D9', icon: 'fitness_center' },
     { label: 'Promociones', color: '#FFF4E5', icon: 'local_offer' },
@@ -78,8 +76,7 @@ export class PointOfSaleComponent implements OnInit {
         }         
         else if (event.url.includes('administration')) {
           this.menuService.setMenuselected('Menu');
-
-          }  
+        }   
         else {
           this.menuService.setMenuselected('Menu');
           this.btnBack=true;

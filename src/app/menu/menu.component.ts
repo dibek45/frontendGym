@@ -6,15 +6,15 @@ import { Store } from '@ngrx/store';
 import { selectItemsList, selectLoading } from '../state/selectors/huella.selectors';
 import { map, Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { UserService } from '../home/user/user.service';
+import { MemberService } from '../state/member/member.service';
 import { NotificationService } from '../shared/notification.service';
 import { SpeechService } from '../shared/speech.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BarcodeFormat } from '@zxing/library';
-import { selectCartTotal } from '../state/selectors/cart.selectors';
+import { selectCartTotal } from '../state/point-of-sale/cart/cart.selectors';
 import { ProductModel } from '../core/models/product.interface';
 import { selectAllProducts } from 'src/app/state/selectors/product.selectors';
-import { CartService } from '../home/product/cart/cart.service';
+import { CartService } from '../state/point-of-sale/cart/cart.service';
 import { setDetailProduct } from '../state/actions/product.actions';
 
 @Component({
@@ -48,7 +48,7 @@ barcode: string = ''; // Variable para el código de barras
     private authService:AuthService, private store:Store<AppState>,
     private sharedService: SharedService,
     private router: Router,
-    private _access:UserService,
+    private _access:MemberService,
     private _notification:NotificationService,
     private speechService: SpeechService,
     public dialog: MatDialog,

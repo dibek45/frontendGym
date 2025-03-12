@@ -2,12 +2,22 @@ import { Sale } from './sale.model'; // Asegúrate de importar el modelo correct
 
 // Define la estructura del estado de ventas
 export interface SaleState {
-  sales: Sale[];      // Lista de ventas
-  error: any | null;  // Para manejar errores
+  sales: Sale[];
+  loading: boolean;
+  error: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  selectedCashRegisterId: number | null;  // 🔹 Filtro por caja
+  selectedCashierId: number | null;   
 }
 
-// Define el estado inicial para las ventas
 export const initialSaleState: SaleState = {
-  sales: [],  // Inicialmente no hay ventas
-  error: null, // Sin errores al inicio
+  sales: [],
+  loading: false,
+  error: null,
+  startDate: null,
+  endDate: null,
+  selectedCashRegisterId: null,  // 🔹 Inicialmente sin filtro
+  selectedCashierId: null        // 🔹 Inicialmente sin filtro
 };
+

@@ -3,10 +3,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
 import { SaleDetailModalComponent } from './modal/sale-detail-modal.component';
-import { ProductsSaleModalDetailsComponent } from './modal/products-sale-modal-details.component';
 
 @Component({
   selector: 'app-table-material-crud',
@@ -14,12 +13,13 @@ import { ProductsSaleModalDetailsComponent } from './modal/products-sale-modal-d
   templateUrl: './table-material.component.html',
   styleUrls: ['./table-material.component.scss'],
   imports: [CommonModule, MaterialModuleModule],
+  providers: [DatePipe] // 👈 Se agrega para poder usar el pipe 'date'
+
 })
 export class TableMaterialCrudComponent implements OnChanges, AfterViewInit {
   private dialog = inject(MatDialog);
 
   @Input() data: any[] = [];
-  displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<any>();
 
   @Output() elementSelected = new EventEmitter<any>();
@@ -31,13 +31,24 @@ export class TableMaterialCrudComponent implements OnChanges, AfterViewInit {
 
   dateColumns: string[] = ['createdAt', 'updatedAt', 'timestamp'];
 
+  displayedColumns: string[] = [
+    'id',
+    'cashRegisterId',
+    'cashierName',
+    'paymentMethod',
+    'saleDate',
+    'totalAmount',
+    'details', // 👈 Botón para abrir el modal con los detalles
+    'actions'  // 👈 Manteniendo la columna de editar/eliminar
+  ];
+  
+ 
+
   ngOnChanges(changes: SimpleChanges): void {
     if ('data' in changes && this.data && this.data.length > 0) {
       this.processData();
     } else {
-      this.displayedColumns = ['id', 'actions']; // Si no hay datos, definir solo estas columnas
-     this.displayedColumns = this.displayedColumns.filter(column => column !== 'gym');
-
+      this.displayedColumns = ['id', 'actions']; // 🔹 Si no hay datos, solo mostrar ID y Acciones
     }
   }
 
@@ -50,14 +61,15 @@ export class TableMaterialCrudComponent implements OnChanges, AfterViewInit {
 
   processData(): void {
     if (this.data.length > 0) {
-      // 🔹 Generar columnas dinámicamente asegurando que `id` sea la primera y excluyendo `gym`
-      const columns = Object.keys(this.data[0]).filter(col => col !== 'id' && col !== 'gym');
-      this.displayedColumns = ['id', ...columns, 'actions'];
+      // 🔹 Transformar datos antes de asignarlos a la tabla
+      this.dataSource.data = this.data.map(sale => ({
+        ...sale,
+        cashRegisterId: sale.cashRegister?.id ?? 'N/A', // 🔹 ID de la caja
+        cashierName: sale.cashRegister?.cashier?.name ?? 'N/A', // 🔹 Nombre del cajero
+      }));
     } else {
       this.displayedColumns = ['id', 'actions'];
     }
-  
-    this.dataSource.data = this.data;
   }
   
   applyFilter(event: Event): void {
@@ -65,27 +77,14 @@ export class TableMaterialCrudComponent implements OnChanges, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  openDetailsModal(objectData: any, columnName: string): void {
-    if (!objectData || typeof objectData !== 'object') {
-      console.warn(`⚠ La columna ${columnName} no contiene un objeto válido.`);
-      return;
-    }
-  
-    if (columnName === 'details') {
-      // 🔹 Si se selecciona "details", abrir el modal especializado
-      this.dialog.open(ProductsSaleModalDetailsComponent, {
-        width: '700px',
-        data: { products: objectData }, // Pasamos los productos al modal
-      });
-    } else {
-      // 🔹 Para otros objetos, abrir el modal estándar
-      this.dialog.open(SaleDetailModalComponent, {
-        width: '600px',
-        data: { objectData: Array.isArray(objectData) ? objectData : [objectData], columnName },
-      });
-    }
+  openSaleDetailModal(sale: any): void {
+    this.dialog.open(SaleDetailModalComponent, {
+      width: '600px',
+      data: {
+        sale: sale
+      }
+    });
   }
-  
 
   isObject(value: any): boolean {
     return typeof value === 'object' && value !== null;
@@ -99,12 +98,6 @@ export class TableMaterialCrudComponent implements OnChanges, AfterViewInit {
     this.elementDeleted.emit(row);
   }
 
-  getCashRegisterName(cashRegister: any): string {
-    if (!cashRegister || typeof cashRegister !== 'object') {
-      return 'Sin nombre';
-    }
-    return cashRegister.name || 'Sin nombre';
-  }
   getDisplayValue(value: any): string {
     if (!value) {
       return '';
@@ -120,6 +113,4 @@ export class TableMaterialCrudComponent implements OnChanges, AfterViewInit {
     }
     return value;
   }
-  
-  
 }

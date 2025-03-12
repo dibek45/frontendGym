@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardCashComponent } from "./shared/card-cash/card-cash.component";
 
-import { CartService } from '../cart.service';
+import { CartService } from '../../../../state/point-of-sale/cart/cart.service';
 
 @Component({
   selector: 'app-right-section',

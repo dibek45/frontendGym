@@ -10,7 +10,7 @@ import { SpeechService } from 'src/app/shared/speech.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class MemberService {
 
   private graphqlEndpoint = 'http://localhost:3000/graphql'; // Reemplaza con tu endpoint GraphQL
 
@@ -28,8 +28,10 @@ export class UserService {
         usersByGymId(gymId: $gymId) {
           id
           gymId
-          name, 
+          name
+          available_days
           img
+
         }
       }
     `;
@@ -88,4 +90,91 @@ export class UserService {
   getMemberDetail(gymId: number, memberId: number): Observable<MemberModel> {
     return this.http.get<MemberModel>(`/api/gym/${gymId}/members/${memberId}`);
   }
+
+
+
+  // member.service.ts (just showing the new method)
+updateDays(memberId: number, days: number) {
+  const gqlQuery = `
+    mutation Mutation($updateAvailableDaysInput: UpdateAvailableDaysDto!) {
+      updateAvailableDays(updateAvailableDaysInput: $updateAvailableDaysInput) {
+        id
+        available_days
+      }
+    }
+  `;
+  const variables = {
+    updateAvailableDaysInput: {
+      id: memberId,
+      available_days: days
+    }
+  };
+
+  return this.http.post<any>('YOUR_GRAPHQL_ENDPOINT', {
+    query: gqlQuery,
+    variables
+  }).pipe(
+    map(res => res?.data?.updateAvailableDays?.available_days)
+  );
+}
+
+
+
+createMember(member: MemberModel): Observable<MemberModel> {
+  const graphqlQuery = `
+    mutation CreateUser($createUser: CreateUser!) {
+      createUser(createUser: $createUser) {
+        id
+        name
+        actived
+        huella
+        img
+        gymId
+        available_days
+        username
+      }
+    }
+  `;
+
+  const userPayload = {
+    name: member.name,
+    actived: member.actived,
+    available_days: member.available_days,
+    img: member.img,
+    gymId: member.gymId,
+    huella: member.huella ?? '',
+    username:member.username
+
+  };
+  
+  console.log('🚀 Payload enviado al backend', userPayload);
+
+  // 🚀 DEBUG DIRECTO
+  this.http.post<any>('http://localhost:3000/graphql', {
+    query: graphqlQuery,
+    variables: { createUser: userPayload }
+  }).subscribe({
+    next: res => {
+      console.log('✅ Response directa:', res);
+    },
+    error: err => {
+      console.error('❌ Error directo:', err);
+    }
+  });
+
+  // 🔙 Deja el return si lo necesitas en el effect:
+  return this.http.post<any>('http://localhost:3000/graphql', {
+    query: graphqlQuery,
+    variables: { createUser: userPayload }
+  }).pipe(
+    map(response => {
+      if (!response.data || !response.data.createUser) {
+        throw new Error('No se pudo crear el usuario en backend');
+      }
+      return response.data.createUser;
+    })
+  );
+}
+
+
 }  

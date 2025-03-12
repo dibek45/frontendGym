@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { AppState } from './state/app.state';
 import { Store } from '@ngrx/store';
-import { setUser } from './state/actions/user.actions';
+import { setUser } from './state/user/user.actions';
 
 @Component({
   selector: 'app-root',

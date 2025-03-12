@@ -7,5 +7,3 @@ export const loadHuella = createAction(
 export const loadedHuella = createAction(
     '[Retrieved huella List]', props<{ id: Readonly<number>}>(),
 );
-
-

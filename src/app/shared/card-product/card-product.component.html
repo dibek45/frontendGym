@@ -1,7 +1,8 @@
 <div class="product-card" (click)="addToCart(element)">
   <!-- Contenedor de contenido -->
   <h3 style="font-weight: 600;margin-top: 10px;">{{element.name }}</h3>
-
+  <h4 style="position: absolute;     margin-left: 15px;">{{element.id}}
+  </h4>
   <div class="product-card-content">
     <img src="{{ element.img }}" alt="{{ element.name }}">
     <div class="product-info">
@@ -9,8 +10,8 @@
       <p style="  font-size: 0.6rem;">Stock:</p>
       <span style="margin-top: -10px;font-weight: 500;">
              {{element.stock}}
-            </span>
+      </span>
     </div>
   </div>
 </div>
-
+ 

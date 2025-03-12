@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { AppState } from '../state/app.state';
-import { setUser } from 'src/app/state/actions/user.actions';
+import { setUser } from 'src/app/state/user/user.actions';
 import { UserInterface } from '../auth/user.interface';
 import { jwtDecode } from 'jwt-decode';
+import { FingerprintPersonaService } from '../shared/fingerprint.service';
 
 @Component({
   selector: 'app-login',
@@ -23,9 +24,14 @@ export class LoginComponent {
     private store: Store<AppState>,
     private authService: AuthService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private WebSocketService:FingerprintPersonaService,
+ 
   ) {}
-
+  ngOnInit(): void {
+    this.compareFingerprints(0);
+    
+      }
   onSubmit(): void {
     console.log('🔹 Nombre de usuario:', this.username);
     console.log('🔹 Contraseña:', this.password);
@@ -95,4 +101,18 @@ export class LoginComponent {
       }
     );
   }
+
+  compareFingerprints(gymId:number): void {
+    //alert("entra")
+    this.WebSocketService.verifyFingerprint(1).subscribe({
+      next: () => {
+        alert('Verificación de huellas en progreso...');
+      },
+      error: (error) => {
+       alert( error);
+      }
+    });
+  
+  }
+  
 }

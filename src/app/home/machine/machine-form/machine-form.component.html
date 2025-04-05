@@ -1,0 +1,94 @@
+<div class="machine-form-container">
+  <h2>{{ machine ? 'Editar Máquina' : 'Nueva Máquina' }}</h2>
+
+  <form [formGroup]="machineForm" (ngSubmit)="onSubmit()">
+    <!-- Nombre -->
+    <mat-expansion-panel [(expanded)]="machinePanelExpanded"  [hideToggle]="true"
+    (afterExpand)="preventAutoScroll($event)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <ng-container *ngIf="!machinePanelExpanded">
+            {{ machineForm.get('name')?.value || 'Máquina sin nombre' }}
+            <mat-icon color="primary" *ngIf="machineForm.valid">check_circle</mat-icon>
+          </ng-container>
+          <ng-container *ngIf="machinePanelExpanded">
+            <mat-icon>edit</mat-icon>
+            &nbsp;Editar máquina
+          </ng-container>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input matInput id="name" formControlName="name" placeholder="Nombre de la máquina" />
+        <div class="error" *ngIf="machineForm.get('name')?.invalid && machineForm.get('name')?.touched">
+          El nombre es requerido.
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea matInput id="description" formControlName="description" placeholder="Descripción"></textarea>
+      </div>
+    
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="button" (click)="machinePanelExpanded = false">
+          Aceptar
+        </button>
+      </div>
+    </mat-expansion-panel>
+    
+
+    <!-- Lista de QRs existentes -->
+    <div class="qr-cards-grid">
+      <ng-container *ngFor="let slot of slots; let i = index">
+        <ng-container *ngIf="qrCodes.at(i); else emptySlot">
+          <app-qr-card
+            [qrForm]="getQrFormGroup(i)"
+            [index]="i"
+            (remove)="removeQrCode($event)"
+            [formGroupName]="i"
+            
+          ></app-qr-card>
+        </ng-container>
+        <ng-template #emptySlot>
+          <div class="qr-slot-placeholder" (click)="startNewQr()">
+            <mat-icon>add</mat-icon>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+    
+
+    <!-- Nuevo QR (formulario temporal) -->
+    <div *ngIf="newQrForm" class="qr-overlay">
+      <div class="qr-code-item floating-qr" [formGroup]="newQrForm">
+   
+
+      <!-- Inputs dentro de un panel responsive -->
+      <div class="qr-form-panel">
+        <label>Nombre del ejercicio</label>
+        <input formControlName="name" placeholder="Ej: Sentadilla" style="width: 80%;"/>
+
+        <label>Link del QR</label>
+        <input formControlName="code" placeholder="https://..." style="width: 80%;"/>
+
+        <div class="qr-code-actions">
+          <button type="button" (click)="confirmNewQr()">Aceptar</button>
+          <button type="button" (click)="cancelNewQr()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <!-- Botones del formulario principal -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="machineForm.invalid">
+        {{ machine ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button type="button" (click)="closeForm()">Cancelar</button>
+    </div>
+  </form>
+</div>

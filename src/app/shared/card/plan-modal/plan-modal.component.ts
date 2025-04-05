@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { addItemToCart, calculateTotal } from 'src/app/state/point-of-sale/cart/cart.actions';
 import { CartItemModel } from 'src/app/home/product/cart/cart-item.model';
-import { setDetailProduct } from 'src/app/state/actions/product.actions';
+import { setDetailProduct } from 'src/app/state/product/product.actions';
 import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
 
 @Component({

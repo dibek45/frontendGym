@@ -1,0 +1,30 @@
+.machine-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+
+  .form-container {
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+
+    border-radius: 8px;
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,53 @@
+.qr-code-item {
+    position: relative;
+    width: 140px;
+    min-height: 10px;
+    padding: 0.5rem 0.5rem 0.8rem;
+    border-radius: 12px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    gap: 0.2rem;
+    overflow: hidden;
+  }
+  
+  .qr-actions-overlay {
+    position: absolute;
+    top: -10px;
+    right:-10px;
+    display: flex;
+    gap: 2px;
+  
+    button[mat-icon-button] {
+      width: 28px;
+      height: 28px;
+      background-color: white;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      padding: 0;
+    }
+  
+    mat-icon {
+      font-size: 18px;
+    }
+  }
+  
+  .qr-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 2px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+  
+  qrcode {
+    margin-top: 4px;
+    margin-bottom: 0; // elimina espacio extra
+    display: block;
+  }
+  

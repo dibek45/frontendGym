@@ -11,7 +11,7 @@ import { loadCategories } from 'src/app/state/actions/category.actions';
 import { AddCategoryModalComponent } from './add-category-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import * as CategoryActions from 'src/app/state/actions/category.actions';
-import * as ProductActions from 'src/app/state/actions/product.actions';
+import * as ProductActions from 'src/app/state/product/product.actions';
 import { ProductModel } from 'src/app/core/models/product.interface';
 
 @Component({

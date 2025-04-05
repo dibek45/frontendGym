@@ -1,7 +1,7 @@
 import { ActionReducerMap } from '@ngrx/store';
 import { MemberState } from '../core/models/member.state';
 import { MemberReducer } from './member/member.reducer';
-import { detailProductReducer, ProductReducer } from './reducers/product.reducer';
+import { detailProductReducer, ProductReducer } from './product/product.reducer';
 import { HuellaReducer } from './reducers/huella.reducer';
 
 import {  ProductState } from '../core/models/product.state';

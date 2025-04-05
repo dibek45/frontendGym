@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Ver Código QR</h2>
+
+<mat-dialog-content class="qr-modal-content">
+  <p>Link del QR:</p>
+  <a [href]="data.qrCode" target="_blank">{{ data.qrCode }}</a>
+
+  <div class="qr-container" (click)="printQr()" style="cursor: pointer;" title="Haz click para imprimir">
+    <qrcode
+      [qrdata]="data.qrCode"
+      [width]="200"
+      [errorCorrectionLevel]="'M'">
+    </qrcode>
+    <p class="print-hint">(Haz click en el QR para imprimir)</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="primary" (click)="editQr()">Editar QR</button>
+  <button mat-button color="accent" (click)="printQr()">Imprimir</button>
+  <button mat-button (click)="close()">Cerrar</button>
+</mat-dialog-actions>

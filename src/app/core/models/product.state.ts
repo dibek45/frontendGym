@@ -1,4 +1,4 @@
-import { DetailProduct } from "src/app/state/reducers/product.reducer";
+import { DetailProduct } from "src/app/state/product/product.reducer";
 import { ProductModel } from "./product.interface";
 
 export interface ProductState{

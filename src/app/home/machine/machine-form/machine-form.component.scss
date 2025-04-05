@@ -1,0 +1,254 @@
+.machine-form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  width: 700px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    input,
+    textarea {
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #4caf50;
+      }
+    }
+
+    .error {
+      color: #f44336;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .qr-codes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .qr-code-item {
+    width: 80%;
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .qr-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: -0.3rem;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 70%;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      transition: border 0.2s;
+
+      &:focus {
+        border-color: #4caf50;
+        outline: none;
+      }
+    }
+
+    .qr-code-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 0.5rem;
+
+      button {
+        padding: 0.4rem 0.8rem;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+
+        &:hover {
+          background-color: #d32f2f;
+        }
+      }
+    }
+
+    .qr-form-panel {
+      margin-top: 0.5rem;
+      padding: 1rem;
+      width: 90%;
+      background-color: #f9f9f9;
+      border-top: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      animation: expandFade 0.25s ease-in-out;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .qr-compact {
+    width: 140px;
+    min-height: 120px;
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+
+    button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+
+      &:first-of-type {
+        background-color: #2196f3;
+        color: white;
+
+        &:hover {
+          background-color: #1976d2;
+        }
+
+        &:disabled {
+          background-color: #9e9e9e;
+          cursor: not-allowed;
+        }
+      }
+
+      &:last-of-type {
+        background-color: #f44336;
+        color: white;
+
+        &:hover {
+          background-color: #d32f2f;
+        }
+      }
+    }
+  }
+
+  @keyframes expandFade {
+    from {
+      opacity: 0;
+      transform: scaleY(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+}
+.qr-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 152px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+  margin-bottom: 20px;
+
+}
+
+.qr-slot-placeholder {
+  width: 99%;
+  aspect-ratio: 1 / 1;
+  width: 152px;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+
+}
+.qr-slot-placeholder {
+
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  mat-icon {
+    font-size: 32px;
+    color: #888;
+  }
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+.qr-overlay {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.3); /* efecto de fondo oscuro */
+  width: 330PX;
+  height: 330PX;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding-top: 5%;
+}
+
+.floating-qr {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  width: 280px;
+}

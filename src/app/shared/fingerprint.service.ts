@@ -34,7 +34,7 @@ export class FingerprintPersonaService {
     private _notification: NotificationService,
     private speechService: SpeechService
   ) {
-    this.setupWebSocket();
+   // this.setupWebSocket();
   }
 
   private setupWebSocket(): void {

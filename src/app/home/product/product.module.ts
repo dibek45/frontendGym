@@ -11,7 +11,7 @@ import { productRoutesRoutingModule } from './product-routing.module';
 import { ProductTableComponent } from './product-table/product-table.component';
 import { TableMaterialComponent } from 'src/app/shared/table-material/table-material.component';
 import { CardProductComponent } from 'src/app/shared/card-product/card-product.component';
-import { ProductService } from './product.service';
+import { ProductService } from '../../state/product/product.service';
 import { SharedModule } from 'src/app/shared/shared-module';
 import { DragOverComponent } from "../../shared/drag-over/drag-over.component";
 

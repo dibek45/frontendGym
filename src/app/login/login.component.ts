@@ -8,6 +8,7 @@ import { setUser } from 'src/app/state/user/user.actions';
 import { UserInterface } from '../auth/user.interface';
 import { jwtDecode } from 'jwt-decode';
 import { FingerprintPersonaService } from '../shared/fingerprint.service';
+import { environment } from 'src/environment.prod';
 
 @Component({
   selector: 'app-login',
@@ -29,9 +30,19 @@ export class LoginComponent {
  
   ) {}
   ngOnInit(): void {
-    this.compareFingerprints(0);
-    
+    this.http.get('https://api.dibeksolutions.com/graphql').subscribe({
+      next: (data) => {
+        alert(JSON.stringify(data, null, 2));
+      },
+      error: (err) => {
+        console.error('Error al obtener los usuarios:', err);
+        alert('Error realupdate: ' + JSON.stringify(err, null, 2));
       }
+    });
+  }
+  
+
+   
   onSubmit(): void {
     console.log('🔹 Nombre de usuario:', this.username);
     console.log('🔹 Contraseña:', this.password);
@@ -47,13 +58,14 @@ export class LoginComponent {
         password: this.password
       }
     };
-
+alert(environment.apiUrl)
     this.http.post<{ data: { login: string } }>(
-      'http://localhost:3000/graphql',
+      environment.apiUrl,
+
       graphqlQuery
     ).subscribe(
       (response) => {
-        console.log('🔹 Full API Response:', response);
+        alert(JSON.stringify(response));
 
         if (!response?.data?.login) { // ✅ Ahora usamos "login" en lugar de "loginmember"
           console.error('❌ Invalid credentials');
@@ -96,20 +108,20 @@ export class LoginComponent {
         this.router.navigate(['home/user/table']);
       },
       (error) => {
-        console.error('❌ Error in authentication:', error);
+        alert(JSON.stringify(error));
         this.error = 'Authentication error. Please try again later.';
       }
     );
   }
 
   compareFingerprints(gymId:number): void {
-    //alert("entra")
+  
     this.WebSocketService.verifyFingerprint(1).subscribe({
       next: () => {
         alert('Verificación de huellas en progreso...');
       },
       error: (error) => {
-       alert( error);
+       alert( JSON.stringify(error));
       }
     });
   

@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ProductModel } from 'src/app/core/models/product.interface';
 import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
-import { setDetailProduct } from 'src/app/state/actions/product.actions';
+import { setDetailProduct } from 'src/app/state/product/product.actions';
 import { AppState } from 'src/app/state/app.state';
 
 @Component({

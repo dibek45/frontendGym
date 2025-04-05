@@ -1,0 +1,46 @@
+<div class="machine-list-container"  >
+
+    <h2>Lista de Máquinas</h2>
+  
+  
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Códigos QR</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let machine of machines$ | async">
+          <td>{{ machine.id }}</td>
+          <td>{{ machine.name }}</td>
+          <td>{{ machine.description }}</td>
+    
+          <td>
+            <ul>
+              <li *ngFor="let qr of machine.qrs; let i = index">
+                <!-- Botón para abrir el modal con el QR -->
+                <button *ngIf="machine.id !== undefined" (click)="openQrModal(qr.code)">
+                  Ver QR {{ i + 1 }}
+                </button>
+              </li>
+            </ul>
+          </td>
+    
+          <td>
+            <button (click)="editMachine(machine)">Editar</button>
+            <button *ngIf="machine.id !== undefined" (click)="deleteMachine(machine.id)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+
+  
+  </div>
+  

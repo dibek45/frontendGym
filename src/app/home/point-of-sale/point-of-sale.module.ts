@@ -23,11 +23,17 @@ import { RoutinesComponent } from './routines/routines.component';
 import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
 import { MatTableModule } from '@angular/material/table';
 import { PromotionDetailsComponent } from './promotion/promotion-details/promotion-details.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RolesModule } from './roles/roles.module';
 import { TableMaterialCrudComponent } from "../../shared/table-material-crud/table-material.component";
 import { NgChartsModule } from 'ng2-charts';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MachineFormComponent } from '../machine/machine-form/machine-form.component';
+import { MachineListComponent } from '../machine/machine-list/machine-list.component';
+import { MachineContainerComponent } from '../machine/machine-container.component.';
+import { QRCodeModule } from 'angularx-qrcode';
+import { QrModalComponent } from '../machine/qr-modal/qr-modal.component';
+import { QrCardComponent } from '../machine/machine-form/shared/qr-card/qr-card.component';
 
 
 
@@ -44,6 +50,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CasherComponent,
     RoutinesComponent,
     PromotionDetailsComponent,
+    MachineContainerComponent,
+    MachineListComponent,
+    MachineFormComponent,
+    QrModalComponent 
+
+
   ],
   imports: [
     CommonModule,
@@ -63,7 +75,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatTableModule,
     FormsModule,
     TableMaterialCrudComponent,
-    MatCheckboxModule
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    QRCodeModule,
+    QrCardComponent  // ✅ importa aquí el componente standalone
+
+    
 ],
   providers:[PointOfSaleService]
 })

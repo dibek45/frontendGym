@@ -62,22 +62,37 @@ export const MemberReducer = createReducer(
 })),
 
 
-on(MemberActions.syncMemberSuccess, (state, { tempId, updatedMember }) => ({
+on(MemberActions.syncMemberSuccess, (state, { tempId, updatedMember }) => {
+  console.log('🟢 Reducer recibe syncMemberSuccess:', tempId, updatedMember);
+
+  return {
+    ...state,
+    members: state.members.map(member =>
+      member.tempId === tempId
+        ? { ...member, ...updatedMember, syncError: false }
+        : member
+    )
+  };
+}),
+on(MemberActions.syncMember, (state, { member }) => ({
   ...state,
-  members: state.members.map(member =>
-    member.tempId === tempId
-      ? { ...member, ...updatedMember, syncError: false }
-      : member
+  members: state.members.map(m =>
+    m.tempId === member.tempId
+      ? { ...m, syncing: true }
+      : m
   )
 })),
+on(MemberActions.syncMemberFailure, (state, { tempId, error }) => {
+  console.log('🟡 Reducer recibe syncMemberFailure:', tempId, error);
 
-on(MemberActions.syncMemberFailure, (state, { tempId, error }) => ({
-  ...state,
-  members: state.members.map(member =>
-    member.tempId === tempId
-      ? { ...member, syncError: true }
-      : member
-  )
-}))
-  
+  return {
+    ...state,
+    members: state.members.map(member =>
+      member.tempId === tempId
+        ? { ...member, syncError: true }
+        : member
+    )
+  };
+}),
+
 );

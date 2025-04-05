@@ -18,7 +18,6 @@ import { SpeechService } from 'src/app/shared/speech.service';
 import { userModel } from 'src/app/core/models/user.interface';
 import { DialogRegistroCompletadoComponent } from '../dialog-registro-completado/dialog-registro-completado.component';
 import { MatDialog } from '@angular/material/dialog';
-import { OfflineDbService } from 'src/app/db-local/offline-db.service';
 import { MemberModel } from 'src/app/core/models/member.interface';
 
 
@@ -44,7 +43,6 @@ export class CreateFormComponent {
     private http: HttpClient,
     private router: Router,
     private dialog: MatDialog, // 👈 Asegúrate que se llama "dialog"
-    private offlineDb: OfflineDbService,
     public notificationService: NotificationService,
     public _dialog:DialogModalService,
     public _speech:SpeechService
@@ -156,17 +154,15 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
       gymId: this.gymIdFromStore,  // ✅ gymId siempre
       isSynced: false,
       syncError: false,
-      username:this.form.value.username,
+      username:this.form.value.email,
       tempId
     };
   
+    console.log(this.form.value.usernamex)
     // 1️⃣ Guardar en Redux
     this.store.dispatch(addMember({ member: nuevoMiembro }));
   
-    // 2️⃣ Guardar en IndexedDB
-    this.offlineDb.saveMember(nuevoMiembro).then(() => {
-      console.log('✅ Guardado en IndexedDB con gymId:', nuevoMiembro.gymId);
-    });
+   
   
     // 3️⃣ Intentar sincronizar
     this.syncMemberWithBackend(nuevoMiembro);
@@ -178,6 +174,7 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
         createUser(createUser: $createUser) {
           id
           name
+          username
           actived
           huella
           img
@@ -193,6 +190,7 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
       actived: member.actived,
       available_days: member.available_days,
       img: member.img,
+      username:member.username,
       gymId: member.gymId,
       huella: member.huella ?? '' // 👈 Asegúrate que no sea null ni undefined
     };
@@ -221,10 +219,7 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
             }
           }));
   
-          // Guardamos el estado de error en IndexedDB
-          this.offlineDb.updateMember(member.id, {
-            syncError: true
-          });
+          
   
           return; // Terminamos aquí
         }
@@ -250,11 +245,7 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
           }
         }));
   
-        // 5️⃣ Actualizamos también en IndexedDB
-        this.offlineDb.updateMember(member.id, {
-          ...miembroBackend,
-          isSynced: true
-        });
+       this.onClose()
       },
   
       error: (error) => {
@@ -269,23 +260,13 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
           }
         }));
   
-        // 2️⃣ Guardamos el error en IndexedDB
-        this.offlineDb.updateMember(member.id, {
-          syncError: true
-        });
+       
       }
     });
   }
   
   
-  retrySyncUnsyncedMembers() {
-    this.offlineDb.getUnsyncedMembersByGym(this.gymIdFromStore).then(members => {
-      console.log(`🔄 Reintentando sincronización para ${members.length} miembros del gym ${this.gymIdFromStore}`);
-      members.forEach(member => {
-        this.syncMemberWithBackend(member);
-      });
-    });
-  }
+ 
   
   
 //    this.router.navigate(['home/user/table']);

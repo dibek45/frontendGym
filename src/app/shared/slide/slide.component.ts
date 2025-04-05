@@ -11,7 +11,13 @@ export class SlideComponent {
   constructor(private authService:AuthService, private router: Router,){
 
   }
+  showMenu: boolean = false;
 
+  toggleMenu(): void {
+    this.showMenu = !this.showMenu;
+  }
+  
+  
   exit(){
     this.logout()
     this.router.navigate(['login']);
@@ -25,26 +31,37 @@ export class SlideComponent {
   }
 
   user(): void {
+    this.showMenu = false;
     this.router.navigate(['home/user/table']);
   }
 
   product(): void {
+    this.showMenu = false;
     this.router.navigate(['home/product/table']);
   }
 
   cart(): void {
+    this.showMenu = false;
     this.router.navigate(['home/product/cart']);
   }
 
   infraestructure(): void {
+    this.showMenu = false;
     this.router.navigate(['home/product/infraestructure']);
   }
 
   settings(): void {
+    this.showMenu = false;
     this.router.navigate(['home/camera-video']);
   }
 
   pointOfSale(): void {
+    this.showMenu = false;
     this.router.navigate(['home/administration']);
   } 
+  agenda(){
+    this.showMenu = false;
+    this.router.navigate(['home/agenda']);
+
+  }
 }

@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MemberModel } from 'src/app/core/models/member.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { SpeechService } from 'src/app/shared/speech.service';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
 
-  private graphqlEndpoint = 'http://localhost:3000/graphql'; // Reemplaza con tu endpoint GraphQL
+  private graphqlEndpoint =       environment.apiUrl
+  ; // Reemplaza con tu endpoint GraphQL
 
   constructor(private http: HttpClient, 
     private _notification:NotificationService,
@@ -119,8 +121,7 @@ updateDays(memberId: number, days: number) {
 }
 
 
-
-createMember(member: MemberModel): Observable<MemberModel> {
+async createMemberAsync(member: MemberModel): Promise<MemberModel> {
   const graphqlQuery = `
     mutation CreateUser($createUser: CreateUser!) {
       createUser(createUser: $createUser) {
@@ -143,38 +144,33 @@ createMember(member: MemberModel): Observable<MemberModel> {
     img: member.img,
     gymId: member.gymId,
     huella: member.huella ?? '',
-    username:member.username
-
+    username: member.username
   };
-  
+
   console.log('🚀 Payload enviado al backend', userPayload);
 
-  // 🚀 DEBUG DIRECTO
-  this.http.post<any>('http://localhost:3000/graphql', {
-    query: graphqlQuery,
-    variables: { createUser: userPayload }
-  }).subscribe({
-    next: res => {
-      console.log('✅ Response directa:', res);
-    },
-    error: err => {
-      console.error('❌ Error directo:', err);
-    }
-  });
+  try {
+    const response: any = await firstValueFrom(
+      this.http.post<any>('http://localhost:3000/graphql', {
+        query: graphqlQuery,
+        variables: { createUser: userPayload }
+      })
+    );
 
-  // 🔙 Deja el return si lo necesitas en el effect:
-  return this.http.post<any>('http://localhost:3000/graphql', {
-    query: graphqlQuery,
-    variables: { createUser: userPayload }
-  }).pipe(
-    map(response => {
-      if (!response.data || !response.data.createUser) {
-        throw new Error('No se pudo crear el usuario en backend');
-      }
-      return response.data.createUser;
-    })
-  );
+    console.log('✅ Response directa:', response);
+
+    if (!response.data || !response.data.createUser) {
+      throw new Error('No se pudo crear el usuario en backend');
+    }
+
+    return response.data.createUser;
+
+  } catch (err) {
+    console.error('❌ Error directo:', err);
+    throw err;
+  }
 }
+
 
 
 }  

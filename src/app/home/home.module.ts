@@ -18,6 +18,7 @@ import { ImageResultCheckComponent } from './auth-face/image-result-check/image-
 import { TypeAuthenticationComponent } from './auth-face/type-authentication/type-authentication.component';
 import { SharedModule } from '../shared/shared-module';
 import { PointOfSaleModule } from './point-of-sale/point-of-sale.module';
+import { AgendaModule } from '../agenda/agenda.module';
 
 
 
@@ -46,7 +47,8 @@ import { PointOfSaleModule } from './point-of-sale/point-of-sale.module';
     MatFormFieldModule,
     TypeAuthenticationComponent,
     ProductModule,
-    PointOfSaleModule
+    PointOfSaleModule,
+    AgendaModule
   ]
   
 })

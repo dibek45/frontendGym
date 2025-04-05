@@ -1,0 +1,74 @@
+.agenda-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+  
+    .calendar-wrapper {
+        width: 600px; /* ✅ Ajusta este valor según lo que busques (más pequeño o grande) */
+        max-width: 100%; /* Para que sea responsive */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+        padding: 10px;
+      }
+   
+  
+    /* Ajustar el ancho de las celdas de horas */
+    ::ng-deep .fc-timegrid-slot {
+      max-width: 50px;
+    }
+  
+    /* Controla el tamaño de las columnas de los días */
+    ::ng-deep .fc-col-header-cell {
+      max-width: 150px; /* Puedes reducirlo aún más si se pasa */
+      white-space: normal;
+    }
+  
+    /* Limita el tamaño de los eventos */
+    ::ng-deep .fc-event {
+      max-width: 100%;
+    }
+  
+    /* Ajustar botones y cabecera para evitar sobrepasar */
+    ::ng-deep .fc-toolbar {
+      flex-wrap: wrap; /* ✅ Si se hace pequeño el contenedor, los botones bajan */
+      justify-content: center;
+    }
+  
+    ::ng-deep .fc-toolbar-title {
+      font-size: 18px;
+    }
+  
+    ::ng-deep .fc-button {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  
+    /* Para las listas */
+    ::ng-deep .fc-list-table {
+      width: 100%;
+      max-width: 1000px;
+    }
+  
+    /* Asegura que el calendario responda a pantallas pequeñas */
+    @media (max-width: 768px) {
+      full-calendar {
+        max-width: 100%;
+      }
+  
+      ::ng-deep .fc-col-header-cell {
+        font-size: 10px;
+      }
+  
+      ::ng-deep .fc-event-title {
+        font-size: 10px;
+      }
+    }
+  }
+  

@@ -9,6 +9,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
 import { VideoIAComponent } from './auth-face/video-ia/video-ia.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { PointOfSaleComponent } from './point-of-sale/point-of-sale.component';
+import { AgendaComponent } from '../agenda/component/agenda.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
                     {
                       path: '',
                       component: UserComponent, 
+                    },
+                  
+                    {
+                      path: 'agenda',
+                      component: AgendaComponent
                     },
                     {
                       path: 'user',
@@ -41,7 +47,7 @@ const routes: Routes = [
                     {
                       path: 'administration',
                       component: PointOfSaleComponent // another child route component that the router renders
-                    },
+                    }
         ], 
   },
   

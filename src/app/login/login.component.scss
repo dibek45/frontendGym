@@ -1,21 +1,87 @@
+/* ----- BASE: Default background for everything ----- */
+.container {
+  background-image: url('../../assets/chat.jpg'); /* Default image */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
-    width: 500px; 
-    margin-left: 450px;
-    margin-bottom: -80px;
-    border-radius: 20px;
-  }
-  
-  .full-width {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+}
+
+mat-card {
+  padding: 20px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.example-button-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ----- XS: Phones (portrait) - 0 to 479px ----- */
+@media (max-width: 479px) {
   .container {
-    background-image: url('../../assets/chat.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-image: url('../../assets/mobile/login.png');
+    background-color: #000;
   }
-  
+
+  .login-container {
+    max-width: 90%;
+  }
+
+  mat-card {
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+}
+
+/* ----- SM: Phones (landscape / small tablets) - 480 to 767px ----- */
+@media (min-width: 480px) and (max-width: 767px) {
+  .container {
+    background-image: url('../../assets/mobile/login.png');
+    background-color: #000;
+  }
+
+  .login-container {
+    max-width: 95%;
+  }
+
+  mat-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+}
+
+/* ----- MD: Tablets - 768 to 1023px ----- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .login-container {
+    max-width: 420px;
+  }
+
+  mat-card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+}
+

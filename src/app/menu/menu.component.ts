@@ -13,9 +13,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { BarcodeFormat } from '@zxing/library';
 import { selectCartTotal } from '../state/point-of-sale/cart/cart.selectors';
 import { ProductModel } from '../core/models/product.interface';
-import { selectAllProducts } from 'src/app/state/selectors/product.selectors';
+import { selectAllProducts } from 'src/app/state/product/product.selectors';
 import { CartService } from '../state/point-of-sale/cart/cart.service';
-import { setDetailProduct } from '../state/actions/product.actions';
+import { setDetailProduct } from '../state/product/product.actions';
 
 @Component({
   selector: 'app-menu',

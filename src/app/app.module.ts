@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
+import { NO_ERRORS_SCHEMA, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,7 +21,7 @@ import { ROOT_REDUCERS } from './state/app.state';
 import { EffectsModule } from '@ngrx/effects';
 import { MemberEffects } from './state/member/member.effects';
 
-import { ProductEffects } from './state/effects/product.effects';
+import { ProductEffects } from './state/product/product.effects';
 //import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 //import { SocketProviderConnect } from 'src/shared/soket.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -38,7 +38,7 @@ import { CashierModule } from './state/point-of-sale/casher/cashier.module';
 import { cashierReducer } from './state/point-of-sale/casher/cashier.reducer';
 import { categoryReducer } from './state/reducers/category.reducer';
 import { CategoryEffects } from './state/effects/category.effects';
-import { detailProductReducer } from './state/reducers/product.reducer';
+import { detailProductReducer } from './state/product/product.reducer';
 import { routinesReducer } from './state/point-of-sale/routines/routines.reducer';
 import { RoutinesEffects } from './state/point-of-sale/routines/routines.effects';
 import { PromotionEffects } from './state/promotions/promotion.effects';
@@ -49,6 +49,10 @@ import { PermissionEffects } from './state/roles/permission/permission.effects';
 import { permissionReducer } from './state/roles/permission/permission.reducer';
 import { PlanEffects } from './state/plan/plan.effects';
 import { planReducer } from './state/plan/plan.reducer';
+import { MachineEffects } from './state/machine/machine.effects';
+import { machineReducer } from './state/machine/machine.reducer';
+import { AgendaComponent } from './agenda/component/agenda.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 //const config: SocketIoConfig = { url: 'http://localhost:4200', options: {} };
 
@@ -59,8 +63,7 @@ import { planReducer } from './state/plan/plan.reducer';
     MenuComponent,
     LoginComponent,
     HomeComponent,
-    SlideComponent,
-
+    SlideComponent
       ],
   imports: [
    
@@ -100,6 +103,14 @@ import { planReducer } from './state/plan/plan.reducer';
     EffectsModule.forFeature([PermissionEffects]),
     StoreModule.forFeature('plan', planReducer),
     EffectsModule.forFeature([PlanEffects]),
+    StoreModule.forFeature('machines', machineReducer), // <-- ESTA ES LA CLAVE
+    EffectsModule.forFeature([MachineEffects]), ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: !isDevMode(),
+  // Register the ServiceWorker as soon as the application is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+}), 
+  
 
   ],
   

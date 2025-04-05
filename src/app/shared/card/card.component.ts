@@ -65,7 +65,7 @@ constructor(public dialog: MatDialog,private store:Store<AppState>,private print
     createdAt: "",
     actived: false, 
     available_days:0,
-    img:"",
+   // img:"",
     gymId:0,
     username:''
 }
@@ -165,8 +165,4 @@ openRenovarModal(userId: string): void {
 }
 
 
-retrySyncUnsyncedMembers() {
-  console.log('🔄 Reintentando sincronización de miembros...');
-  
-}
 }

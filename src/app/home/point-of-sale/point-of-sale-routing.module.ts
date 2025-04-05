@@ -11,6 +11,7 @@ import { PromotionComponent } from './promotion/promotion.component';
 import { CasherComponent } from './casher/casher.component';
 import { RoutinesComponent } from './routines/routines.component';
 import { RolesComponent } from './roles/roles.component';
+import { MachineContainerComponent } from '../machine/machine-container.component.';
 
 const routes: Routes = [
   {
@@ -57,6 +58,14 @@ const routes: Routes = [
       {
         path:'roles',
         component:RolesComponent
+      },
+      {
+        path:'maquinas',
+        component:MachineContainerComponent
+      },
+      {
+        path:'agenda',
+        component:MachineContainerComponent
       }
 
       

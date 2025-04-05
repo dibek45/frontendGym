@@ -1,0 +1,20 @@
+<div class="machine-container">
+
+  <!-- Botón global para agregar -->
+  <button (click)="onAddMachine()">Agregar Máquina</button>
+
+  <!-- Lista de máquinas -->
+  <app-machine-list
+    *ngIf="!showForm"
+    (edit)="onEditMachine($event)">
+  </app-machine-list>
+
+  <!-- Formulario para agregar o editar -->
+  <div *ngIf="showForm" class="form-container">
+    <app-machine-form
+      [machine]="selectedMachine"
+      (formClosed)="onCloseForm()">
+    </app-machine-form>
+  </div>
+
+</div>

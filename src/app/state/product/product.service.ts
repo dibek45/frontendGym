@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, delay, map, of, throwError } from 'rxjs';
 import { ProductModel } from 'src/app/core/models/product.interface';
 import { FileConverter } from 'src/app/shared/converter';
+import { environment } from 'src/environment.prod';
 
 
 @Injectable({
@@ -10,7 +11,8 @@ import { FileConverter } from 'src/app/shared/converter';
 })
 export class ProductService {
 
-  private graphqlEndpoint = 'http://localhost:3000/graphql'; // Reemplaza con tu endpoint GraphQL
+  private graphqlEndpoint = environment.apiUrl
+   // Reemplaza con tu endpoint GraphQL
 
   constructor(private http: HttpClient) { 
   }

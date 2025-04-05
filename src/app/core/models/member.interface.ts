@@ -4,7 +4,7 @@ export interface MemberModel {
   createdAt: string;
   actived: boolean;
   available_days: number;
-  img?: string;
+ img?: string;
   gymId:number;
   huella?:string;
   username:string;

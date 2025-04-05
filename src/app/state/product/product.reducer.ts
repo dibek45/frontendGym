@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { loadProducts, loadedProducts, setSearchProduct,addProduct, addProductSuccess, addProductFailure, searchProductByBarcodeSuccess, setDetailProduct, loadDetailProduct, loadDetailProductFailure } from '../actions/product.actions';
+import { loadProducts, loadedProducts, setSearchProduct,addProduct, addProductSuccess, addProductFailure, searchProductByBarcodeSuccess, setDetailProduct, loadDetailProduct, loadDetailProductFailure } from './product.actions';
 import { ProductState } from 'src/app/core/models/product.state';
 import { DetailProductState } from 'src/app/core/models/detail-product.state';
 

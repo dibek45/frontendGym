@@ -1,0 +1,37 @@
+
+<div [formGroup]="qrForm" [ngClass]="['qr-code-item', !editing ? 'qr-compact' : '']">
+    <!-- Botones superpuestos -->
+    <div class="qr-actions-overlay">
+      <button mat-icon-button color="primary" style="position: absolute;
+    margin-left: -117px;" (click)="startEdit()">
+        <mat-icon style="    margin-top: 5px;">edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="eliminar(index)">
+        X
+      </button>
+    </div>
+  
+    <!-- Título del QR -->
+    <strong class="qr-title">{{ qrForm.get('name')?.value || 'Sin nombre' }}</strong>
+  
+    <!-- Código QR -->
+    <qrcode
+      [qrdata]="qrForm.get('code')?.value || ''"
+      [width]="editing ? 120 : 100"
+      [errorCorrectionLevel]="'M'">
+    </qrcode>
+  
+    <!-- Formulario si está editando -->
+    <div *ngIf="editing">
+      <label>Nombre del ejercicio</label>
+      <input formControlName="name" placeholder="Ej: Sentadilla" style="width: 80%;"/>
+      <br>
+      <label>Link del QR</label>
+      <input formControlName="code" placeholder="https://..."  style="width: 80%;"/>
+      <div class="qr-code-actions">
+        <button type="button" (click)="stopEdit()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+  
+  

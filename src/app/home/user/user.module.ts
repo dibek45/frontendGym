@@ -16,7 +16,6 @@ import { CreateFormComponent } from './create-form/create-form.component';
 import { RegisterHuellaComponent } from './create-form/register-huella/register-huella.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { DialogRegistroCompletadoComponent } from './dialog-registro-completado/dialog-registro-completado.component';
-import { OfflineDbService } from 'src/app/db-local/offline-db.service';
 
   
 
@@ -35,6 +34,6 @@ import { OfflineDbService } from 'src/app/db-local/offline-db.service';
     
 ],
   exports:[],
-  providers:[EmployeeService,DatePipe,NotificationService,OfflineDbService]
+  providers:[EmployeeService,DatePipe,NotificationService]
 })
 export class UsuarioModule { }

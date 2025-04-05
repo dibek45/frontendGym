@@ -1,4 +1,9 @@
-<div class="slider-menu">
+<!-- Botón de menú solo visible en móviles -->
+<button class="menu-toggle" (click)="toggleMenu()">
+  <i class="fas fa-bars"></i>
+</button>
+
+<div class="slider-menu" [class.show]="showMenu">
   <!-- Perfil -->
   <div class="profile-section">
     <img src="https://via.placeholder.com/50" alt="David Velázquez" />
@@ -7,31 +12,31 @@
 
   <!-- Menú de navegación -->
   <div class="nav-container">
-    <!-- Usuarios -->
-    <div class="nav-item" (click)="user()">
+    <div class="nav-item" (click)="user(); ">
       <i class="fas fa-users"></i>
       <span>Usuarios</span>
     </div>
 
-    <!-- Productos -->
-    <div class="nav-item" (click)="product()">
+    <div class="nav-item" (click)="product(); ">
       <i class="fas fa-store"></i>
       <span>Productos</span>
     </div>
 
-    <!-- Carrito -->
-    <div class="nav-item" (click)="cart()">
+    <div class="nav-item" (click)="cart(); " >
       <i class="fas fa-shopping-cart"></i>
       <span>Carrito</span>
     </div>
 
-    <!-- Punto de Venta -->
-    <div class="nav-item" (click)="pointOfSale()">
-      <i class="fas fa-cash-register"></i>
-      <span >Administracion</span>
+    <div class="nav-item" (click)="agenda();  ">
+      <i class="fas fa-calendar-alt"></i>
+      <span>Agenda</span>
     </div>
 
-    <!-- Salir -->
+    <div class="nav-item" (click)="pointOfSale(); ">
+      <i class="fas fa-cash-register"></i>
+      <span>Administración</span>
+    </div>
+
     <div class="nav-item exit" (click)="exit()">
       <i class="fas fa-sign-out-alt"></i>
       <span>Salir</span>

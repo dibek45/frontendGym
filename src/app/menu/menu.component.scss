@@ -294,8 +294,24 @@ margin-left: 5px;
   border-top: none;
 }
 
+@media (max-width: 768px) {
+  .mat-toolbar {
+    display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      height: 50px;
+    }
 
+  .icon-button {
+    font-size: 20px; // opcional, ajusta el tamaño si se ve muy grande
+  }
+}
 
+@media (max-width: 1023px) {
+  .menu-out {
+    display: none !important;
+  }
+}
 
 @media (min-width: 1024px) {
   .menu-out {

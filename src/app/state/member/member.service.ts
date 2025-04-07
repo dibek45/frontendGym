@@ -151,7 +151,7 @@ async createMemberAsync(member: MemberModel): Promise<MemberModel> {
 
   try {
     const response: any = await firstValueFrom(
-      this.http.post<any>('http://localhost:3000/graphql', {
+      this.http.post<any>(environment.apiUrl, {
         query: graphqlQuery,
         variables: { createUser: userPayload }
       })

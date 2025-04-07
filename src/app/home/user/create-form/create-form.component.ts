@@ -19,6 +19,7 @@ import { userModel } from 'src/app/core/models/user.interface';
 import { DialogRegistroCompletadoComponent } from '../dialog-registro-completado/dialog-registro-completado.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MemberModel } from 'src/app/core/models/member.interface';
+import { environment } from 'src/environment.prod';
 
 
 @Component({
@@ -199,7 +200,7 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
     console.log('📤 Enviando payload limpio al backend:', userPayload);
   
     // 🔨 Enviamos la mutación POST al endpoint GraphQL
-    this.http.post<any>('http://localhost:3000/graphql', {
+    this.http.post<any>(environment.apiUrl, {
       query: graphqlQuery,
       variables: { createUser: userPayload } // ✅ Solo los datos permitidos por el backend
     }).subscribe({

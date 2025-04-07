@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from "./../../../../environment.prod";
 @Injectable({
   providedIn: 'root'
 })
 export class PermissionsService {
-  private apiUrl = 'http://localhost:3000/graphql';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

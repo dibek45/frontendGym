@@ -1,20 +1,69 @@
-.row-container {
-    display: flex;
-    flex-direction: row;
-    //gap: 16px;
-  
-    &.single-column {
-      flex-direction: column;
-    }
-  
-    .column {
-      flex: 1;
-    }
+.user-form-wrapper {
+  background-color: white;
+  width: 100%;
+}
+
+.user-form-container {
+  background-color: white;
+  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+// Solo aplicar left: 340px en pantallas grandes
+@media (min-width: 769px) {
+  .user-form-container {
+    position: absolute;
+    left: 340px;
   }
-  .container {
-background-color: white;
+}
+
+// Remover left en pantallas iguales o menores a 768px
+@media (max-width: 768px) {
+  .user-form-container {
+    position: relative !important;
+    left: unset !important;
+    width: 100% !important; // 👈 ocupa todo el ancho en celular
+    margin: 0 !important;   // 👈 elimina márgenes laterales
+    padding: 15px;          // 👈 un poco de espacio interno
   }
 
-  .centered-div {
-    padding: 20px;
+
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+
+  &.single-column {
+    flex-direction: column;
   }
+
+  .column {
+    flex: 1;
+  }
+}
+
+.button-row {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.btn-complete {
+  min-width: 120px;
+}
+
+.fingerprint-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.toolbar {
+  background-color: white !important;
+  color: black;
+}

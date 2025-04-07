@@ -1,22 +1,127 @@
-@media (min-width: 1200px) {
-    .pantalla {
-      position: absolute;
-      margin-left: -650px;
-      width: 1400px; /* Ancho fijo para pantallas grandes */
-    }
+/* Estilo base */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem auto;
+}
 
-      
-    textarea {
-      width: 100%;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      resize: none;
-      background-color: #ffff;
-      border-radius: 5px;
-      padding: 10px;
-      margin-bottom: 10px;
-      left: 70px;
-    }
-    
+.btn-create {
+  border-radius: 50px;
+  width: 150px;
+  font-size: 14px;
+}
+
+.filter-textarea {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 55px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+/* Vista de tabla y cards */
+.view-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.card-item {
+  margin: 10px;
+}
+
+/* Responsive */
+
+/* XS */
+@media (max-width: 575.98px) {
+  .search-container {
+    padding: 0 10px;
   }
+
+  .btn-create,
+  .filter-textarea {
+    width: 100%;
+  }
+}
+
+/* S */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .btn-create,
+  .filter-textarea {
+    width: 90%;
+  }
+}
+
+/* M */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 340px;
+  }
+
+  .btn-create {
+    margin-right: 1rem;
+  }
+
+  .filter-textarea {
+    width: 350px;
+  }
+
+  .view-wrapper {
+    justify-content: flex-start;
+    padding-left: 340px;
+  }
+}
+
+/* L */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 340px;
+  }
+
+  .btn-create {
+    margin-right: 20px;
+  }
+
+  .filter-textarea {
+    width: 385px;
+  }
+
+  .view-wrapper {
+    justify-content: flex-start;
+    padding-left: 340px;
+  }
+}
+
+/* XL */
+@media (min-width: 1200px) {
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 340px;
+  }
+
+  .btn-create {
+    width: 150px;
+    margin-right: 20px;
+  }
+
+  .filter-textarea {
+    width: 385px;
+    margin: 0;
+  }
+
+  .view-wrapper {
+    justify-content: flex-start;
+    padding-left: 340px;
+  }
+}

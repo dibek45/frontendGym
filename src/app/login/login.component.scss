@@ -11,6 +11,8 @@
   padding: 16px;
   box-sizing: border-box;
   overflow-y: auto;
+  width: 100vw;
+  height: 100vh;
 }
 
 .login-container {
@@ -43,6 +45,7 @@ mat-card {
   .container {
     background-image: url('../../assets/mobile/login.png');
     background-color: #000;
+    
   }
 
   .login-container {
@@ -60,6 +63,8 @@ mat-card {
 @media (min-width: 480px) and (max-width: 767px) {
   .container {
     background-image: url('../../assets/mobile/login.png');
+        min-width: 1000px;
+
     background-color: #000;
   }
 

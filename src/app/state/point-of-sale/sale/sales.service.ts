@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SalesService {
-  private apiUrl = 'http://localhost:3000/graphql'; // URL de la API GraphQL
+  private apiUrl = environment.apiUrl; // URL de la API GraphQL
 
   constructor(private http: HttpClient) {}
 

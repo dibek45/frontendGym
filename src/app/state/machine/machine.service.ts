@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MachineModel } from './machine.model';
+import { environment } from 'src/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class MachineService {
-  private apiUrl = 'http://localhost:3000/graphql';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

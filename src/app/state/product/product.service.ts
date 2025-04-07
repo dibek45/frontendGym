@@ -103,8 +103,12 @@ getData(gymId: number): Observable<ProductModel[]> {
   `;
   const variables = { gymId };
   return this.http.post<any>(this.graphqlEndpoint, { query, variables })
-    .pipe(
-      map(result => result.data.productsByGymId as ProductModel[])
-    );
+  .pipe(
+    map(result => {
+      console.log('Respuesta completa del servidor:', result);
+      return result.data.productsByGymId as ProductModel[];
+    })
+  );
+
 }
 }

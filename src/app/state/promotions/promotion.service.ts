@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PromotionService {
-  private readonly API_URL = 'http://localhost:3000/graphql'; // Replace with your GraphQL API URL
+  private readonly API_URL = environment.apiUrl; // Replace with your GraphQL API URL
 
   constructor(private http: HttpClient) {}
 

@@ -8,12 +8,13 @@ import { Sale } from './sale.model';
 import { CashRegisterActions } from './cash-register.actions';
 import { Store } from '@ngrx/store';
 import { selectAllCashRegisters } from './cash-register.selectors';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CashRegisterService {
-  private graphqlEndpoint = 'http://localhost:3000/GRAPHQL'; // Cambia al endpoint de tu servidor GraphQL
+  private graphqlEndpoint = environment.apiUrl; // Cambia al endpoint de tu servidor GraphQL
 
   cashRegisters$: Observable<CashRegister[]>; // Observable para las cajas registradoras
 

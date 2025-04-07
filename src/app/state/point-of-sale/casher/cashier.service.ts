@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Cashier } from './cashier.model';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CashierService {
-  private graphqlEndpoint = 'http://localhost:3000/graphql'; // Cambia al endpoint de tu servidor GraphQL
+  private graphqlEndpoint = environment.apiUrl; // Cambia al endpoint de tu servidor GraphQL
 
   constructor(private http: HttpClient) {}
 

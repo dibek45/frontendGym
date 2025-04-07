@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Category } from './category.model';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private apiUrl = 'http://localhost:3000/GRAPHQL'; // URL del endpoint GraphQL
+  private apiUrl = environment.apiUrl; // URL del endpoint GraphQL
 
   constructor(private http: HttpClient) {}
 

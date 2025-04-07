@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Routine, ExerciseType } from './routines.model';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoutineService {
-  private graphqlEndpoint = 'http://localhost:3000/graphql'; // Replace with your actual GraphQL endpoint
+  private graphqlEndpoint = environment.apiUrl; // Replace with your actual GraphQL endpoint
 
   constructor(private http: HttpClient) {}
 
@@ -71,7 +72,7 @@ export class RoutineService {
     console.log("GraphQL Variables:", variables);
   
     return this.http
-      .post<{ data: { routines: Routine[] } }>("http://localhost:3000/graphql", {
+      .post<{ data: { routines: Routine[] } }>(environment.apiUrl, {
         query,
         variables,
       })

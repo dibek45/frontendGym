@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Plan } from './plan.model';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlanService {
-  private graphqlUrl = 'http://localhost:3000/graphql'; // 🔹 Reemplázalo con tu API real
+  private graphqlUrl = environment.apiUrl; // 🔹 Reemplázalo con tu API real
 
   constructor(private http: HttpClient) {}
 

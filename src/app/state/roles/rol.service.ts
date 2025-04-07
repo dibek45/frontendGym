@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Role } from './rol.model';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
-  private apiUrl = 'http://localhost:3000/graphql'; // Adjust based on backend
+  private apiUrl = environment.apiUrl; // Adjust based on backend
 
   constructor(private http: HttpClient) {}
 

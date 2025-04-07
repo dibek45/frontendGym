@@ -1,38 +1,94 @@
+.product-form-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative; // base sin left
+  left: 0px;
+}
 
+// Solo aplicar left: 340px en pantallas mayores a 768px
+@media (min-width: 769px) {
+  .product-form-container {
+    position: absolute;
+    left: 340px;
+  }
+}
 
-.drag-drop-container {
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  
-    &.drag-over {
-      background-color: #e3f2fd;
-      border-color: #2196f3;
-    }
+// Remover left en pantallas iguales o menores a 768px
+@media (max-width: 768px) {
+  .product-form-container {
+    left: unset;
+    position: relative;
   }
-  
-  .image-preview {
-    margin-top: 20px;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-/* Estilo inicial del hint */
+}
+
+.image-url-field {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.row-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+  min-width: 300px;
+}
+
+.button-row {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.btn-complete {
+  min-width: 120px;
+}
+
+// Estilos del campo mat-hint
 .custom-mat-form-field mat-hint {
-    color: #757575; /* Color gris predeterminado */
-    transition: color 0.3s ease; /* Suaviza el cambio de color */
+  color: #757575;
+  transition: color 0.3s ease;
+}
+
+.custom-mat-form-field:focus-within mat-hint {
+  color: #007bff;
+}
+
+// Drag and Drop visual
+.drag-drop-container {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #f5f5f5;
   }
-  
-  /* Cambia el color del hint del campo actualmente seleccionado */
-  .custom-mat-form-field:focus-within mat-hint {
-    color: #007bff; /* Azul cuando el campo está enfocado */
+
+  &.drag-over {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
   }
-  
+}
+
+// Imagen cargada
+.image-preview {
+  margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}

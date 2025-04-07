@@ -16,6 +16,7 @@ import { selectUser } from 'src/app/state/user/user.selectors';
 import { AppState } from 'src/app/state/app.state';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { PrinterService } from 'src/app/printer.service';
+import { environment } from 'src/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -285,7 +286,7 @@ export class CartService {
     });
   
     await this.http.post(
-      'http://localhost:3000/graphql', 
+      environment.apiUrl, 
       {
         query: graphqlQuery,
         variables: {

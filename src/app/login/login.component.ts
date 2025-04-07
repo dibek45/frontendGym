@@ -30,15 +30,7 @@ export class LoginComponent {
  
   ) {}
   ngOnInit(): void {
-    this.http.get('https://api.dibeksolutions.com/graphql').subscribe({
-      next: (data) => {
-        alert(JSON.stringify(data, null, 2));
-      },
-      error: (err) => {
-        console.error('Error al obtener los usuarios:', err);
-        alert('Error realupdate: ' + JSON.stringify(err, null, 2));
-      }
-    });
+   
   }
   
 
@@ -58,7 +50,7 @@ export class LoginComponent {
         password: this.password
       }
     };
-alert(environment.apiUrl)
+//alert(environment.apiUrl)
     this.http.post<{ data: { login: string } }>(
       environment.apiUrl,
 

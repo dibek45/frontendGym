@@ -1,98 +1,79 @@
 .horizontal-menu {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box; // ✅ evita que el padding sume al ancho total
+
+  // Escritorio: 3 columnas con desplazamiento horizontal controlado
+  @media (min-width: 769px) {
+    grid-template-columns: repeat(3, 1fr);
     position: absolute;
-    display: flex;
     margin-left: 350px;
-    justify-content: flex-start; /* Alineación horizontal */
-    border-radius: 8px;
-    display: grid; /* Cambia a grid layout */
-  grid-template-columns: repeat(3, 1fr); /* 4 columnas de tamaño igual */
-  gap: 16px; /* Espaciado entre las tarjetas */
-  padding: 20px; /* Espaciado interno para el contenedor */
-  justify-content: center; /* Centra las filas horizontalmente */
-
+    max-width: calc(100vw - 350px); // ✅ evita que se pase del viewport
+    overflow-x: hidden;
   }
 
-  
-  .menu-button {
-    display: flex;
-    flex-direction: column; /* Alinea el contenido en vertical */
-    align-items: center;
-    justify-content: center;
-    width: 250px; /* Ancho fijo */
-    height: 150px; /* Alto fijo */
-    background-color: white; /* Fondo blanco */
-    color: #333; /* Texto oscuro */
-    border-radius: 12px; /* Bordes más redondeados */
-    cursor: pointer;
-    padding: 20px; /* Aumenta el espacio interno alrededor del texto */
-    line-height: 1.5; /* Aumenta la separación entre líneas */
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
-    font-size: 18px;
-    font-weight: 500;
+  // Móvil y tablet: 2 columnas y 100% de ancho
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    position: relative;
+    margin-left: 0;
+    padding: 10px;
+    width: 100%;
+    overflow-x: hidden;
   }
-  
-  .menu-button:hov  er {
-    background-color: #e4e6eb; /* Cambio de fondo al pasar el cursor */
-  }
-  
-  .menu-button:active {
-    background-color: #d0d4db; /* Fondo más oscuro al hacer clic */
-  }
-  
-  
-  .menu-button {
-    width: 220px; /* Define un tamaño consistente */
-    height: 150px;
-  }
+}
 
-  .menu-button {
-    background-color: #ffffff; /* Fondo blanco */
-    color: #333333; /* Texto oscuro */
-    border-radius: 12px; /* Bordes redondeados */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .menu-button:hover {
-    transform: translateY(-5px); /* Mueve la tarjeta hacia arriba al pasar el cursor */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
-  }
-  
-  .menu-button:active {
-    transform: scale(0.98); /* Leve reducción al hacer clic */
-  }
-  
-  
-  .menu-button {
-  border: 1px solid #e0f3ff; /* Bordes claros */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #ffffff; /* Fondo blanco */
-    color: #333333; /* Texto oscuro */
-    border-radius: 16px; /* Bordes más redondeados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-  }
-  
-  .menu-button i {
-    font-size: 40px; /* Iconos grandes */
-    color: #007bff; /* Azul principal */
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #333333;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0f3ff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 16px;
+  width: 100%; // ✅ que ocupe solo su celda sin desbordar
+  box-sizing: border-box;
+
+  i {
+    font-size: 36px;
+    color: #007bff;
     margin-bottom: 10px;
   }
-  
-  .menu-button:hover {
-    transform: translateY(-5px); /* Efecto de elevación */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
-  }
-  
-  .menu-button span {
-    font-size: 16px; /* Tamaño del texto */
-    font-weight: bold; /* Texto más llamativo */
+
+  span {
+    font-size: 14px;
+    font-weight: bold;
     text-align: center;
   }
-  
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  // Estilos más pequeños en pantallas pequeñas
+  @media (max-width: 768px) {
+    height: 120px;
+    padding: 12px;
+
+    i {
+      font-size: 28px;
+    }
+
+    span {
+      font-size: 13px;
+    }
+  }
+}

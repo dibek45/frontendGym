@@ -1,68 +1,125 @@
-@media (min-width: 1200px) {
-    .pantalla {
-        position: absolute;
-        margin-left: 350px;
-    }
-    .search-div{
-        margin-left: 150px;
-    }
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+}
 
+/* Estilos globales */
+.search-div {
+  width: 100%;
+}
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f2f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-      }
-      
-      .post-container {
-        width: 400px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-      }
-      
-      textarea {
-        width: 100%;
-        border: none;
-        outline: none;
-        font-size: 16px;
-        resize: none;
-        background-color: #ffff;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
-      }
-      
-      .options {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-      }
-      
-      .option {
-        display: flex;
-        align-items: center;
-        background-color: #f0f2f5;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
-      }
-      
-      .option:hover {
-        background-color: #ffff;
-      }
-      
-      .option .icon {
-        margin-right: 5px;
-        font-size: 18px;
-      }
-      
+.search-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 10px;
+  width: 100%;
+}
+
+.btn-create {
+  position: relative;
+}
+
+.search-textarea {
+  position: relative;
+  width: 100%;
+  max-width: 385px;
+  border-radius: 55px;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background-color: #ffff;
+}
+
+/* Layout del contenido */
+.pantalla {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Lista de tarjetas */
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 16px;
+}
+
+/* TABLETS (iPad y similares: entre 769px y 1199px) */
+@media (min-width: 769px) and (max-width: 1199px) {
+  .pantalla {
+    margin-left: 300px;
   }
+
+  .search-div {
+    margin-left: 470px;
+  }
+
+  .btn-create {
+    position: absolute;
+    left: 375px;
+  }
+}
+
+/* ESCRITORIO (1200px en adelante) */
+@media (min-width: 1200px) {
+  .pantalla {
+    position: absolute;
+    margin-left: 350px;
+    width: calc(100% - 350px);
+  }
+
+  .search-div {
+    margin-left: 150px;
+  }
+
+  .btn-create {
+    position: absolute;
+    left: 375px;
+  }
+}
+
+/* Estilo para post (opcional) */
+.post-container {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin: auto;
+}
+
+/* Opciones del post */
+.options {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  background-color: #f0f2f5;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #ffff;
+  }
+
+  .icon {
+    margin-right: 5px;
+    font-size: 18px;
+  }
+}

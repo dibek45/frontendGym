@@ -1,5 +1,3 @@
-{{menuService.menuselected$ | async}}
-
 <div *ngIf="(menuService.menuselected$ | async) === 'Menu'">
   <app-horizontal-menu
     [buttons]="menuButtons"

@@ -232,3 +232,7 @@ body {
 .modal-actions button:hover {
   background-color: #45a049;
 }
+html, body {
+  overflow-x: hidden; // 👈 evita scroll lateral global
+  width: 100%;
+}

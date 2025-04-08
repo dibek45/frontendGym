@@ -1,29 +1,25 @@
 <div class="search-div">
-  <div>
-    <button mat-raised-button (click)="onCreate()" style="left: 375px;
-    position: absolute;">
+  <div class="search-toolbar">
+    <button mat-raised-button (click)="onCreate()" class="btn-create">
       <mat-icon>add</mat-icon>Create
     </button>
-    <textarea   style="    position: relative;
-    margin-left:280px;
-    width: 385px;
-    border-radius: 55px;"  autocomplete="off"  (keyup)="applyFilter($event)"></textarea>
 
-
-
-   
+    <textarea
+      autocomplete="off"
+      (keyup)="applyFilter($event)"
+      class="search-textarea"
+    ></textarea>
   </div>
- 
-  
 </div>
-  <div class="search-div">
+
+<div class="pantalla">
+  <router-outlet></router-outlet>
+  <div class="card-list">
+    <b *ngIf="loading$ | async;">Cargando... {{ loading$ | async | json}}</b>
+    <app-card
+      *ngFor="let user of members$ | async"
+      [user]="user"
+      [plans]="plans$ | async"
+    ></app-card>
   </div>
-  <div class="pantalla">
-    <router-outlet></router-outlet>
-    <div style="display: flex; flex-wrap: wrap; flex-direction: row;" >
-      <b *ngIf="loading$ | async;">Cargando... {{ loading$ | async | json}}</b>
-      <app-card *ngFor="let user of members$ | async" [user]="user"    [plans]="plans$ | async" >
-        ></app-card>
-      
-    </div>
-  </div>
+</div>

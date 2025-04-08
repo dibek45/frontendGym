@@ -30,7 +30,8 @@ export class LoginComponent {
  
   ) {}
   ngOnInit(): void {
-   
+    alert(window.innerWidth);
+
   }
   
 
@@ -57,7 +58,6 @@ export class LoginComponent {
       graphqlQuery
     ).subscribe(
       (response) => {
-        alert(JSON.stringify(response));
 
         if (!response?.data?.login) { // ✅ Ahora usamos "login" en lugar de "loginmember"
           console.error('❌ Invalid credentials');

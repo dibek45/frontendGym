@@ -1,6 +1,6 @@
-/* ----- BASE: Default background for everything ----- */
+/* ----- BASE: Estilos generales ----- */
 .container {
-  background-image: url('../../assets/chat.jpg'); /* Default image */
+  background-image: url('../../assets/chat.jpg'); /* Imagen por defecto */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -40,31 +40,12 @@ mat-card {
   margin-top: 16px;
 }
 
-/* ----- XS: Phones (portrait) - 0 to 479px ----- */
-@media (max-width: 479px) {
+/* ----- MEDIA QUERIES ----- */
+
+/* Dispositivos móviles (portrait y landscape) - hasta 767px de ancho CSS */
+@media (max-width: 767px) {
   .container {
     background-image: url('../../assets/mobile/login.png');
-    background-color: #000;
-    
-  }
-
-  .login-container {
-    max-width: 90%;
-  }
-
-  mat-card {
-    padding: 12px;
-    border-radius: 12px;
-    box-shadow: none;
-  }
-}
-
-/* ----- SM: Phones (landscape / small tablets) - 480 to 767px ----- */
-@media (min-width: 480px) and (max-width: 767px) {
-  .container {
-    background-image: url('../../assets/mobile/login.png');
-        min-width: 1000px;
-
     background-color: #000;
   }
 
@@ -75,10 +56,11 @@ mat-card {
   mat-card {
     padding: 14px;
     border-radius: 14px;
+    box-shadow: none;
   }
 }
 
-/* ----- MD: Tablets - 768 to 1023px ----- */
+/* Tablets - entre 768px y 1023px de ancho CSS */
 @media (min-width: 768px) and (max-width: 1023px) {
   .login-container {
     max-width: 420px;
@@ -90,3 +72,15 @@ mat-card {
   }
 }
 
+/* Escritorios y pantallas grandes - desde 1024px en adelante */
+@media (min-width: 1024px) {
+  .login-container {
+    max-width: 400px;
+  }
+
+  mat-card {
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}

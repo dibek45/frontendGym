@@ -1,136 +1,75 @@
-<div class="container" style=" position: absolute;
-left: 400px;
-min-width: 1000px;
-margin-top: 10px;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-border-radius: 8px;
-padding: 16px;" >
-
-  <!-- Check if the cart is empty -->
-  <div *ngIf="(cartItemsRdx$ | async)?.length === 0">
-    <p></p>
-  </div>
-
-  <div class="main-container">
-
+<!-- pos.component.html limpio y responsivo -->
+<div class="pos-container">
+  <div class="main-layout">
+    <!-- Seccion izquierda (carrito) -->
     <div class="left-section">
       <div class="header-container">
-        <div class="header-icon"></div>
         <div class="header-title">Venta #551</div>
       </div>
 
       <div class="table-container">
-        <div *ngIf="(cartItemsRdx$ | async) as cartItems; else loading">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Artículo</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr *ngFor="let item of cartItems; let i = index">
-                <!-- ID del producto -->
-                <td>{{ item.product.id }}</td>
-
-                <!-- Si es membresía, muestra el select; de lo contrario, muestra el nombre normal -->
-                <td *ngIf="item.product?.isMembership; else normalProduct">
-                  <select class="custom-select" (change)="updateMembershipPlan($event, i)">
-                    <option
-                      *ngFor="let plan of availablePlans"
-                      [value]="plan.id"
-                      [selected]="plan.id "
-                    >
-                      {{ plan.name }} - ${{ plan.price }}
-                    </option>
-                  </select>
-                </td>
-
-                <ng-template #normalProduct>
-                  <td>{{ item.product?.name }}</td>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Artículo</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cartItemsRdx$ | async; let i = index">
+              <td>{{ item.product.id }}</td>
+              <td *ngIf="item.product?.isMembership; else normalProduct">
+                <select class="custom-select" (change)="updateMembershipPlan($event, i)">
+                  <option *ngFor="let plan of availablePlans" [value]="plan.id">
+                    {{ plan.name }} - ${{ plan.price }}
+                  </option>
+                </select>
+              </td>
+              <ng-template #normalProduct>
+                <td>{{ item.product?.name }}</td>
+              </ng-template>
+              <td>
+                <ng-container *ngIf="item.product?.isMembership; else quantityControl">
+                  1
+                </ng-container>
+                <ng-template #quantityControl>
+                  <button class="quantity-btn" (click)="updateQuantity(i, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
+                  {{ item.quantity }}
+                  <button class="quantity-btn" (click)="updateQuantity(i, item.quantity + 1)">+</button>
                 </ng-template>
+              </td>
+              <td>${{ item.product.price }}</td>
+              <td>${{ item.product.price * item.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-                <!-- Cantidad: si es membresía, siempre 1; si no, control de cantidad -->
-                <td>
-                  <ng-container *ngIf="item.product?.isMembership; else quantityControl">
-                    1
-                  </ng-container>
-                  <ng-template #quantityControl>
-                    <button class="quantity-btn"
-                            (click)="updateQuantity(i, item.quantity - 1)"
-                            [disabled]="item.quantity <= 1">
-                      -
-                    </button>
-                    {{ item.quantity }}
-                    <button class="quantity-btn"
-                            (click)="updateQuantity(i, item.quantity + 1)">
-                      +
-                    </button>
-                  </ng-template>
-                </td>
-
-                <td>${{ item.product.price }}</td>
-                <td>${{ item.product.price * item.quantity }}</td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- Teclado e imagen -->
+      <div class="bottom-tools">
+        <div class="keypad">
+          <div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">x</div>
+          <div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">-</div>
+          <div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">+</div>
+          <div class="key zero">0</div><div class="key">Enter</div>
+        </div>
+        <div class="img-preview" *ngIf="detailProduct$ | async as detailProduct">
+          <img *ngIf="detailProduct.img" [src]="detailProduct.img" alt="Preview">
         </div>
       </div>
     </div>
 
-    <!-- Right Section -->
-    <div *ngIf="detailProduct$ | async as detailProduct" >
+    <!-- Seccion derecha -->
+    <div class="right-section" *ngIf="detailProduct$ | async as detailProduct">
       <app-right-section
         [totalImput]="miTotal"
         [price]="detailProduct.price"
         [name]="detailProduct.name"
-        (finishSale)="finish()"
-      >
+        (finishSale)="finish()">
       </app-right-section>
-    </div>
-
-    <!-- Show loading template while cart is loading -->
-    <ng-template #loading>
-      <p>Cargando carrito...</p>
-    </ng-template>
-  </div>
-
-  <div style="display: flex; margin-left: 150px;">
-    <div class="keypad">
-      <!-- keypad layout -->
-      <div class="key">7</div>
-      <div class="key">8</div>
-      <div class="key">9</div>
-      <div class="key">x</div>
-
-      <div class="key">4</div>
-      <div class="key">5</div>
-      <div class="key">6</div>
-      <div class="key">-</div>
-
-      <div class="key">1</div>
-      <div class="key">2</div>
-      <div class="key">3</div>
-      <div class="key">+</div>
-
-      <div class="key zero">0</div>
-      <div class="key">Enter</div>
-    </div>
-
-    <div *ngIf="detailProduct$ | async as detailProduct" class="img" style="margin-left: 17px; width: 105px;">
-      <img *ngIf="detailProduct.img" [src]="detailProduct.img" alt="" style="width: 100px; height: 150px;">
-    </div>
-  </div>
-
-  <div class="modal" [ngClass]="{ 'show': showModal }">
-    <div class="modal-content">
-      <p>¿Desea eliminar este producto?</p>
-      <button (click)="deleteItem(selectedIndex)">Eliminar</button>
-      <button (click)="closeModal()">Cancelar</button>
     </div>
   </div>
 </div>

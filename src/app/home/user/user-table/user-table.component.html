@@ -1,5 +1,5 @@
 <div class="search-div">
-  <div class="search-toolbar">
+  <div class="search-container">
     <button mat-raised-button (click)="onCreate()" class="btn-create">
       <mat-icon>add</mat-icon>Create
     </button>
@@ -7,10 +7,9 @@
     <textarea
       autocomplete="off"
       (keyup)="applyFilter($event)"
-      class="search-textarea"
+      class="filter-textarea"
     ></textarea>
   </div>
-</div>
 
 <div class="pantalla">
   <router-outlet></router-outlet>

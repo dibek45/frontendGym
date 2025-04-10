@@ -299,7 +299,7 @@ margin-left: 5px;
     display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      height: 50px;
+      height: 55px;
     }
 
   .icon-button {
@@ -483,4 +483,15 @@ mat-toolbar {
 .icon-button:hover {
   transform: scale(1.1); /* Aumenta el tamaño ligeramente */
 }
+@media (max-width: 768px) {
+  .icon-bar {
+    
+    margin-top: -30 px; /* 👈 subimos 0.5px */
+    gap: 0px; /* 👈 reduce el espacio entre iconos */
 
+  }
+  .icon-button {
+    font-size: 18px; /* 👈 un poco más pequeño */
+    margin: 0 2px; /* 👈 espaciado mínimo entre iconos */
+  }
+}

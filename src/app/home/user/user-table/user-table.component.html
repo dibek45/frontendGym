@@ -16,7 +16,7 @@
   <router-outlet></router-outlet>
   <div class="card-list">
     <b *ngIf="loading$ | async;">Cargando... {{ loading$ | async | json}}</b>
-    <app-card
+    <app-card class="card"
       *ngFor="let user of members$ | async"
       [user]="user"
       [plans]="plans$ | async"

@@ -1,30 +1,77 @@
-.machine-container {
+/* Contenedor general de la tabla */
+.responsive-table {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 2rem;
+  width: 100%;
+}
 
-  button {
-    background-color: #4caf50;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
+/* Fila del encabezado (solo en escritorio) */
+.table-header {
+  display: flex;
+  flex-direction: row;
+  background-color: #f1f1f1;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  padding: 0.75rem 0;
+}
 
-    &:hover {
-      background-color: #45a049;
-    }
+/* Cada celda del encabezado */
+.table-header div {
+  flex: 1;
+  padding: 0 0.75rem;
+  text-align: left;
+}
+
+/* Fila de datos */
+.table-row {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 0;
+}
+
+/* Cada celda de la fila */
+.cell {
+  flex: 1;
+  padding: 0 0.75rem;
+  text-align: left;
+}
+
+/* Botón rojo de QR */
+.qr-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* RESPONSIVE para móvil */
+@media (max-width: 768px) {
+  .table-header {
+    display: none; /* Oculta la cabecera en móvil */
   }
 
-  .form-container {
-    margin-top: 1.5rem;
-    width: 100%;
-    max-width: 600px;
-
+  .table-row {
+    flex-direction: column;
+    background-color: #f9f9f9;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 2rem;
+  }
+
+  .cell {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+
+  .cell::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+    color: #333;
   }
 }

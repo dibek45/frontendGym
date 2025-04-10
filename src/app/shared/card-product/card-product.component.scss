@@ -1,44 +1,52 @@
 .product-card {
+  position: relative; /* Necesario para posicionar el número dentro */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: #ffffff;
-  border-radius: 10px; /* Bordes suaves */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombras ligeras */
-  width: 260px; /* Ancho más compacto */
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin: 10px; /* Espaciado entre tarjetas */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 180px;
-height: 160px;
+  height: 160px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 10px;
 }
 
 .product-card:hover {
-  transform: translateY(-3px); /* Efecto hover */
+  transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Contenedor para dividir la imagen y la información */
+/* NUEVO: número amarillo */
+.product-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: yellow;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 6px;
+  border-radius: 0 0 6px 0;
+  z-index: 10;
+}
+
 .product-card-content {
   display: flex;
   flex-direction: row;
-  gap: 8px; /* Espacio entre imagen y texto */
+  gap: 8px;
   align-items: center;
-  margin-bottom: 10px;
-  margin-left: 20px;
-  margin-top: -10px;
-margin-bottom: 20px;
-padding-bottom: 20px;
+  margin: -10px 0 20px 20px;
+  padding-bottom: 20px;
 }
 
-/* Imagen ocupa el 50% */
 .product-card img {
-  max-width: 100px; /* Tamaño reducido */
+  max-width: 100px;
   max-height: 100px;
   border-radius: 8px;
-  object-fit: cover; /* Ajusta la imagen proporcionalmente */
+  object-fit: cover;
 }
 
-/* Información ocupa el otro 50% */
 .product-info {
   display: flex;
   flex-direction: column;
@@ -46,23 +54,21 @@ padding-bottom: 20px;
 }
 
 .product-info h3 {
-  font-size: 1rem; /* Tamaño de letra */
+  font-size: 1rem;
   font-weight: bold;
   margin: 0 0 5px;
 }
 
 .product-info p {
-  font-size: 0.9rem; /* Letra más pequeña */
+  font-size: 0.9rem;
   margin: 2px 0;
   color: #555;
 }
-.stock{
-  font-size: 0.6rem;
 
+.stock {
+  font-size: 0.6rem;
 }
 
-
-/* Botón ocupa el 100% debajo */
 .add-to-cart-btn {
   background: #28a745;
   color: white;
@@ -73,11 +79,11 @@ padding-bottom: 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  width: 150px; /* Botón ocupa el ancho total */
+  width: 150px;
   transition: background-color 0.2s;
   margin-left: 15px;
 }
 
 .add-to-cart-btn:hover {
-  background: #218838; 
+  background: #218838;
 }

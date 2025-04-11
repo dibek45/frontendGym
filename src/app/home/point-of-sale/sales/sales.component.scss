@@ -1,0 +1,148 @@
+.sales-table-container {
+  overflow-x: auto;
+  padding: 16px;
+
+  table {
+    width: 90%;
+    min-width: 600px;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap;
+  }
+
+  th {
+    font-weight: 600;
+    background-color: #f9f9f9;
+  }
+
+  .mat-icon-button {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+// Pantallas entre 768px y 999px
+@media (max-width: 999px) {
+  .sales-table-container {
+    width: 100%;
+    left: 0;
+  }
+
+  th, td {
+    font-size: 13px;
+    padding: 10px 6px;
+  }
+
+  .mat-icon-button {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+// Pantallas móviles
+@media (max-width: 480px) {
+  .sales-table-container {
+    width: 100%;
+    left: 0;
+  }
+
+  table {
+    min-width: unset;
+    width: 80%;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 8px 4px;
+  }
+
+  .mat-icon-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mat-cell {
+    vertical-align: middle;
+  }
+}
+
+// Escritorio ancho (≥1000px)
+
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+
+  button.mat-icon-button {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+
+    mat-icon {
+      font-size: 18px;
+      margin: 0;
+    }
+  }
+}
+
+// Estilo filtros
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  position: absolute;
+  left: 660px;
+  width: 500px;
+
+  mat-form-field, button {
+    flex: 1 1 calc(50% - 10px);
+    min-width: 140px;
+  }
+
+  button {
+    align-self: flex-end;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 999px) {
+  .filters-container {
+    position: static;
+    width: 60%;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-container {
+    width: 80%;
+    padding: 0 10px;
+  }
+
+  .filters-container mat-form-field,
+  .filters-container button {
+    width: 48%;
+  }
+}
+
+.no-sales {
+  text-align: center;
+  font-weight: bold;
+  color: gray;
+  margin-top: 12px;
+}
+@media (min-width: 1000px) {
+  .sales-table-container {
+    position: absolute;
+    top: 350px;
+    left: 380px;
+    width: 80%;
+  }
+}

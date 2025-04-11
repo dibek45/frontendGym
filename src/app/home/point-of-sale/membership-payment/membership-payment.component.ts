@@ -54,5 +54,23 @@ export class MembershipPaymentComponent {
       cashierId: 1
     }
   ];
+  displayedColumns: string[] = [
+    'id',
+    'memberName',
+    'amount',
+    'paymentMethod',
+    'paymentDate',
+    'membershipType',
+    'duration',
+    'actions'
+  ];
+  
+  edit(item: MembershipPaymentModel) {
+    console.log('Edit:', item);
+  }
+  
+  delete(item: MembershipPaymentModel) {
+    console.log('Delete:', item);
+  }
   
 }

@@ -1,3 +1,74 @@
-<app-table-material-crud [data]="data" style="display: flex; flex-wrap: wrap;position: absolute;
-    left: 665px;
-  width: 500px;"></app-table-material-crud>
+<div class="membership-table-wrapper">
+  <table mat-table [dataSource]="data" class="mat-elevation-z8">
+
+    <!-- ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let item">{{ item.id }}</td>
+    </ng-container>
+
+    <!-- Miembro -->
+    <ng-container matColumnDef="memberName">
+      <th mat-header-cell *matHeaderCellDef>Miembro</th>
+      <td mat-cell *matCellDef="let item">
+        {{
+          item.memberName.length > 10
+            ? (item.memberName | slice: 0:10) + '…'
+            : item.memberName
+        }}
+      </td>
+    </ng-container>
+
+    <!-- Monto -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Monto ($)</th>
+      <td mat-cell *matCellDef="let item">{{ item.amount }}</td>
+    </ng-container>
+
+    <!-- Método de Pago -->
+    <ng-container matColumnDef="paymentMethod">
+      <th mat-header-cell *matHeaderCellDef>M. de Pago</th>
+      <td mat-cell *matCellDef="let item">
+        <mat-icon *ngIf="item.paymentMethod === 'cash'" color="primary">attach_money</mat-icon>
+        <span *ngIf="item.paymentMethod !== 'cash'"><br>{{ item.paymentMethod }}</span>
+      </td>
+    </ng-container>
+
+    <!-- Fecha -->
+    <ng-container matColumnDef="paymentDate">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let item">{{ item.paymentDate | date:'dd/MM/yy HH:mm' }}</td>
+    </ng-container>
+
+    <!-- Tipo -->
+    <ng-container matColumnDef="membershipType">
+      <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <td mat-cell *matCellDef="let item">{{ item.membershipType }}</td>
+    </ng-container>
+
+    <!-- Duración -->
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef>Duración</th>
+      <td mat-cell *matCellDef="let item">{{ item.duration }}</td>
+    </ng-container>
+
+    <!-- Acciones -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let item">
+        <div class="action-buttons">
+          <button mat-icon-button color="primary" (click)="edit(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="delete(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Filas -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

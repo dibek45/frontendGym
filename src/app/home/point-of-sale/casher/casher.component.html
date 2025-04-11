@@ -1,14 +1,13 @@
-<app-add-button style="position: absolute;    left: 400px;     z-index: 1;
-    top: 330px;" (click)="openModal()"></app-add-button>
+<app-add-button class="add-button" (click)="openModal()"></app-add-button>
 
 <div class="modal-container" *ngIf="isModalOpen">
-    <app-add-casher (closeModal)="handleModalClose($event)"></app-add-casher>
+  <app-add-casher (closeModal)="handleModalClose($event)"></app-add-casher>
 </div>
 
-  <div *ngIf="cashers$ | async as cashiers" class="card-container" style="position: absolute;    left: 400px;display: -webkit-box;">
-    <div *ngFor="let cashier of cashiers" class="cashier-card">
-      <app-card-casher [cashier]="cashier"></app-card-casher>
-    </div>
+<div *ngIf="cashers$ | async as cashiers" class="card-container">
+  <div *ngFor="let cashier of cashiers" class="cashier-card">
+    <app-card-casher [cashier]="cashier"></app-card-casher>
   </div>
-  
+</div>
+
   

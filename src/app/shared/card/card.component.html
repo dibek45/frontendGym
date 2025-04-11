@@ -8,7 +8,7 @@
       <div class="user-image">
         <img [src]="user.img || 'https://via.placeholder.com/150'" alt="User Image">
       </div>
-      <div style="margin-top: -20px;">
+      <div style="margin-top: -30px;">
         <button mat-button (click)="openRenovarModal(user.id)" class="menu-button">
           <span class="material-symbols-outlined" style="position: relative; top: 5px;">date_range</span> Renovar
         </button>
@@ -19,12 +19,12 @@
     <div style="width: 55%;">
       <h3 class="name">{{ user.name || 'User Name' | truncateName:15 }}</h3>
 
-      <div class="content">
-        <div style="position: relative; margin-top: 100px; margin-left: 20px;padding-top: 30px;">
+      <div style="position: absolute; margin-top: 45px; margin-left: 20px;">
+        <div >
           <span style="font-size: 40px;">{{user.available_days}}</span>
         </div>
-        <div style="margin-left: 20px; margin-bottom: -65px;">
-          <a class="effect effect-4" href="#">Disponibles</a>
+        <div >
+          <a  href="#">Disponibles</a>
         </div>
 
         <button mat-icon-button color="primary" (click)="editUser(user)" class="edit-container" matTooltip="Editar usuario">
@@ -43,7 +43,7 @@
     <div style="width: 55%; margin-top: 0px;">
       <div style="width: 50%; margin-top: 5px; margin-left: 35px;">
         <!-- SVG Código de Barras Vertical -->
-        <svg xmlns="http://www.w3.org/2000/svg" style="width: 50%; position: absolute; height: 70px; padding-left: 8px; left: 50px;top: 182px; transform: rotate(90deg);" viewBox="0 -960 960 960" fill="#5f6368" (click)="downloadBarcode()">
+        <svg xmlns="http://www.w3.org/2000/svg" style="width: 50%; position: absolute; height: 70px; padding-left: 8px; left: 50px;top: 170px; transform: rotate(90deg);" viewBox="0 -960 960 960" fill="#5f6368" (click)="downloadBarcode()">
           <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z"/>
         </svg>
       </div>

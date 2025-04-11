@@ -1,55 +1,81 @@
+/* Contenedor principal */
 .promotion-container {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-left: 400px;
+}
+
+/* Título */
+.promotion-header h2 {
+  margin-bottom: 10px;
+}
+
+/* Botones de tipo de promoción */
+.type-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.type-buttons button {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.type-buttons button.active {
+  background: #007bff;
+  color: white;
+}
+
+/* Contenido adicional */
+.promotion-content {
+  margin-top: 20px;
+}
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+/* Botón de agregar */
+.add-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 999px) {
+  .promotion-container {
+    margin-left: 0;
+    margin: 16px;
   }
-  
-  .promotion-header h2 {
-    margin-bottom: 10px;
+  button.mat-icon-button {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+
+    mat-icon {
+      font-size: 18px;
+      margin: 0;
+    }
   }
-  
-  .type-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .type-buttons button {
-    border: 1px solid #ccc;
-    background: white;
-    padding: 10px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
-  .type-buttons button.active {
-    background: #007bff;
-    color: white;
-  }
-  
-  .promotion-content {
-    margin-top: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-  }
-  
-  .add-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin-top: 15px;
-    cursor: pointer;
-  }
-  
+}

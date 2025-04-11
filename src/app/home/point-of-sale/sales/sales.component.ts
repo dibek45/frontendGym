@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Sale } from 'src/app/state/point-of-sale/sale/sale.model';
@@ -7,21 +7,37 @@ import { SalesService } from 'src/app/state/point-of-sale/sale/sales.service';
 import { loadSales, resetFilters, setCashierId, setCashRegisterId, setEndDate, setStartDate } from 'src/app/state/point-of-sale/sale/sale.actions';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { SaleDetailModalComponent } from 'src/app/shared/table-material-crud/modal/sale-detail-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 
 @Component({
   selector: 'app-sales',
+  styleUrls: ['./sales.component.scss'],
   templateUrl: './sales.component.html',
 })
 export class SalesComponent {
+
+  private dialog = inject(MatDialog);
+
   sales$: Observable<Sale[]>;
   selectedCashRegisterId: number | null = null;
   selectedCashierId: number | null = null;
   startDate: string | null = null;
   endDate: string | null = null;
-
+  displayedColumns: string[] = [
+    'id',
+    'cashRegisterId',
+    'cashier',
+    'paymentMethod',
+    'saleDate',
+    'total',
+    'details',
+    'actions'
+  ];
+  
 
   cashRegisters = [
     { id: 168, name: 'Caja 168' },
@@ -117,4 +133,14 @@ export class SalesComponent {
       pdfMake.createPdf(documentDefinition).download('Reporte-Ventas.pdf');
     });
   }
+
+   openSaleDetailModal(sale: any): void {
+    console.log(sale)
+      this.dialog.open(SaleDetailModalComponent, {
+        width: '600px',
+        data: {
+          sale: sale
+        }
+      });
+    }
 }

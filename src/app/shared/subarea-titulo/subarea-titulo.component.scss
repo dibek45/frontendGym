@@ -1,8 +1,31 @@
 .titulo_subarea {
     font-family: inherit;
     font-weight: 700;
-    font-family: inherit; 
-    position: absolute;
     font-size: 19px;
+    position: absolute;
     left: 400px;
-}
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  /* Responsive para pantallas menores de 999px */
+  @media (max-width: 999px) {
+    .titulo_subarea {
+      position: static;
+      text-align: center;
+      display: block;
+      margin: 16px auto 12px;
+      font-size: 18px;
+    }
+  }
+  
+  /* Responsive para móviles */
+  @media (max-width: 480px) {
+    .titulo_subarea {
+      font-size: 16px;
+      margin-bottom: 00px;
+      margin: 0
+
+    }
+  }
+  

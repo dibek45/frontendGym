@@ -16,6 +16,18 @@ export interface ExpenseModel {
   styleUrls: ['./expenses.component.scss']
 })
 export class ExpensesComponent {
+
+  displayedColumns: string[] = [
+    'id',
+    'description',
+    'amount',
+    'paymentMethod',
+    'expenseDate',
+    'category',
+    'createdBy',
+    'actions'
+  ];
+  
   data: ExpenseModel[] = [
     {
       id: 1,

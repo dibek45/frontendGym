@@ -4,6 +4,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
+import { MenuService } from 'src/app/home/point-of-sale/submenu.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agenda',
@@ -11,6 +13,9 @@ import listPlugin from '@fullcalendar/list';
   styleUrls: ['./agenda.component.scss']
 })
 export class AgendaComponent {
+  constructor( public menuService: MenuService,private router: Router ){
+
+  }
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth', // Comienza en vista mensual
@@ -83,5 +88,7 @@ export class AgendaComponent {
       console.log('No se puede agendar desde esta vista.');
     }
   }
-  
+  goBack() {
+    this.router.navigate(['home/administration']);
+  }
 }

@@ -1,123 +1,28 @@
-.cash-register-card {
-    width: 350px;
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 20px auto;
-    font-family: Arial, sans-serif;
-    color: #333;
-    position: relative;
-    right: 72px;
-    top: 33px;
-  }
-  
-  .card-header {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  
-  .card-header h2 {
-    font-size: 1.8rem;
-    margin: 0;
-    color: #222;
-  }
-  
-  .card-header .cashier {
-    font-size: 1rem;
-    color: #666;
-  }
-  
-  .card-header .total {
-    font-size: 1.5rem;
-    color: #007BFF;
-    font-weight: bold;
-    margin-top: 5px;
-  }
-  
-  .card-details {
-    margin: 10px 0;
-    font-size: 0.9rem;
-  }
-  
-  .card-details .detail {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .card-actions {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  
-  .action-button {
-    flex: 1;
-    background-color: #e9e9e9;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 12px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .action-button:hover {
-    background-color: #d8d8d8;
-    transform: translateY(-2px);
-  }
-  
-  .action-button.open {
-    background-color: #D9EAD3;
-  }
-  
-  .action-button.close {
-    background-color: #F8D7DA;
-  }
-  
-  .small-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: #555;
-    margin: 8px 0;
-  }
-  
-  .extra-buttons {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  
-  .circle-button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .circle-button:hover {
-    background-color: #d8d8d8;
-    transform: scale(1.1);
-  }
-  .details-modal {
+.cash-register-section {
+  position: absolute;
+  left: 400px;
+  width: 80%;
+  padding: 20px;
+}
+
+/* Botón flotante para agregar caja */
+.add-button {
+  position: absolute;
+  left: 400px;
+  top: 330px;
+  z-index: 10;
+}
+
+/* Lista de tarjetas */
+.cash-register-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* Detalles Modal */
+.details-modal {
   width: 600px;
   background-color: #fff;
   border-radius: 10px;
@@ -127,7 +32,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .modal-header {
@@ -140,6 +45,14 @@
 
 .modal-header h3 {
   margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
 }
 
 .modal-body h4 {
@@ -157,7 +70,8 @@ table {
   margin-top: 10px;
 }
 
-table th, table td {
+table th,
+table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -167,168 +81,76 @@ table th {
   background-color: #f8f8f8;
 }
 
-.modal-footer {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.export-button {
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.export-button:hover {
-  background-color: #0056b3;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #666;
-}
-.hidden {
-    display: none;
-  }
-  
-  .details-modal {
-    width: 600px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-  }
-  
-  .details-modal .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-  }
-  
-  .details-modal .close-button {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: #666;
-  }
-  
-///componente subseccion
-
-
-
-.add-cash-register-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f9f9f9;
-}
-
-.form-card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-
-h2 {
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #555;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 8px 10px;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-input:focus,
-select:focus {
-  border-color: #007bff;
-}
-
-.form-actions {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-button:not(:disabled) {
-  background-color: #007bff;
-  color: #fff;
-}
-
-button.cancel {
-  background-color: #f44336;
-  color: #fff;
-}
-
-button:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
-button.cancel:hover {
-  background-color: #d32f2f;
-}
-
-
+/* Fondo oscuro detrás del modal */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* Oscurecimiento */
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+}
+
+/* Modal agregar caja */
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1002;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* RESPONSIVE */
+@media (max-width: 999px) {
+  .cash-register-section {
+    position: static;
+    width: 95%;
+    margin: auto;
+    padding: 16px;
+  }
+
+  .add-button {
+    position: static;
+    display: block;
+    margin: 16px auto;
+  }
+
+  .details-modal {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cash-register-section {
+    padding: 10px;
+  }
+
+  .modal-body h4 {
+    font-size: 1rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-container {
+    padding: 16px;
+  }
+
+  table th,
+  table td {
+    font-size: 13px;
+    padding: 6px;
+  }
+  .cash-register-list {
+    margin-left: 20px;
+  }
 }

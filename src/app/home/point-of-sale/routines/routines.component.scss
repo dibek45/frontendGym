@@ -1,85 +1,124 @@
-.routines {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin: 16px;
-  }
+.routines-container {
+  position: absolute;
+  left: 400px;
+  width: 80%;
+}
 
-  .card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+/* Escritorio grande */
+@media (min-width: 1000px) {
+  .routines-container {
+    position: absolute;
+    left: 400px;
+    width: 80%;
+  }
+}
+
+/* Pantallas medianas */
+@media (max-width: 999px) {
+  .routines-container {
+    position: static;
     padding: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    margin: auto;
   }
+}
 
-  .muscle-groups {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .chip {
-    padding: 8px 12px;
-    background: #f4f4f4;
-    border: 1px solid #ccc;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-  }
-
-  .chip.selected {
-    background: #007bff;
-    color: #fff;
-  }
-
-  .table {
+/* Pantallas pequeñas */
+@media (max-width: 480px) {
+  .routines-container {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-  }
-
-  .table th, .table td {
-    border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
   }
+}
 
-  .table th {
-    background: #f4f4f4;
-    font-weight: bold;
-  }
+/* Secciones */
+.routines {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px 0;
+}
 
-  .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 8px;
-  }
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .icon-button.edit {
-    color: #007bff;
-  }
+/* Chips */
+.muscle-groups {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
-  .icon-button.delete {
-    color: #dc3545;
-  }
+.chip {
+  padding: 8px 12px;
+  background: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
 
-  .btn {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.chip.selected {
+  background: #007bff;
+  color: #fff;
+}
 
-  .btn.primary {
-    background: #007bff;
-    color: #fff;
-  }
+/* Tabla */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
 
-  .btn.primary:hover {
-    background: #0056b3;
-  }
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background: #f4f4f4;
+  font-weight: bold;
+}
+
+/* Botones de acción */
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.icon-button.edit {
+  color: #007bff;
+}
+
+.icon-button.delete {
+  color: #dc3545;
+}
+
+/* Botón agregar rutina */
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: #0056b3;
+}

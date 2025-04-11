@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AgendaRoutingModule } from './agenda-routing.module';
 import { AgendaComponent } from './component/agenda.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
   imports: [
     CommonModule,
     AgendaRoutingModule,
-    FullCalendarModule 
+    FullCalendarModule,
+    MatIconModule
   ]
 })
 export class AgendaModule { }

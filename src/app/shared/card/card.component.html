@@ -2,9 +2,9 @@
   <!-- Botón Sync -->
  
   <!-- Contenido principal -->
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: -10px; margin-bottom: -20px;">
+  <div class="div_principal">
     <!-- Imagen del usuario -->
-    <div style="width: 40%; margin-left: 10px; position: relative;">
+    <div class="div_user-image">
       <div class="user-image">
         <img [src]="user.img || 'https://via.placeholder.com/150'" alt="User Image">
       </div>
@@ -27,9 +27,7 @@
           <a  href="#">Disponibles</a>
         </div>
 
-        <button mat-icon-button color="primary" (click)="editUser(user)" class="edit-container" matTooltip="Editar usuario">
-          <mat-icon>edit</mat-icon>
-        </button>
+       
       </div>
     </div>
   </div>

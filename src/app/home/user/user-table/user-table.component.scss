@@ -178,6 +178,9 @@ html, body {
   font-size: 18px;
 }
 @media (max-width: 767px) {
+  .container{
+    width: 43%;
+  }
   .post-container {
     flex: 1 1 calc(50% - 16px);
     max-width: calc(50% - 16px);
@@ -197,12 +200,18 @@ html, body {
     width: 10px
   }
   .card {
-    width: 200px;
-    margin: 10px;
+    margin: -10px;
   }
   .filter-textarea {
     width: 50%;
     margin-top: -70px;
     margin-left: 50px;
   }
+  .card-list{
+    display: block;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+
 }

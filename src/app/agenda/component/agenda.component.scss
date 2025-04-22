@@ -1,74 +1,126 @@
+.ruta-y-volver {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ruta {
+  font-style: italic;
+  color: #424242;
+}
+
+.botones-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.boton-card {
+  background-color: white;
+  border-radius: 16px;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.boton-card .icono {
+  font-size: 40px;
+  margin-bottom: 8px;
+  color: #1976d2;
+}
+
+.boton-card span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.subfiltros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.subfiltros button {
+  border: 2px solid #ccc;
+  color: #424242;
+  background-color: #ffffff;
+  font-weight: 500;
+  min-width: 110px;
+  transition: all 0.2s ease-in-out;
+}
+
+.subfiltros button:hover {
+  border-color: #1976d2;
+  background-color: #e3f2fd;
+}
+
+.subfiltros .sub-activo {
+  background-color: #1976d2 !important;
+  color: white !important;
+  border-color: #1976d2 !important;
+}
 .agenda-container {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  
-    h1 {
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-  
-    .calendar-wrapper {
-        width: 600px; /* ✅ Ajusta este valor según lo que busques (más pequeño o grande) */
-        max-width: 100%; /* Para que sea responsive */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        background-color: #fff;
-        padding: 10px;
-      }
-   
-  
-    /* Ajustar el ancho de las celdas de horas */
-    ::ng-deep .fc-timegrid-slot {
-      max-width: 50px;
-    }
-  
-    /* Controla el tamaño de las columnas de los días */
-    ::ng-deep .fc-col-header-cell {
-      max-width: 150px; /* Puedes reducirlo aún más si se pasa */
-      white-space: normal;
-    }
-  
-    /* Limita el tamaño de los eventos */
-    ::ng-deep .fc-event {
-      max-width: 100%;
-    }
-  
-    /* Ajustar botones y cabecera para evitar sobrepasar */
-    ::ng-deep .fc-toolbar {
-      flex-wrap: wrap; /* ✅ Si se hace pequeño el contenedor, los botones bajan */
-      justify-content: center;
-    }
-  
-    ::ng-deep .fc-toolbar-title {
-      font-size: 18px;
-    }
-  
-    ::ng-deep .fc-button {
-      padding: 4px 8px;
-      font-size: 12px;
-    }
-  
-    /* Para las listas */
-    ::ng-deep .fc-list-table {
-      width: 100%;
-      max-width: 1000px;
-    }
-  
-    /* Asegura que el calendario responda a pantallas pequeñas */
-    @media (max-width: 768px) {
-      full-calendar {
-        max-width: 100%;
-      }
-  
-      ::ng-deep .fc-col-header-cell {
-        font-size: 10px;
-      }
-  
-      ::ng-deep .fc-event-title {
-        font-size: 10px;
-      }
-    }
-  }
-  
+  width: 90%;
+  margin: 0 auto;
+}
+
+.calendar-wrapper {
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.eventos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.evento-item {
+  background: #f9f9f9;
+  border-left: 4px solid #1976d2;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.evento-item .titulo {
+  font-weight: 600;
+  margin: 0;
+}
+
+.evento-item .hora {
+  color: #555;
+  margin: 2px 0;
+}
+
+.evento-item .instructor {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #444;
+}
+
+.sin-eventos {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin-top: 20px;
+}
+

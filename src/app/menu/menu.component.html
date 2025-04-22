@@ -17,25 +17,13 @@
         (click)="selectIcon('home')">
         <i class="fas fa-home" style="color: #3f51b5; font-size: 20px; min-width: 24px; text-align: center;"></i>
       </button>
-      <button 
-        class="icon-button" 
-        [class.active]="selectedIcon === 'user'" 
-        (click)="user()"
-        (click)="selectIcon('user')">
-        <i class="fas fa-users" style="color: #3f51b5; font-size: 20px; min-width: 24px; text-align: center;"></i>
-      </button>
-      <button 
-        class="icon-button" 
-        [class.active]="selectedIcon === 'product'" 
-        (click)="selectIcon('product')"
-        (click)="product()">
-        <i class="fas fa-store" style="color: #3f51b5; font-size: 20px; min-width: 24px; text-align: center;"></i>
-      </button>
+      
+     
       <button 
         class="icon-button" 
         [class.active]="selectedIcon === 'cart'" 
         (click)="selectIcon('cart')" (click)="cart()">
-        <i class="fas fa-shopping-cart" style="color: #3f51b5; font-size: 20px; min-width: 24px; text-align: center;"></i>
+        <i class="fas fa-shopping-cart" style="color: #3f51b5; font-size: 20px; min-width: 24px; text-align: end;"></i>
       </button>
 
       

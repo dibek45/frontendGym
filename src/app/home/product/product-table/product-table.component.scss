@@ -23,6 +23,7 @@
   resize: none;
 }
 
+
 /* Vista de tabla y cards */
 .view-wrapper {
   display: flex;
@@ -64,13 +65,13 @@
 }
 
 /* S */
-@media (min-width: 374px) and (max-width: 767.98px) {
+@media (min-width: 374px) and (max-width: 600px) {
 
   .btn-create{
     left: 20px;
   }
   .vista{
- 
+ position: relative;
       left: 20px;
     
   }
@@ -153,7 +154,7 @@
     padding-left: 340px;
   }
 }
-@media (max-width: 575.98px) {
+@media (min-width: 600px) and (max-width:800px) {
   .search-container {
     padding: 0 10px;
   }
@@ -164,7 +165,7 @@
   }
 
   .btn-create {
-    width: 25%;
+    width: 45%;
     position: relative;
     margin-left: -300px;
   }
@@ -178,8 +179,17 @@
   }
 
   .filter-textarea {
-    width: 50%;
-    margin-top: -70px;
-    margin-left: 50px;
+    width: 100%;
+    margin-top: -10px;
+    margin-left: 20px;
+  }
+  .vista{
+    left: 38px;
+  }
+
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 340px;
   }
 }

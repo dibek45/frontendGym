@@ -294,18 +294,7 @@ margin-left: 5px;
   border-top: none;
 }
 
-@media (max-width: 768px) {
-  .mat-toolbar {
-    display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      height: 55px;
-    }
 
-  .icon-button {
-    font-size: 20px; // opcional, ajusta el tamaño si se ve muy grande
-  }
-}
 
 @media (max-width: 1023px) {
   .menu-out {
@@ -494,4 +483,17 @@ mat-toolbar {
     font-size: 18px; /* 👈 un poco más pequeño */
     margin: 0 2px; /* 👈 espaciado mínimo entre iconos */
   }
+  @media (max-width: 768px) {
+  .mat-toolbar {
+    display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      height: 55px;
+    }
+
+  .icon-button {
+   align-content: end;
+    font-size: 20px; // opcional, ajusta el tamaño si se ve muy grande
+  }
+}
 }

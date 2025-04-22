@@ -231,11 +231,21 @@ html, body {
 }
 
 /* S */
-@media (min-width: 374px) and (max-width: 767.98px) {
+@media (min-width: 374px) and (max-width: 600px) {
 
   .btn-create{position: relative;
     margin-left: -20px;
     left: -120px;
+    top: 5px;
+  }
+  
+}
+/* S */
+@media (min-width: 600px) and (max-width: 800px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -240px;
     top: 5px;
   }
   

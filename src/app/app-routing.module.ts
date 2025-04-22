@@ -4,7 +4,10 @@ import { LoginComponent } from './login/login.component';
 
 
 export const routes: Routes = [
-  
+  {
+    path: 'agenda',
+    loadChildren: () => import('./agenda/agenda.module').then(m => m.AgendaModule)
+  },
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)

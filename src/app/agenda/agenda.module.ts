@@ -5,6 +5,7 @@ import { AgendaRoutingModule } from './agenda-routing.module';
 import { AgendaComponent } from './component/agenda.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     AgendaRoutingModule,
     FullCalendarModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
   ]
 })
 export class AgendaModule { }

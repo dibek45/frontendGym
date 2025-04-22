@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     component: AgendaComponent
+  },
+  {
+    path: ':categoria',
+    component: AgendaComponent
   }
 ];
 

@@ -214,3 +214,38 @@ html, body {
 
 
 }
+
+/* XS */
+@media (max-width: 374px) {
+
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -120px;
+    top: 5px;
+  }
+  
+ 
+
+  
+}
+
+/* S */
+@media (min-width: 374px) and (max-width: 767.98px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -120px;
+    top: 5px;
+  }
+  
+}
+@media (min-width: 400px) and (max-width: 420.98px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -140px;
+    top: 5px;
+  }
+  
+}

@@ -30,6 +30,7 @@ export class ProductFormComponent {
   droppedImage: string = ''; // Inicialización con una cadena vacía
 
   constructor(
+
     private store: Store<AppState>,
     public notificationService: NotificationService,
     private router: Router,
@@ -180,5 +181,11 @@ export class ProductFormComponent {
 
   preventSubmit(event: any): void {
     event.preventDefault();
+  }
+
+
+  
+  closeForm() {
+    this.router.navigate(['/home/product/table']);
   }
 }

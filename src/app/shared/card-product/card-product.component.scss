@@ -54,6 +54,7 @@
   .product-info {
   
     display: flex;
+    margin-left: -5pxs;
     flex-direction: column;
     justify-content: center;
   }
@@ -140,7 +141,7 @@
 
   
   .product-info {
-    margin-left: 20px;
+    margin-left: 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -194,10 +195,10 @@
     object-fit: cover;
   }
   .product-card img {
-    max-width: 80px;
-    max-height: 80px;
+    max-width: 100px;
+    max-height: 90px;
     margin: 5px;
-    margin-top: -20px;
+    margin-top: -25px;
   }
 
   .price {

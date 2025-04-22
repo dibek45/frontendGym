@@ -1,4 +1,8 @@
 <div class="product-form-container">
+  <div class="close-button" (click)="closeForm()">
+    <mat-icon>close</mat-icon>
+  </div>
+  
   <app-photo 
     (newItemEvent)="addItem($event)"     
     (imgEmmit)="getImageTaken($event)"

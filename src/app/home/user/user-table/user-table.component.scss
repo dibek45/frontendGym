@@ -45,7 +45,6 @@ html, body {
 /* Layout del contenido */
 .pantalla {
   width: 100%;
-  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -200,7 +199,7 @@ html, body {
     width: 10px
   }
   .card {
-    margin: -10px;
+    margin: -9px;
   }
   .filter-textarea {
     width: 50%;

@@ -4,7 +4,10 @@ html, body {
   overflow-x: hidden;
   font-family: Arial, sans-serif;
 }
-
+/* Por defecto oculto */
+.mobile-summary {
+  display: none;
+}
 .pos-container {
   width: 100%;
   box-sizing: border-box;
@@ -205,6 +208,118 @@ tbody tr {
   .bottom-tools {
     display: none;
   }
+  /* Ajuste para que right-section se muestre arriba en móviles */
+@media (max-width: 767px) {
+
+  .right-section {
+    display: none !important;
+  }
+
+  .mobile-summary {
+    display: block;
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-family: 'Arial', sans-serif;
+  }
+  .mobile-resumen {
+    text-align: right; /* 🔵 Esto alinea todo el contenido hacia la derecha */
+  }
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .mobile-resumen p {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+
+  .mobile-total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00a693;
+    margin-top: 10px;
+  }
+
+  .mobile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .mobile-actions button {
+    flex: 1;
+  }
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pos-container {
+    width: 92%;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+  .right-section {
+    display: none !important; /* ✅ Se oculta completamente */
+  }
+
+  .left-section {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-section .summary-section {
+    background: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+
+  .right-section .header-bar {
+    background-color: #00a693;
+    color: white;
+    border-radius: 8px 8px 0 0;
+    margin-top: 0;
+  }
+
+  .right-section .content-box {
+    padding: 15px;
+    height: auto;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .right-section .total {
+    color: #00a693;
+    font-size: 2.2em;
+    margin: 10px 0;
+  }
+
+  .right-section button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .right-section button:last-child {
+    margin-bottom: 0;
+  }
+
+  .summary-section + .summary-section {
+    margin-top: 10px !important;
+  }
+
+  .main-container {
+    padding: 10px;
+  }
+}
+
 }
 
 // M - 768px a 991px

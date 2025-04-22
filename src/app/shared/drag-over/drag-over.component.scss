@@ -41,4 +41,10 @@
     color: #007bff; /* Color de texto activo */
     font-weight: bold; /* Negrita para destacar */
   }
-  
+  @media (max-width: 769px) {
+    .drag-over-container {
+
+      margin-left:0px;
+      width: 80%;
+    }
+  }

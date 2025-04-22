@@ -1,251 +1,101 @@
-/* Estilos de la tarjeta */
 .container {
   width: 15em;
-  margin: 1em; /* Margen entre las tarjetas */
+  margin: 1em;
   background-color: #ffffff;
   border-radius: 1em;
   border: 8px solid white;
- // z-index: 10;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-family: 'Open Sans Condensed', sans-serif;
   position: relative;
-  overflow: hidden;
-  display: inline-block; /* Asegura que cada tarjeta sea independiente */
+  display: inline-block;
   vertical-align: top;
+  overflow: visible; /* 🟢 evita que se corte el botón */
 }
 
-
-.div_principal{
-  display: flex; justify-content: space-between; align-items: center; margin-top: -10px; margin-bottom: -20px;
-}
-
-
-.div_user-image{
-  width: 40%; margin-left: 10px; position: relative;
-}
-/* Encabezado */
-.header {
+.div_principal {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-left: 1em;
-  padding-top: .5em}
-
-.title {
-  font-size: 1em;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-  position:absolute;
-  margin-left: 60px;
-  top: 10px;
+  align-items: flex-start;
 }
 
-.edit-icon {
-  background-color: #ffffff;
-  padding: 0.5em;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.div_user-image {
+  width: 40%;
+  margin-left: 10px;
+  margin-top: -10px; /* 🟢 sube la imagen */
+  position: relative;
 }
 
-.edit-icon i {
-  font-size: 1.2em;
-  color: #007BFF;
-}
-
-
-
-/* Imagen del usuario */
 .user-image {
-  padding: 2em 0;
+  padding: 1em 0 0.5em; /* 🟢 reduce espacio arriba */
 }
 
 .user-image img {
-
   object-fit: cover;
   height: 80px;
   border-radius: 50%;
   width: 90%;
-
-}
-
-/* Contenido */
-.content {
-  color: #565656;
-  padding: 1.5em;
+  border: 3px solid #000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .name {
-  position: absolute;
-  font-size: 1em;
-  text-transform: uppercase;
-top: 40px;}
-
-.username {
-  font-size: 0.7em;
-  color: #9e9e9e;
-  margin-bottom: 0.5em;
-}
-
-.details {
-  font-size: -0.1em;
-  color: #8c8c8c;
-}
-
-/* Botones */
-.actions {
-  margin-top: 1em;
-}
-
-button {
-  margin: 0.5em 0;
-  font-size: 0.9em;
-  padding: 0.5em 1em;
-  background-color: #f3f3f3;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  transition: background-color 0.3s ease;
-}
-
-button mat-icon {
   font-size: 1.2em;
-  margin-right: 0.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 0.3em;
+  position: relative;
+  top: 5px;
 }
 
-button:hover {
+/* Botón Renovar */
+.menu-button {
+  font-size: 0.75em;
+  padding: 0.4em 1em;
+  min-width: auto;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: #f3f3f3;
+  color: black;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-button:hover {
   background-color: #007BFF;
   color: #ffffff;
 }
 
-
-.user-image img {
-  margin-top: 20px;
-  object-fit: cover;
-  border: 3px solid #000; /* Contorno negro */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contorno */
-}
-
-.content {
-  padding: 0.5em;
-  text-align: left; /* Alinear el contenido a la izquierda */
-}
-
-.name {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: -0.5em;
-  margin-top: -60px;
-}
-
-.username{
-  margin-top: 10px;
-
-}
-.username, .details {
-  font-size: 1em;
-  color: #555;
-  margin-bottom: 0.3em;
-
-}
-
-.effect.effect-4 {
-  text-decoration: none;
-  color: #007BFF;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-.effect.effect-4:hover {
-  color: #0056b3;
-}
-.custom-menu {
-  min-width: 150px !important;
-  max-width: 200px;
-  
-  button {
-    font-size: 16px !important;
-    padding: 10px 15px !important;
-  }
-}
-
-.mat-menu-panel {
-  border-radius: 8px !important;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important;
-}
-::ng-deep .mat-menu-panel {
-  background: white !important; /* Set background to white */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important; /* Light shadow for a clean look */
-  border-radius: 8px !important;
-}
-
-::ng-deep .mat-menu-item {
-  background: transparent !important; /* Remove any background color */
-  font-size: 16px;
-}
-
-::ng-deep .mat-menu-item:hover {
-  background: rgba(0, 0, 0, 0.05) !important; /* Light hover effect */
-}
-.sync-container {
-  position: absolute;
-  top: -13px;   /* Distancia del borde superior */
-  right: 10px; /* Distancia del borde derecho */
-  z-index: 10; /* Para que quede encima del contenido */
-}
-.edit-container {
-  position: absolute;
-  top: -13px;   /* Distancia del borde superior */
-  right: 158px; /* Distancia del borde derecho */
-  
-}
-/* Ícono del botón editar */
-.edit-container mat-icon {
-  font-size: 16px;        // Tamaño del ícono
-  width: 16px;
-  height: 16px;
-}
-
-/* Ícono del botón sync */
-.sync-button .edit-container mat-icon {
-  font-size: 16px;
-  width: 12px;
-  height: 12px;
-}
-.sync-container  .edit-container button {
-  background-color: #fff;
-  border-radius: 50%;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
-}
-
-.sync-container button:hover {
-  background-color: #f5f5f5;
-}
-
-.sync-container mat-icon {
-  color: #2275b0; /* Verde, pero puedes usar el que quieras */
-}
-
-
-
-@media (min-width: 400px) and (max-width: 767.98px) {
- 
+/* Responsive: 2 por fila en móvil */
+@media (max-width: 767.98px) {
   .container {
-    width: 43%;
-    margin-top: 10px; /* Margen entre las tarjetas */
-    background-color: #ffffff;
-    border-radius: 1em;
-    border: 8px solid white;
-   // z-index: 10;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-family: 'Open Sans Condensed', sans-serif;
-    position: relative;
-    overflow: hidden;
-    display: inline-block; /* Asegura que cada tarjeta sea independiente */
-    vertical-align: top;
+    width: calc(47% - 1em);
+    margin-left: 10px;
+    
   }
+
+  .div_user-image {
+    width: 40%;
+    margin-left: 5px;
+  }
+  .user-image img {
+    object-fit: cover;
+    height: 70px;
+    border-radius: 50%;
+    width: 90%;
+    border: 3px solid #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .info-wrapper {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* 🔥 necesario para que el auto-margin funcione */
+  }
+  
+  .dias-wrapper {
+    margin-top: 25px; /* 🔥 empuja hacia abajo automáticamente */
+  }
+  
 }

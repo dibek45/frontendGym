@@ -4,7 +4,7 @@
     <!-- Seccion izquierda (carrito) -->
     <div class="left-section">
       <div class="header-container">
-        <div class="header-title">Venta #551</div>
+        <span>Venta #551</span>
       </div>
 
       <div class="table-container">
@@ -47,6 +47,28 @@
           </tbody>
         </table>
       </div>
+<!-- Resumen móvil: SOLO visible en móvil -->
+<!-- Resumen móvil: SOLO visible en móvil -->
+<div class="mobile-summary" *ngIf="detailProduct$ | async as detailProduct">
+  <div class="mobile-header">
+ 
+
+  </div>
+
+  <div class="mobile-resumen">
+ 
+    <p><strong>Subtotal:</strong> ${{ miTotal - (miTotal * 0.16) }}</p>
+    <p><strong>IVA:</strong> ${{ (miTotal * 0.16) | number:'1.2-2' }}</p>
+    <p class="mobile-total"><strong>Total:</strong> ${{ miTotal }}</p>
+  </div>
+
+  <div class="mobile-actions">
+    <button mat-flat-button color="warn" (click)="clearCart()">Cancelar</button>
+    <button mat-flat-button color="primary" (click)="finish()">Finalizar</button>
+
+  </div>
+</div>
+
 
       <!-- Teclado e imagen -->
       <div class="bottom-tools">

@@ -100,7 +100,9 @@
   position: absolute;
   left: 660px;
   width: 500px;
-
+  background-color: white;       /* ✅ Fondo blanco */
+  border-radius: 8px;            /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Sombra suave */
   mat-form-field, button {
     flex: 1 1 calc(50% - 10px);
     min-width: 140px;
@@ -122,7 +124,8 @@
 
 @media (max-width: 480px) {
   .filters-container {
-    width: 80%;
+    width: 92%;
+    margin: 5px;
     padding: 0 10px;
   }
 
@@ -130,6 +133,23 @@
   .filters-container button {
     width: 48%;
   }
+
+  
+  .generate-button-container {
+    display: flex;
+    gap: 5%; /* Espacio horizontal entre botones */
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .generate-button-container button {
+    flex: 0 0 40%;       /* ✅ Cada botón ocupa el 40% fijo */
+    font-size: 13px;
+    padding: 6px 10px;
+    min-width: unset !important;
+  }
+  
+  
 }
 
 .no-sales {

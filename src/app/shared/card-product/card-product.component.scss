@@ -1,6 +1,9 @@
 
-@media (min-width: 706px) {
+/* Responsive para móviles */
+@media (min-width: 374px) and (max-width: 400px) {
+
   .product-card {
+    background-color: red;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -8,9 +11,9 @@
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 180px;
-    height: 160px;
-    margin: 10px;
+    width: 150px;
+    height: 220px;
+    margin: 5px;
     transition: transform 0.2s, box-shadow 0.2s;
   }
   
@@ -20,46 +23,38 @@
   }
   
   .product-id {
-    position: absolute;
+    position: relative;
     margin-left: 15px;
+    color: yellow;
     font-size: 0.9rem;
-    top: 5px;
+ 
     left: 5px;
   }
   
-  .title {
-    font-weight: 600;
-    margin-top: 10px;
-    text-align: center;
-    padding: 0 8px;
-    font-size: 1rem;
-  }
+ 
   
   .product-card-content {
+    position: absolute;
+    top: 80px;
     display: flex;
     flex-direction: row;
     gap: 8px;
     align-items: center;
-    margin: -10px 0 20px 20px;
-    padding-bottom: 20px;
+    margin: 5px;
+   
   }
   
-  .product-card img {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 8px;
-    object-fit: cover;
-  }
+
   
   .product-info {
-  
+    margin-left: 0px;
     display: flex;
-    margin-left: -5pxs;
     flex-direction: column;
     justify-content: center;
   }
   
   .price {
+    font-size: 25px;
     font-weight: 550;
     margin: 0;
   }
@@ -94,11 +89,46 @@
   .add-to-cart-btn:hover {
     background: #218838;
   }
+  .product-card {
+    width: 171px;
+    
+    height: 160px;
+  }
+
+  .product-card img {
+   
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .product-card img {
+    max-width: 80px;
+    max-height: 70px;
+    margin: 5px;
+    margin-top: -25px;
+  }
+
+  .price {
+    font-size: 20px;
+  }
+
+  .title {
+
+    position: absolute;
+    text-align: center;
+    font-size: 0.9rem;
+    top: 15px;
+ padding: auto;
+ left: 10px;
+
+  }
+  
+
 }
-/* Responsive para móviles */
+
 @media (min-width: 400px) and (max-width: 767.98px) {
 
   .product-card {
+    background-color: #218838;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -120,6 +150,7 @@
   .product-id {
     position: relative;
     margin-left: 15px;
+    color: #218838;
     font-size: 0.9rem;
  
     left: 5px;
@@ -215,4 +246,126 @@
  left: 10px;
 
   }
+}
+
+@media (min-width: 200px) and (max-width: 374px) {
+
+  .product-card {
+    display: none;
+    background-color: #218838;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 1px;
+    height: 140px;
+    margin: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product-id {
+    position: relative;
+    margin-left: 15px;
+    color: red;
+    font-size: 0.9rem;
+ 
+    left: 5px;
+  }
+  
+ 
+  
+  .product-card-content {
+    position: absolute;
+    top: 80px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    margin: 5px;
+   
+  }
+  
+
+  
+  .product-info {
+    margin-left: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .price {
+    font-size: 25px;
+    font-weight: 550;
+    margin: 0;
+  }
+  
+  .stock-label {
+    font-size: 0.6rem;
+    margin: 2px 0;
+    color: #555;
+  }
+  
+  .stock-value {
+    font-weight: 500;
+    margin-top: -10px;
+    font-size: 0.8rem;
+  }
+  
+  .add-to-cart-btn {
+    background: #28a745;
+    color: white;
+    padding: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 150px;
+    margin-left: 15px;
+    transition: background-color 0.2s;
+  }
+  
+  .add-to-cart-btn:hover {
+    background: #218838;
+  }
+ 
+
+  .product-card img {
+   
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .product-card img {
+    max-width: 80px;
+    max-height: 70px;
+    margin: 5px;
+    margin-top: -25px;
+  }
+
+  .price {
+    font-size: 20px;
+  }
+
+  .title {
+
+    position: absolute;
+    text-align: center;
+    font-size: 0.7rem;
+
+ padding: auto;
+ left: 50px;
+
+  }
+  
+
 }

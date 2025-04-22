@@ -12,7 +12,9 @@
   vertical-align: top;
   overflow: visible; /* 🟢 evita que se corte el botón */
 }
-
+.available_days{
+  font-size: 30px;
+}
 .div_principal {
   display: flex;
   justify-content: space-between;
@@ -54,7 +56,7 @@
   font-size: 0.75em;
   padding: 0.4em 1em;
   min-width: auto;
-  margin-bottom: 10px;
+  margin-top: -5px;
   border-radius: 8px;
   background-color: #f3f3f3;
   color: black;
@@ -69,9 +71,8 @@
 
 @media (max-width: 400px) {
   .container {
-    width: calc(47% - 1em);
+    width: calc(46% - 1em);
     margin-left: 10px;
-    background-color: #007BFF;
     
   }
 
@@ -96,7 +97,15 @@
   }
   
   .dias-wrapper {
-    margin-top: 25px; /* 🔥 empuja hacia abajo automáticamente */
+    position: absolute;
+    left: 90px;
+    top: 65px; /* 🔥 empuja hacia abajo automáticamente */
+  }
+  .available_days{
+    font-size: 20px;
+  }
+  .disponibles{
+    font-size: 10px;
   }
 }
 /* Responsive: 2 por fila en móvil */

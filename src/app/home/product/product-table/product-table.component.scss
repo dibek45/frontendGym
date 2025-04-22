@@ -38,16 +38,49 @@
 /* Responsive */
 
 /* XS */
+@media (max-width: 374px) {
 
+
+  .btn-create{
+    left: 20px;
+  }
+  .vista{
+      left: 5px;
+    }
+  
+  .btn-create,
+  .filter-textarea {
+    width: 90%;
+
+  }
+  .card-item {
+    background-color: white;
+    margin: 5px;
+    width: 165px;
+    margin: 5px;
+  }
+  
+}
 
 /* S */
-@media (min-width: 406px) and (max-width: 767.98px) {
+@media (min-width: 374px) and (max-width: 767.98px) {
+
+  .btn-create{
+    left: 20px;
+  }
+  .vista{
+ 
+      left: 20px;
+    
+  }
   .btn-create,
   .filter-textarea {
     width: 90%;
   }
   .card-item {
     margin: 5px;
+    width: 175px;
+    margin: 1px;
   }
   
 }

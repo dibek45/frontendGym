@@ -141,19 +141,21 @@
 
 .subfiltros {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 1px; /* ✅ solo 1px de separación entre botones */
+  gap: 0px; /* ✅ solo 1px de separación entre botones */
   justify-content: center;
   padding: 4px 0;
   overflow-x: auto;
 }
 
 .subfiltros button {
-  white-space: nowrap;
-  min-width: auto;
-  padding: 6px 14px;
-  font-size: 14px;
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
   border-radius: 8px;
+  background-color: #e0e0e0;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 .titulo-fecha {
@@ -163,6 +165,16 @@
   margin: 12px 0;
   color: #444;
 }
+.subfiltros button:hover {
+  background-color: #c5cae9;
+  color: #1a237e;
+  transform: scale(1.05);
+}
 
+.subfiltros button.sub-activo {
+  background-color: #3f51b5;
+  color: #fff;
+  font-weight: bold;
+}
 
 }

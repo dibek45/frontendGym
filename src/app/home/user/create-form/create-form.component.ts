@@ -274,6 +274,8 @@ this._dialog.openDialog('1500ms', '100ms', 'REGISTRO CON EXITO',"Dar de alta usu
 
   onClose() {
     this.llenarDatos=false;
+    this.router.navigate(['home/user/table']);
+
     this.form.reset();
     this.notificationService.mostrarSnackbar(':: Cerrado','success');
   }

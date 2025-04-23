@@ -251,7 +251,7 @@ table th {
 //modal 
 
 
-@media (max-width: 200px) {
+@media (min-width: 350px) and (max-width: 450px) {
   .cash-register-card {
     width: 90%;
     background-color: #ffffff;
@@ -261,8 +261,7 @@ table th {
     margin: 20px auto;
     font-family: Arial, sans-serif;
     color: #333;
-    position: relative;
     left: 0px;
-    top: 33px;
+
   }
 }

@@ -185,18 +185,16 @@ html, body {
     max-width: calc(50% - 16px);
   
   }
-  .btn-create {
-    width: 25%;
-    position: relative;
-    margin-left: -300px;
-  }
+ 
   .search-toolbar {
     display: flex;
+    margin-top: 80px;
     align-items: center;
     flex-wrap: wrap;
     gap: 16px;
     padding: 10px;
-    width: 10px
+    width: 10px;
+
   }
   .card {
     margin: -9px;
@@ -215,27 +213,35 @@ html, body {
 
 }
 
-/* XS */
-@media (max-width: 374px) {
-
-
-  .btn-create{position: relative;
-    margin-left: -20px;
-    left: -120px;
-    top: 5px;
-  }
-  
- 
-
-  
-}
 
 /* S */
-@media (min-width: 374px) and (max-width: 600px) {
+@media (min-width: 350px) and (max-width: 420px) {
 
   .btn-create{position: relative;
     margin-left: -20px;
-    left: -120px;
+    left: -118px;
+    top: 58px;
+    width: 100px;
+  }
+  .filter-textarea {
+
+    margin-top: -20px;
+    margin-left: 50px;
+  }
+}
+
+@media (min-width: 421px) and (max-width: 450px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -140px;
+    top: 5px;
+  }
+@media (min-width: 450px) and (max-width: 600px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: 0px;
     top: 5px;
   }
   
@@ -250,22 +256,6 @@ html, body {
   }
   
 }
-@media (min-width: 350px) and (max-width: 420.98px) {
 
-  .btn-create{position: relative;
-    margin-left: -20px;
-    left: -140px;
-    top: 5px;
-  }
-  
-}
-
-@media (min-width: 421px) and (max-width: 500px) {
-
-  .btn-create{position: relative;
-    margin-left: -20px;
-    left: -140px;
-    top: 5px;
-  }
   
 }

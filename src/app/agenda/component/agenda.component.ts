@@ -128,6 +128,15 @@ export class AgendaComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    // Espera al render
+    setTimeout(() => {
+      const todayCell = document.querySelector('.fc-day-today');
+      if (todayCell) {
+        todayCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 200);
+  }
   dayCellContent(arg: any) {
     const dateStr = arg.date.toISOString().split('T')[0];
   

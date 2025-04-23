@@ -115,6 +115,16 @@ body, html {
 
   
 }
+@media (min-width: 340px) and (max-width: 370px) {
+
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left:80%;
+    
+  }
+}
 
 @media (min-width: 370px) and (max-width: 380px) {
 
@@ -138,18 +148,27 @@ body, html {
   }
 }
 
-@media (min-width: 399px) and (max-width: 431px) {
+@media (min-width: 399px) and (max-width: 425px) {
 
   
   .menu-toggle {
     display: block;
     margin-top: -8px;
-    margin-left: 90%
+    margin-left: 85%
     
   }
 }
 
+@media (min-width: 426px) and (max-width: 431px) {
 
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 85%
+    
+  }
+}
 @media (min-width: 431px) and (max-width: 450px) {
 
   

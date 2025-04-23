@@ -68,33 +68,8 @@
 }
 
 /* S */
-@media (min-width: 374px) and (max-width: 400px) {
+@media (min-width: 354px) and (max-width: 370px) {
 
-  .search-container {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .btn-create{
-    left: 20px;
-    width: 100px;
-  }
-  .vista{
- position: relative;
-      left: 20px;
-    
-  }
- 
-  .filter-textarea {
-    width: 60%;
-  }
-  .card-item {
-    margin: 5px;
-    width: 175px;
-    margin: 1px;
-  }
-  
-}
-@media (min-width: 400px) and (max-width: 500px) {
   .search-container {
     flex-direction: row;
     justify-content: flex-start;
@@ -102,13 +77,112 @@
   .btn-create{position: relative;
 
     width: 50px;
-    top: 5px;
+    left: 20px;
+    top: 30px;
     width: 100px;
 
   }
   
   .filter-textarea {
     width: 50%;
+    margin-top: 55px;
+  }
+
+  .vista{
+ position: relative;
+      left: 20px;
+    
+  }
+ 
+  .card-item {
+    margin: 5px;
+    width: 175px;
+    margin: 1px;
+  }
+  
+}
+@media (min-width: 371px) and (max-width: 400px) {
+
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .btn-create{position: relative;
+
+    width: 50px;
+    left: 20px;
+    top: 30px;
+    width: 100px;
+
+  }
+  
+  .filter-textarea {
+    width: 50%;
+    margin-top: 55px;
+  }
+
+  .vista{
+ position: relative;
+      left: 20px;
+    
+  }
+ 
+  .card-item {
+    margin: 5px;
+    width: 175px;
+    margin: 1px;
+  }
+  
+}
+@media (min-width: 400px) and (max-width: 440px) {
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .btn-create{position: relative;
+
+    width: 50px;
+    left: 20px;
+    top: 30px;
+    width: 100px;
+
+  }
+  
+  .filter-textarea {
+    width: 50%;
+    margin-top: 55px;
+  }
+
+  .vista{
+ position: relative;
+      left: 20px;
+    
+  }
+ 
+  .card-item {
+    margin: 5px;
+    width: 175px;
+    margin: 1px;
+  }
+  
+}
+
+@media (min-width: 441px) and (max-width: 500px) {
+  .search-container {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .btn-create{position: relative;
+
+    width: 50px;
+    top: 30px;
+    width: 100px;
+
+  }
+  
+  .filter-textarea {
+    width: 50%;
+    margin-top: 55px;
   }
 
   .vista{

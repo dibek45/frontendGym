@@ -215,7 +215,7 @@ html, body {
 
 
 /* S */
-@media (min-width: 350px) and (max-width: 420px) {
+@media (min-width: 350px) and (max-width: 400px) {
 
   .btn-create{position: relative;
     margin-left: -20px;
@@ -229,7 +229,20 @@ html, body {
     margin-left: 50px;
   }
 }
+@media (min-width: 401px) and (max-width: 412px) {
 
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -128px;
+    top: 58px;
+    width: 100px;
+  }
+  .filter-textarea {
+
+    margin-top: -20px;
+    margin-left: 50px;
+  }
+}
 @media (min-width: 421px) and (max-width: 450px) {
 
   .btn-create{position: relative;

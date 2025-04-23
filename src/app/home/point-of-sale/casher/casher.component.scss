@@ -62,3 +62,16 @@
 .cashier-card p strong {
   color: #000;
 }
+
+
+@media (min-width: 350px) and (max-width: 500px){
+  .add-button {
+    position: static;
+    margin-left: -290px;
+    margin-bottom: -50px;
+    display: flex;
+    top: 350px;
+    left: 20px;
+    justify-content: center;
+  }
+}

@@ -1,7 +1,10 @@
 .horizontal-menu {
   display: grid;
+  background-color: #f4f4f4;
+  top: 30px;
   gap: 16px;
   padding: 20px;
+  margin-top: 10px;
   justify-content: center;
   width: 100%;
   box-sizing: border-box; // ✅ evita que el padding sume al ancho total

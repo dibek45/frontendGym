@@ -1,4 +1,5 @@
 .sales-table-container {
+  width: 100%;
   overflow-x: auto;
   padding: 16px;
 
@@ -164,5 +165,13 @@
     top: 350px;
     left: 380px;
     width: 80%;
+  }
+}
+
+@media (min-width: 350px) and (max-width: 600px) {
+  .filters-container{
+    width: 90%;
+    margin: 10px;
+    padding: 10px;
   }
 }

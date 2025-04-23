@@ -39,18 +39,11 @@ export class AgendaComponent implements OnInit {
       subtipos: ['Spinning', 'Box', 'Karate', 'Zumba']
     },
     {
-      categoria: 'Citas',
-      subtipos: ['Nutriólogo', 'Fisioterapeuta']
-    },
-    {
-      categoria: 'Entrenadores',
-      subtipos: ['Alberto', 'María', 'Juan']
-    },
-    {
-      categoria: 'Otros',
-      subtipos: ['Clase muestra', 'Evaluación']
+      categoria: 'Eventos',
+      subtipos: ['Evaluación Física', 'Taller de Nutrición', 'Clase Muestra', 'Bootcamp al Aire Libre']
     }
   ];
+  
 
   eventosTotales: EventoPersonalizado[] = [
     {
@@ -77,6 +70,11 @@ export class AgendaComponent implements OnInit {
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
+    dayMaxEventRows: true,
+    dayMaxEvents: 4,
+
+    eventContent: this.eventContent.bind(this),
+
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
     headerToolbar: {
       left: 'prev,next today',
@@ -92,6 +90,8 @@ export class AgendaComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.generarClasesBox();
+
     this.route.paramMap.subscribe(params => {
       const categoria = params.get('categoria');
       this.filtroActivo = categoria ? this.capitalizar(categoria) : '';
@@ -99,7 +99,42 @@ export class AgendaComponent implements OnInit {
       this.actualizarEventosFiltrados();
     });
   }
-
+  generarClasesBox() {
+    const boxHorario = {
+      tipo: 'Clases',
+      subTipo: 'Box',
+      title: 'Clase de   Box',
+      instructor: 'Carlos',
+      startHour: 6,
+      endHour: 7
+    };
+  
+    const hoy = new Date();
+    const inicioSemana = new Date(hoy);
+    inicioSemana.setDate(hoy.getDate() - hoy.getDay() + 1); // lunes
+  
+    for (let i = 0; i < 5; i++) { // lunes a viernes
+      const fecha = new Date(inicioSemana);
+      fecha.setDate(inicioSemana.getDate() + i);
+  
+      const fechaISO = fecha.toISOString().split('T')[0]; // yyyy-MM-dd
+  
+      const evento: EventoPersonalizado = {
+        id: `box-${i}`,
+        title: boxHorario.title,
+        tipo: boxHorario.tipo,
+        subTipo: boxHorario.subTipo,
+        instructor: boxHorario.instructor,
+        start: `${fechaISO}T06:00:00`,
+        end: `${fechaISO}T07:00:00`
+      };
+  
+      this.eventosTotales.push(evento);
+    }
+  
+    this.actualizarEventosFiltrados();
+  }
+  
   capitalizar(texto: string): string {
     return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
@@ -178,4 +213,23 @@ export class AgendaComponent implements OnInit {
     this.actualizarEventosFiltrados();
   }
 
+  eventContent(info: any) {
+    const start = info.event.start;
+    const end = info.event.end;
+  
+    if (!start || !end) return {};
+  
+    const horaInicio = start.getHours();
+    const horaFin = end.getHours();
+  
+    return {
+      html: `
+        <div style="font-size: 10px; line-height: 1; padding: 0 2px;">
+          ${horaInicio} a ${horaFin} AM
+        </div>
+      `
+    };
+  }
+  
+  
 }

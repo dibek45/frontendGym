@@ -12,37 +12,47 @@
   color: #424242;
 }
 
+
 .botones-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  padding: 16px;
+  display: flex;
+  flex-direction: column; /* ✅ apilados verticalmente */
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  height: 100vh; /* centrado vertical */
+  box-sizing: border-box;
 }
 
 .boton-card {
-  background-color: white;
+  background-color: #ffffff;
   border-radius: 16px;
+  padding: 24px;
+  width: 220px;
   text-align: center;
-  padding: 20px;
   border: 1px solid #e0e0e0;
-  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer;
+}
+
+.boton-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .boton-card .icono {
-  font-size: 40px;
-  margin-bottom: 8px;
+  font-size: 44px;
   color: #1976d2;
+  margin-bottom: 8px;
 }
 
 .boton-card span {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
+  color: #333;
 }
+
 
 .subfiltros {
   display: flex;

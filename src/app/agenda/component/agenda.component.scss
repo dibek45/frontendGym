@@ -133,4 +133,36 @@
   font-style: italic;
   margin-top: 20px;
 }
+@media (min-width: 300px) and (max-width:500px) {
 
+.calendar{
+  height: 400px;
+}
+
+.subfiltros {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1px; /* ✅ solo 1px de separación entre botones */
+  justify-content: center;
+  padding: 4px 0;
+  overflow-x: auto;
+}
+
+.subfiltros button {
+  white-space: nowrap;
+  min-width: auto;
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.titulo-fecha {
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 12px 0;
+  color: #444;
+}
+
+
+}

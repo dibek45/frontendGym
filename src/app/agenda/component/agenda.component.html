@@ -34,20 +34,40 @@
 <!-- Mostrar solo si hay subfiltro -->
 <div *ngIf="claseActiva" class="agenda-container">
   <!-- Calendario reducido -->
-  <div class="calendar-wrapper">
-    <full-calendar [options]="calendarOptions"></full-calendar>
-  </div>
+<!-- 📅 Mostrar calendario solo si está activado -->
+<div *ngIf="mostrarCalendario" class="calendar-wrapper">
+  <full-calendar
+  *ngIf="mostrarCalendario"
+  #fullCalendar
+  [options]="calendarOptions">
+</full-calendar>
+</div>
+
+
+
+
+
+<!-- Título con la fecha seleccionada -->
+<div *ngIf="fechaSeleccionada" class="titulo-fecha">
+  Eventos del {{ getFechaSeleccionadaComoDate() | date: 'fullDate' : undefined : 'es-MX' }}
+
+</div>
 
   <!-- Lista de eventos -->
-  <div *ngIf="eventosFiltrados.length > 0" class="eventos-lista">
-    <div *ngFor="let evento of eventosFiltrados" class="evento-item">
+  <div *ngIf="getEventosDelDia().length > 0" class="eventos-lista" [@eventosFade]>
+    <div *ngFor="let evento of getEventosDelDia(); trackBy: trackByEventoId"
+     class="evento-item">
       <p class="titulo">{{ evento.title }}</p>
-      <p class="hora">{{ evento.start | date: 'shortTime' }} - {{ evento.end | date: 'shortTime' }}</p>
+      <p class="hora">
+        {{ evento.start | date: 'shortTime' }} - {{ evento.end | date: 'shortTime' }}
+      </p>
       <p class="instructor" *ngIf="evento.instructor">
         <mat-icon>person</mat-icon> {{ evento.instructor }}
       </p>
     </div>
   </div>
+  
+
 
   <p *ngIf="eventosFiltrados.length === 0" class="sin-eventos">
     No hay eventos disponibles.

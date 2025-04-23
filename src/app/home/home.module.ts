@@ -19,6 +19,7 @@ import { TypeAuthenticationComponent } from './auth-face/type-authentication/typ
 import { SharedModule } from '../shared/shared-module';
 import { PointOfSaleModule } from './point-of-sale/point-of-sale.module';
 import { AgendaModule } from '../agenda/agenda.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -48,7 +49,7 @@ import { AgendaModule } from '../agenda/agenda.module';
     TypeAuthenticationComponent,
     ProductModule,
     PointOfSaleModule,
-    AgendaModule
+    AgendaModule,
   ]
   
 })

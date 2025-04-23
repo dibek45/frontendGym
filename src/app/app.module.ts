@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
 
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+
+registerLocaleData(localeEs, 'es-MX');
 
 import { MenuComponent } from './menu/menu.component';
 

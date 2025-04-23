@@ -1,45 +1,44 @@
-<!-- Botón de menú solo visible en móviles -->
-<button class="menu-toggle" (click)="toggleMenu()">
-  <i class="fas fa-bars"></i>
+<!-- Botón de menú (3 puntos) -->
+<button mat-icon-button [matMenuTriggerFor]="menu" class="menu-toggle">
+  <mat-icon>more_vert</mat-icon>
 </button>
 
-<div class="slider-menu" [class.show]="showMenu">
+<!-- Menú desplegable -->
+<mat-menu #menu="matMenu">
+
   <!-- Perfil -->
-  <div class="profile-section">
-    <img src="https://via.placeholder.com/50" alt="David Velázquez" />
-    <span>David Velázquez</span>
+  <div class="profile-section" style="padding: 12px; text-align: center;">
+    <img src="https://via.placeholder.com/50" alt="David Velázquez" style="border-radius: 50%;" />
+    <div style="margin-top: 5px;">David Velázquez</div>
   </div>
+  <mat-divider></mat-divider>
 
-  <!-- Menú de navegación -->
-  <div class="nav-container">
-    <div class="nav-item" (click)="user(); ">
-      <i class="fas fa-users"></i>
-      <span>Usuarios</span>
-    </div>
+  <!-- Opciones de navegación -->
+  <button mat-menu-item (click)="user()">
+    <mat-icon>group</mat-icon>
+    <span>Usuarios</span>
+  </button>
+  <button mat-menu-item (click)="product()">
+    <mat-icon>storefront</mat-icon>
+    <span>Productos</span>
+  </button>
+  <button mat-menu-item (click)="cart()">
+    <mat-icon>shopping_cart</mat-icon>
+    <span>Carrito</span>
+  </button>
+  <button mat-menu-item (click)="agenda()">
+    <mat-icon>event</mat-icon>
+    <span>Agenda</span>
+  </button>
+  <button mat-menu-item (click)="pointOfSale()">
+    <mat-icon>point_of_sale</mat-icon>
+    <span>Administración</span>
+  </button>
 
-    <div class="nav-item" (click)="product(); ">
-      <i class="fas fa-store"></i>
-      <span>Productos</span>
-    </div>
+  <mat-divider></mat-divider>
 
-    <div class="nav-item" (click)="cart(); " >
-      <i class="fas fa-shopping-cart"></i>
-      <span>Carrito</span>
-    </div>
-
-    <div class="nav-item" (click)="agenda();  ">
-      <i class="fas fa-calendar-alt"></i>
-      <span>Agenda</span>
-    </div>
-
-    <div class="nav-item" (click)="pointOfSale(); ">
-      <i class="fas fa-cash-register"></i>
-      <span>Administración</span>
-    </div>
-
-    <div class="nav-item exit" (click)="exit()">
-      <i class="fas fa-sign-out-alt"></i>
-      <span>Salir</span>
-    </div>
-  </div>
-</div>
+  <button mat-menu-item (click)="exit()">
+    <mat-icon>logout</mat-icon>
+    <span>Salir</span>
+  </button>
+</mat-menu>

@@ -1,32 +1,17 @@
-<div class="container" *ngIf="user">
-  <div class="div_principal">
-    <!-- Imagen del usuario -->
-    <div class="div_user-image">
-      <div class="user-image">
-        <img [src]="user.img || 'https://via.placeholder.com/150'" alt="User Image">
-      </div>
-      <div style="margin-top: 5px;">
-        <button mat-button (click)="openRenovarModal(user.id)" class="menu-button">
-          
-          Renovar
-        </button>
-      </div>
-    </div>
+<div class="card-modern">
+  <img class="profile-photo" [src]="user.img || 'https://via.placeholder.com/150'" alt="User Photo" />
 
-    <!-- Info del usuario -->
-  <!-- Info del usuario -->
-<div class="info-wrapper">
-  <h3 class="name">{{ user.name || 'User Name' | truncateName:15 | slice:0:10 }}</h3>
+  <h2 class="user-name">{{ user.name| slice:0:12  }}</h2>
+  <p class="availability">
+    <span class="available-days">{{ user.available_days }}</span> Disponibles
+  </p>
 
-  <div class="dias-wrapper">
-    <div>
-      <span class="available_days">{{ user.available_days }}</span>
-    </div>
-    <div>
-      <a href="#" class="disponibles">Disponibles</a>
-    </div>
-  </div>
-</div>
-
+  <div class="actions">
+    <button mat-icon-button class="edit-btn">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-raised-button color="primary" class="renew-btn" (click)="openRenovarModal(user.id)">
+      Renovar
+    </button>
   </div>
 </div>

@@ -57,6 +57,7 @@ import { MachineEffects } from './state/machine/machine.effects';
 import { machineReducer } from './state/machine/machine.reducer';
 import { AgendaComponent } from './agenda/component/agenda.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 //const config: SocketIoConfig = { url: 'http://localhost:4200', options: {} };
 
@@ -70,7 +71,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     SlideComponent
       ],
   imports: [
-   
+    MatSidenavModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModuleModule,

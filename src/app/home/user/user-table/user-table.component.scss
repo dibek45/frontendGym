@@ -250,7 +250,17 @@ html, body {
   }
   
 }
-@media (min-width: 400px) and (max-width: 420.98px) {
+@media (min-width: 350px) and (max-width: 420.98px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -140px;
+    top: 5px;
+  }
+  
+}
+
+@media (min-width: 421px) and (max-width: 500px) {
 
   .btn-create{position: relative;
     margin-left: -20px;

@@ -113,10 +113,95 @@ body, html {
     transform: translateX(0); // visible cuando se aplica la clase
   }
 
+  
+}
+
+@media (min-width: 370px) and (max-width: 380px) {
+
+  
   .menu-toggle {
     display: block;
     margin-top: -8px;
+    margin-left:80%;
+    
+  }
+}
 
+@media (min-width: 380px) and (max-width: 399px) {
+
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 320px;
+    
+  }
+}
+
+@media (min-width: 399px) and (max-width: 431px) {
+
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 90%
+    
+  }
+}
+
+
+@media (min-width: 431px) and (max-width: 450px) {
+
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 90%    
+  }
+}
+@media (min-width: 450px) and (max-width: 480px) {
+
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 90%
+    
+  }
+}
+@media (min-width: 480px) and (max-width: 500px) {
+
+  
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 90%
+    
+  }
+}
+
+
+.custom-drawer-container {
+  height: 100vh;
+}
+
+.custom-drawer {
+  width: 240px;
+  background: white;
+  padding: 1rem;
+  border-right: 1px solid #eee;
+}
+
+.main-content {
+  padding: 1rem;
+}
+
+
+@media (min-width: 500px) and (max-width: 800px) {
+  .menu-toggle {
+    display: block;
+    margin-top: -8px;
+    margin-left: 90%
     
   }
 }

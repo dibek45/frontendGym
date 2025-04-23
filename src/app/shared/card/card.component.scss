@@ -129,7 +129,40 @@
   
 }
 
-@media (min-width: 400px) and (max-width: 429px) {
+@media (min-width: 400px) and (max-width: 415px) {
+  .card-modern {
+    max-width: 185px;
+    width: 250px;
+    height: 215px;
+    margin-right: 25px;
+    margin-bottom: -40px;  }
+  .user-name {
+    font-size: 20px;
+    margin: 0 0 5px;
+    position: relative;
+    top: -20px;
+  }
+
+  
+.profile-photo {
+  width: 140px;
+  height: 120px;
+ 
+}
+  .availability {
+    font-size: 16px;
+    margin: 0 0 15px;
+    position: relative;
+    top: -40px;
+  }
+  .actions {
+    display: flex;
+    position: relative;
+    top: -60px;
+  }
+}
+
+@media (min-width: 416px) and (max-width: 430px) {
   .card-modern {
     max-width: 165px;
     width: 240px;
@@ -155,6 +188,7 @@
     top: -60px;
   }
 }
+
 @media (min-width: 430px) and (max-width: 500px) {
   .card-modern {
     max-width: 195px;

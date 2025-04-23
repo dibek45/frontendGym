@@ -250,6 +250,16 @@ html, body {
     left: -140px;
     top: 5px;
   }
+
+  .filter-textarea {
+    
+    margin-left: 50px;
+    margin-top: -7px;
+    height: 20px;
+}
+  
+ 
+}
 @media (min-width: 450px) and (max-width: 600px) {
 
   .btn-create{position: relative;
@@ -271,4 +281,3 @@ html, body {
 }
 
   
-}

@@ -33,39 +33,9 @@
 }
 
 .card-item {
-  margin: 10px;
 }
 
 /* Responsive */
-
-/* XS */
-@media (max-width: 374px) {
-
-  .search-container {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .btn-create{
-    position: absolute;
-    left: 20px;
-  }
-  .vista{
-      left: 5px;
-    }
-  
-  .btn-create,
-  .filter-textarea {
-    width: 90%;
-
-  }
-  .card-item {
-    background-color: white;
-    margin: 5px;
-    width: 165px;
-    margin: 5px;
-  }
-  
-}
 
 /* S */
 @media (min-width: 354px) and (max-width: 370px) {
@@ -94,11 +64,7 @@
     
   }
  
-  .card-item {
-    margin: 5px;
-    width: 175px;
-    margin: 1px;
-  }
+  
   
 }
 @media (min-width: 371px) and (max-width: 400px) {

@@ -96,27 +96,21 @@
 
 @media (min-width: 200px) and (max-width: 374px) {
   .product-card {
-    width: 150px;
+    width: 141px;
     height: 140px;
-    display: none;
   }
 
   .product-id {
-    color: red;
+    color: rgb(255, 0, 119);
   }
 
   .product-card img {
-    max-width: 80px;
+    max-width: 60px;
     max-height: 70px;
-  }
-
-  .title {
-    font-size: 0.7rem;
-    left: 50px;
   }
 }
 
-@media (min-width: 350px) and (max-width: 400px) {
+@media (min-width: 374px) and (max-width: 400px) {
   .product-card {
     width: 161px;
     height: 150px;

@@ -1,7 +1,9 @@
 <!-- Ruta seleccionada y botón de regresar -->
+
 <div class="ruta-y-volver" *ngIf="filtroActivo">
-  <span class="ruta">/{{ filtroActivo }}</span>
   <button mat-button color="primary" (click)="resetFiltros()">Regresar</button>
+
+  <span class="ruta">/{{ filtroActivo }}</span>
 </div>
 
 <!-- Cuadros principales (solo si no hay filtro activo) -->

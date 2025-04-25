@@ -1,0 +1,33 @@
+<div class="membership-modern-card">
+    <div class="card-header">
+      <div>
+        <h3>{{ membership.memberName }}</h3>
+        <p class="subtext">Payment: {{ membership.paymentDate | date: 'dd/MM/yy HH:mm' }}</p>
+      </div>
+  
+      <div class="actions">
+        <button mat-icon-button color="primary" >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  
+    <div class="card-row">
+      <mat-icon class="icon blue">attach_money</mat-icon>
+      <span>${{ membership.amount }} - {{ membership.membershipType }}</span>
+    </div>
+  
+    <div class="card-row">
+      <mat-icon class="icon blue">calendar_today</mat-icon>
+      <span>{{ membership.duration }}</span>
+    </div>
+  
+    <div class="card-row">
+      <mat-icon class="icon blue">payments</mat-icon>
+      <span>{{ membership.paymentMethod }}</span>
+    </div>
+  </div>
+  

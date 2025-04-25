@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { ExpenseCardComponent } from '../components/expense-card/expense-card.component';
 export interface ExpenseModel {
   id: number;
   description: string;
@@ -13,10 +16,14 @@ export interface ExpenseModel {
 @Component({
   selector: 'app-expenses',
   templateUrl: './expenses.component.html',
-  styleUrls: ['./expenses.component.scss']
+  styleUrls: ['./expenses.component.scss'],
+    standalone: true,
+    imports: [CommonModule, SearchCreateListComponent],
 })
 export class ExpensesComponent {
-
+    cardComponent = ExpenseCardComponent;
+  
+//
   displayedColumns: string[] = [
     'id',
     'description',
@@ -60,5 +67,23 @@ export class ExpensesComponent {
       cashierId: 1
     }
   ];
+  onCreate() {
+    alert('create:');
+    // Aquí podrías navegar o abrir modal
+    // this.router.navigate(['/ruta/nuevo']);
+  }
   
+  onEdit(item: any) {
+    alert('Eliminar:'+item);
+    // Puedes abrir modal o ir a una ruta con ID
+    // this.router.navigate(['/ruta/editar', item.id]);
+  }
+  
+  onDelete(item: any) {
+    alert('Eliminar:'+item);
+    // Aquí puedes abrir un diálogo de confirmación
+    // if (confirm('¿Seguro que deseas eliminar?')) {
+    //   this.deleteItem(item.id);
+    // }
+  }  
 }

@@ -6,7 +6,6 @@ import { PointOfSaleRoutingModule } from './point-of-sale-routing.module';
 import { HorizontalMenuComponent } from 'src/app/menu/horizontal-menu-dump/horizontal-menu.component';
 import { CashRegisterComponent } from './cash-register/cash-register.component';
 import { SalesComponent } from './sales/sales.component';
-import { ExpensesComponent } from './expenses/expenses.component';
 import { SubareaTituloComponent } from 'src/app/shared/subarea-titulo/subarea-titulo.component';
 import { MembershipPaymentComponent } from './membership-payment/membership-payment.component';
 import { ReportComponent } from './report/report.component';
@@ -42,8 +41,7 @@ import { QrCardComponent } from '../machine/machine-form/shared/qr-card/qr-card.
     PointOfSaleComponent,
     CashRegisterComponent,
     SalesComponent,
-    ExpensesComponent,
-    MembershipPaymentComponent,
+
     ReportComponent,
     GraphsComponent,
     PromotionComponent,
@@ -78,9 +76,8 @@ import { QrCardComponent } from '../machine/machine-form/shared/qr-card/qr-card.
     MatCheckboxModule,
     ReactiveFormsModule,
     QRCodeModule,
-    QrCardComponent  // ✅ importa aquí el componente standalone
-
-    
+    QrCardComponent // ✅ importa aquí el componente standalone
+    ,
 ],
   providers:[PointOfSaleService]
 })

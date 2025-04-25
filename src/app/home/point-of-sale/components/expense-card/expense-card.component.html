@@ -1,0 +1,30 @@
+<div class="expense-card">
+    <div class="header">
+      <div>
+        <h3>{{ expense.description }}</h3>
+        <p class="sub">Date: {{ expense.expenseDate | date: 'dd/MM/yy HH:mm' }}</p>
+      </div>
+      <div class="icons">
+        <button mat-icon-button color="primary" (click)="editClicked()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteClicked()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  
+    <div class="info-row">
+      <mat-icon class="icon blue">attach_money</mat-icon>
+      <span>${{ expense.amount }} – {{ expense.paymentMethod }}</span>
+    </div>
+    <div class="info-row">
+      <mat-icon class="icon blue">sell</mat-icon>
+      <span>{{ expense.category }}</span>
+    </div>
+    <div class="info-row">
+      <mat-icon class="icon blue">person</mat-icon>
+      <span>By: {{ expense.createdBy }}</span>
+    </div>
+  </div>
+  

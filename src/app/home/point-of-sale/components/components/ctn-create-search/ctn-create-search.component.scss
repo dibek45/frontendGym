@@ -1,0 +1,39 @@
+.search-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 20px; /* 👈 margen interno para que no estén pegados a los lados */
+    box-sizing: border-box;
+  }
+  
+  /* Botón CREATE */
+  .btn-create {
+    flex: 0 0 30%;
+    max-width: 25%;
+    padding: 10px 16px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 10px; /* 👈 margen externo opcional */
+  }
+  
+  /* Input SEARCH */
+  .search-textarea {
+    flex: 0 0 70%;
+    max-width: 55%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 55px;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    margin-right: 10px; /* 👈 margen externo opcional */
+  }
+  

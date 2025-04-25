@@ -1,0 +1,10 @@
+<div class="search-toolbar">
+    <button class="btn-create" (click)="onCreate()">Create</button>
+    <input
+      type="text"
+      class="search-textarea"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      placeholder="Search..." />
+  </div>
+  

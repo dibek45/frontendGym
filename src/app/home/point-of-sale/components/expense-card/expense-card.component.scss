@@ -1,0 +1,50 @@
+.expense-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    width: 320px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #111;
+    }
+  
+    .sub {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 4px;
+    }
+  
+    .icons {
+      display: flex;
+      gap: 8px;
+    }
+  }
+  
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: #222;
+  
+    .icon {
+      font-size: 22px;
+    }
+  
+    .blue {
+      color: #1976d2;
+    }
+  }
+  

@@ -77,3 +77,7 @@ export const setCashRegisterId = createAction(
   '[Sales] Set Cash Register Id',
   props<{ cashRegisterId: number | null }>()
 );
+export const setSearchTerm = createAction(
+  '[Sales] Set Search Term',
+  props<{ searchTerm: string }>()
+);

@@ -29,7 +29,15 @@
   
     .actions {
       display: flex;
+      position: relative;
+      left: 25px;
+      top:-20px;
       gap: 8px;
+    }
+
+    .edit{
+      position: relative;
+      left: 45px;
     }
   }
   

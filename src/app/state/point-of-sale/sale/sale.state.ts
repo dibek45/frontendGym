@@ -9,6 +9,8 @@ export interface SaleState {
   endDate: string | null;
   selectedCashRegisterId: number | null;  // 🔹 Filtro por caja
   selectedCashierId: number | null;   
+  searchTerm: string; // 🔥 Aquí debe ser "string", no ""
+
 }
 
 export const initialSaleState: SaleState = {
@@ -18,6 +20,7 @@ export const initialSaleState: SaleState = {
   startDate: null,
   endDate: null,
   selectedCashRegisterId: null,  // 🔹 Inicialmente sin filtro
-  selectedCashierId: null        // 🔹 Inicialmente sin filtro
+  selectedCashierId: null ,       // 🔹 Inicialmente sin filtro
+  searchTerm: '', // nuevo
 };
 

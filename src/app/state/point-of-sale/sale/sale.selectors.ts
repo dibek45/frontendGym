@@ -6,7 +6,14 @@ export const selectSalesState = createFeatureSelector<SaleState>('sales');
 export const selectFilteredSales = createSelector(
   selectSalesState,
   (state: SaleState) => {
-    const { sales, startDate, endDate, selectedCashierId, selectedCashRegisterId } = state;
+    const {
+      sales,
+      startDate,
+      endDate,
+      selectedCashierId,
+      selectedCashRegisterId,
+      searchTerm
+    } = state;
 
     return sales.filter(sale => {
       const saleDate = sale.saleDate ? new Date(sale.saleDate) : null;
@@ -17,7 +24,18 @@ export const selectFilteredSales = createSelector(
       if (selectedCashRegisterId !== null && sale.cashRegister?.id !== selectedCashRegisterId) return false;
       if (selectedCashierId !== null && sale.cashRegister?.cashier?.id !== selectedCashierId) return false;
 
+      if (searchTerm && searchTerm.trim() !== '') {
+        const term = searchTerm.toLowerCase();
+        const matches = Object.values(sale).some(value =>
+          value !== null && value !== undefined &&
+          String(value).toLowerCase().includes(term)
+        );
+
+        if (!matches) return false;
+      }
+
       return true;
     });
   }
 );
+

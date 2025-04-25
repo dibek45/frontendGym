@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Sale } from 'src/app/state/point-of-sale/sale/sale.model';
 import {  selectFilteredSales } from 'src/app/state/point-of-sale/sale/sale.selectors';
 import { SalesService } from 'src/app/state/point-of-sale/sale/sales.service';
-import { loadSales, resetFilters, setCashierId, setCashRegisterId, setEndDate, setStartDate } from 'src/app/state/point-of-sale/sale/sale.actions';
+import { loadSales, resetFilters, setCashierId, setCashRegisterId, setEndDate, setSearchTerm, setStartDate } from 'src/app/state/point-of-sale/sale/sale.actions';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { SaleDetailModalComponent } from 'src/app/shared/table-material-crud/modal/sale-detail-modal.component';
@@ -143,4 +143,12 @@ export class SalesComponent {
         }
       });
     }
+
+    onCreateClick() {
+      console.log('Crear nueva venta');
+      // O abrir un modal, o navegar a una ruta nueva
+    }
+    onSearch(searchValue: string) {
+      this.store.dispatch(setSearchTerm({ searchTerm: searchValue }));
+    }  
 }

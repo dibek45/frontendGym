@@ -33,6 +33,7 @@ import { MachineContainerComponent } from '../machine/machine-container.componen
 import { QRCodeModule } from 'angularx-qrcode';
 import { QrModalComponent } from '../machine/qr-modal/qr-modal.component';
 import { QrCardComponent } from '../machine/machine-form/shared/qr-card/qr-card.component';
+import { CtnCreateSearchComponent } from './components/components/ctn-create-search/ctn-create-search.component';
 
 
 
@@ -56,6 +57,7 @@ import { QrCardComponent } from '../machine/machine-form/shared/qr-card/qr-card.
 
   ],
   imports: [
+    CtnCreateSearchComponent,
     CommonModule,
     RolesModule,
     MatTableModule,

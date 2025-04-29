@@ -117,9 +117,85 @@ export class AgendaComponent implements OnInit {
     eventContent: this.eventContent.bind(this)
   };
   
-
+  private generarClasesYEventosDinamicos() {
+    const hoy = new Date();
+    const lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() - hoy.getDay() + 1); // lunes
+  
+    const horariosClases: { [key: string]: { dias: number[], start: string, end: string, instructor: string } } = {
+      'Box': { dias: [0, 1, 2, 3, 4], start: '', end: '', instructor: 'Carlos' },
+      'Zumba': { dias: [0, 1, 2, 3], start: '15:00:00', end: '16:00:00', instructor: 'Alejandra' },
+      'Karate': { dias: [0, 1, 2], start: '12:00:00', end: '14:00:00', instructor: 'Luis' },
+      'Spinning': { dias: [1, 3], start: '07:00:00', end: '08:00:00', instructor: 'Marco' }
+    };
+  
+    const eventosEspeciales = [
+      { subTipo: 'Evaluación Física', diaOffset: 3, start: '10:00:00', end: '11:00:00', instructor: 'Ana' },
+      { subTipo: 'Taller de Nutrición', diaOffset: 5, start: '18:00:00', end: '19:00:00', instructor: 'Sofía' },
+      { subTipo: 'Clase Muestra', diaOffset: 6, start: '11:00:00', end: '12:00:00', instructor: 'Pedro' },
+      { subTipo: 'Bootcamp al Aire Libre', diaOffset: 0, start: '07:00:00', end: '09:00:00', instructor: 'Marco' }
+    ];
+  
+    this.eventosTotales = [];
+  
+    // 🔥 Generar clases
+    Object.keys(horariosClases).forEach(subTipo => {
+      const config = horariosClases[subTipo];
+  
+      for (let i = 0; i <= 6; i++) { // De lunes a domingo
+        if (!config.dias.includes(i)) continue;
+  
+        const fecha = new Date(lunes);
+        fecha.setDate(lunes.getDate() + i);
+  
+        // Ajuste especial para Box
+        let start = config.start;
+        let end = config.end;
+        if (subTipo === 'Box') {
+          if (i <= 1) { // lunes, martes
+            start = '06:00:00';
+            end = '07:00:00';
+          } else { // miércoles a viernes
+            start = '08:00:00';
+            end = '09:00:00';
+          }
+        }
+  
+        const fechaISO = fecha.toISOString().split('T')[0];
+        this.eventosTotales.push({
+          id: `${subTipo.toLowerCase()}-${i}`,
+          title: `Clase de ${subTipo}`,
+          tipo: 'Clases',
+          subTipo,
+          instructor: config.instructor,
+          start: `${fechaISO}T${start}`,
+          end: `${fechaISO}T${end}`
+        });
+      }
+    });
+  
+    // 🔥 Generar eventos especiales
+    eventosEspeciales.forEach(evento => {
+      const fecha = new Date(lunes);
+      fecha.setDate(lunes.getDate() + evento.diaOffset);
+      const fechaISO = fecha.toISOString().split('T')[0];
+  
+      this.eventosTotales.push({
+        id: `evento-${evento.subTipo.toLowerCase().replace(/\s+/g, '-')}`,
+        title: evento.subTipo,
+        tipo: 'Eventos',
+        subTipo: evento.subTipo,
+        instructor: evento.instructor,
+        start: `${fechaISO}T${evento.start}`,
+        end: `${fechaISO}T${evento.end}`
+      });
+    });
+  }
+  
   ngOnInit() {
+    this.generarClasesYEventosDinamicos();
 
+    
     this.route.paramMap.subscribe(params => {
       const categoria = params.get('categoria');
       this.filtroActivo = categoria ? this.capitalizar(categoria) : '';

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SummaryWeeklyBottomSectionComponent } from './summary-weekly-bottom-section/summary-weekly-bottom-section.component';
 
 export interface DataPerDay {
   date: string;
@@ -20,7 +21,7 @@ export interface WeekDayData {
   standalone: true,
   templateUrl: './summary-weekly.component.html',
   styleUrls: ['./summary-weekly.component.scss'],
-  imports: [CommonModule],
+  imports: [CommonModule,SummaryWeeklyBottomSectionComponent],
 })
 export class SummaryWeeklyComponent implements OnChanges {
   @Input() weekStartDate!: Date;

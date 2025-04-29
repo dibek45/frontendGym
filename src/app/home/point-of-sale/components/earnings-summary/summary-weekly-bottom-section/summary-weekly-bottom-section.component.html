@@ -1,0 +1,10 @@
+<div class="total-summary">
+  <div class="total-row">
+    <div class="total-label">{{ data.label }}</div>
+    <div class="total-amount">{{ data.totalAmount | currency:'MXN':'symbol' }}</div>
+  </div>
+
+  <button class="activity-button" (click)="onSeeActivity()">
+    {{ data.buttonText }}
+  </button>
+</div>

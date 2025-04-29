@@ -1,28 +1,28 @@
 /* ----- BASE: Estilos generales ----- */
 .container {
-  background-image: url('../../assets/chat.jpg'); /* Imagen por defecto */
+  background-image: url('../../assets/chat.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 16px;
   box-sizing: border-box;
   overflow-y: auto;
-  width: 100vw;
-  height: 100vh;
 }
 
 .login-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* valor inicial para desktop */
   border-radius: 20px;
 }
 
 mat-card {
-  padding: 20px;
+  padding: 20px; /* valor inicial */
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -42,7 +42,7 @@ mat-card {
 
 /* ----- MEDIA QUERIES ----- */
 
-/* Dispositivos móviles (portrait y landscape) - hasta 767px de ancho CSS */
+/* Dispositivos móviles */
 @media (max-width: 767px) {
   .container {
     background-image: url('../../assets/mobile/login.png');
@@ -60,7 +60,7 @@ mat-card {
   }
 }
 
-/* Tablets - entre 768px y 1023px de ancho CSS */
+/* Tablets */
 @media (min-width: 768px) and (max-width: 1023px) {
   .login-container {
     max-width: 420px;
@@ -72,15 +72,7 @@ mat-card {
   }
 }
 
-/* Escritorios y pantallas grandes - desde 1024px en adelante */
+/* Escritorios grandes */
 @media (min-width: 1024px) {
-  .login-container {
-    max-width: 400px;
-  }
-
-  mat-card {
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+  /* No necesitas redefinir mat-card aquí, ya lo pusiste arriba */
 }

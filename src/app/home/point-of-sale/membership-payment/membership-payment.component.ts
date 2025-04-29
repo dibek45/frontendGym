@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
-import { ExpenseCardComponent } from '../components/expense-card/expense-card.component';
+import { Component } from '@angular/core';
+import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { SummaryWeeklyComponent } from '../components/earnings-summary/summary-weekly.component';
 import { MembershipCardComponent } from '../components/membership-card/membership-card.component';
-//'src/shared/standalone/components/card-list/components/membership-card/membership-card.component';
 
 export interface MembershipPaymentModel {
   id: number;
@@ -16,19 +16,23 @@ export interface MembershipPaymentModel {
   cashierId: number;
 }
 
+export interface DataPerDay {
+  date: string;
+  amount: number;
+  tickets: number;
+}
+
 @Component({
   selector: 'app-membership-payment',
   templateUrl: './membership-payment.component.html',
   styleUrls: ['./membership-payment.component.scss'],
   standalone: true,
-  imports: [CommonModule, SearchCreateListComponent],
+  imports: [CommonModule, SearchCreateListComponent, SummaryWeeklyComponent],
 })
-
 export class MembershipPaymentComponent {
-
   cardComponent = MembershipCardComponent;
 
-  viewMode: 'table' | 'card' = 'card';
+  showActivityList = false;
 
   data: MembershipPaymentModel[] = [
     {
@@ -59,48 +63,32 @@ export class MembershipPaymentComponent {
     'id', 'memberName', 'amount', 'paymentMethod',
     'paymentDate', 'membershipType', 'duration', 'actions'
   ];
-  filteredData: MembershipPaymentModel[] = [];
 
-  toggleView() {
-    this.viewMode = this.viewMode === 'table' ? 'card' : 'table';
+  startOfWeek = new Date('2024-10-28');
+
+  paymentsSemana: DataPerDay[] = this.data.map(payment => ({
+    date: payment.paymentDate.split('T')[0],
+    amount: payment.amount,
+    tickets: 1
+  }));
+
+  handleSeeActivity() {
+    this.showActivityList = true;
   }
 
-  edit(item: MembershipPaymentModel) {
-    console.log('Edit:', item);
+  handleBackToSummary() {
+    this.showActivityList = false;
   }
 
-  delete(item: MembershipPaymentModel) {
-    console.log('Delete:', item);
-  }
-
-  applySearch(searchValue: string) {
-    const term = searchValue.toLowerCase().trim();
-  
-    this.filteredData = this.data.filter(item =>
-      item.memberName.toLowerCase().includes(term) ||
-      item.membershipType.toLowerCase().includes(term) ||
-      item.paymentMethod.toLowerCase().includes(term)
-    );
-  }
-  
   onCreate() {
     alert('create:');
-    // Aquí podrías navegar o abrir modal
-    // this.router.navigate(['/ruta/nuevo']);
   }
-  
+
   onEdit(item: any) {
-    alert('Eliminar:'+item);
-    // Puedes abrir modal o ir a una ruta con ID
-    // this.router.navigate(['/ruta/editar', item.id]);
+    alert('Editar: ' + item);
   }
-  
+
   onDelete(item: any) {
-    alert('Eliminar:'+item);
-    // Aquí puedes abrir un diálogo de confirmación
-    // if (confirm('¿Seguro que deseas eliminar?')) {
-    //   this.deleteItem(item.id);
-    // }
+    alert('Eliminar: ' + item);
   }
-  
 }

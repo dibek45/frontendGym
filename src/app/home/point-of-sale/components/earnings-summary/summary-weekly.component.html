@@ -1,0 +1,97 @@
+<div class="summary-container">
+
+  <div class="header-navigation">
+    <button class="arrow-button" (click)="previousWeek()"><</button>
+    <span class="date-range">{{ selectedRange }}</span>
+    <button class="arrow-button" (click)="nextWeek()">></button>
+  </div>
+
+  <h1 class="total-earnings">
+    MX${{ totalAmount | number:'1.2-2' }}
+  </h1>
+
+  <div class="bar-chart-container">
+
+    <!-- Línea máxima y su número -->
+    <div 
+      class="max-line" 
+      [style.bottom]="maxHeight + 'px'">
+      MX${{ maxAmount | number:'1.2-2' }}
+    </div>
+  
+    <div 
+      class="dashed-line" 
+      [style.bottom]="maxHeight + 'px'">
+    </div>
+  
+    <div class="bar-chart">
+      <div
+        *ngFor="let day of weekDays"
+        class="bar"
+        [class.selected]="selectedDay?.label === day.label"
+        [style.height]="(day.amount / maxAmount * maxHeight) + 'px'"
+        (click)="selectDay(day)">
+        <span class="day">{{ day.label }}</span>
+      </div>
+    </div>
+    
+  
+  </div>
+  
+  
+  
+
+  <div class="stats-section">
+
+    <h2 *ngIf="!selectedDay">{{ title }}</h2> <!-- 🔵 Mostrar título SOLO si no hay selección -->
+  
+    <div class="stats-grid" *ngIf="!selectedDay"> <!-- 🔵 Resumen semanal si no hay selección -->
+      <div>
+        <div class="stat-title">{{ totalLabel }}</div>
+        <div class="stat-value">{{ totalAmount | currency:'MXN':'symbol' }}</div>
+      </div>
+    
+      <div>
+        <div class="stat-title">Total de gastos</div>
+        <div class="stat-value">{{ totalTickets }}</div>
+      </div>
+    
+      <div *ngIf="totalExtra > 0">
+        <div class="stat-title">{{ extraLabel }}</div>
+        <div class="stat-value">{{ totalExtra }}</div>
+      </div>
+    
+      <div>
+        <div class="stat-title">Día más fuerte</div>
+        <div class="stat-value">{{ bestDay }}</div>
+      </div>
+    </div>
+  
+    <!-- 🔵 Resumen por día seleccionado -->
+    <div class="selected-day-summary" *ngIf="selectedDay">
+      <h3>{{ selectedDay.label }}</h3>
+      <div class="stat-title">Total Amount</div>
+      <div class="stat-value">{{ selectedDay.amount | currency:'MXN':'symbol' }}</div>
+  
+      <div *ngIf="selectedDay.extra > 0">
+        <div class="stat-title">Extra</div>
+        <div class="stat-value">{{ selectedDay.extra | currency:'MXN':'symbol' }}</div>
+      </div>
+  
+      <div class="stat-title">Tickets</div>
+      <div class="stat-value">{{ selectedDay.tickets }}</div>
+    </div>
+  
+  </div>
+  <hr>
+
+<div class="total-summary">
+  <div class="total-row">
+    <div class="total-label">Total Gastado</div>
+    <div class="total-amount">{{ totalAmount | currency:'MXN':'symbol' }}</div>
+  </div>
+
+  <button class="activity-button" (click)="onSeeActivity()">Ver actividad de gastos</button>
+</div>
+
+</div>

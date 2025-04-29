@@ -2,31 +2,47 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Sale } from 'src/app/state/point-of-sale/sale/sale.model';
-import {  selectFilteredSales } from 'src/app/state/point-of-sale/sale/sale.selectors';
-import { SalesService } from 'src/app/state/point-of-sale/sale/sales.service';
+import { selectFilteredSales } from 'src/app/state/point-of-sale/sale/sale.selectors';
 import { loadSales, resetFilters, setCashierId, setCashRegisterId, setEndDate, setSearchTerm, setStartDate } from 'src/app/state/point-of-sale/sale/sale.actions';
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { SaleDetailModalComponent } from 'src/app/shared/table-material-crud/modal/sale-detail-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-
-(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-
+import { SaleDetailModalComponent } from 'src/app/shared/table-material-crud/modal/sale-detail-modal.component';
+import { CommonModule } from '@angular/common';
+import { SummaryWeeklyComponent } from '../components/earnings-summary/summary-weekly.component';
+import { CtnCreateSearchComponent } from '../components/components/ctn-create-search/ctn-create-search.component';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { SaleCardComponent } from '../components/sale-card/sale-card';
 
 @Component({
   selector: 'app-sales',
   styleUrls: ['./sales.component.scss'],
   templateUrl: './sales.component.html',
+  standalone: true,
+  imports: [ CommonModule,
+    FormsModule,              
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    SummaryWeeklyComponent,CtnCreateSearchComponent,SaleCardComponent],
 })
 export class SalesComponent {
 
   private dialog = inject(MatDialog);
+  cardComponent = SaleCardComponent; // ✅ aquí defines el componente que se mostrará como card
 
   sales$: Observable<Sale[]>;
   selectedCashRegisterId: number | null = null;
   selectedCashierId: number | null = null;
   startDate: string | null = null;
   endDate: string | null = null;
+
   displayedColumns: string[] = [
     'id',
     'cashRegisterId',
@@ -37,7 +53,6 @@ export class SalesComponent {
     'details',
     'actions'
   ];
-  
 
   cashRegisters = [
     { id: 168, name: 'Caja 168' },
@@ -45,15 +60,51 @@ export class SalesComponent {
   ];
   cashiers: { id: number; name: string }[] = [];
 
+  // 🔵 Nuevo
+  showActivityList = false;
+  startOfWeek = new Date();
+  salesSummary: { date: string, amount: number, tickets: number }[] = [];
+
   constructor(private store: Store) {
     this.sales$ = this.store.select(selectFilteredSales);
   }
 
-
   ngOnInit() {
-    console.log(`📌inicia metodo onInit}`);
-    this.store.dispatch(loadSales({ gymId: 1 })); // 🔹 Ahora pasamos el gymId
+    this.store.dispatch(loadSales({ gymId: 1 }));
+  
+    this.sales$.subscribe((sales) => {
+      const resumen: { [key: string]: { amount: number, tickets: number } } = {};
+  
+      sales.forEach(sale => {
+        const saleDate = new Date(sale.saleDate); // 🔵 CORRECTO: convertir
+        const dateOnly = saleDate.toISOString().split('T')[0]; // 🔵 yyyy-MM-dd
+  
+        if (!resumen[dateOnly]) {
+          resumen[dateOnly] = { amount: 0, tickets: 0 };
+        }
+        resumen[dateOnly].amount += sale.totalAmount;
+        resumen[dateOnly].tickets += 1;
+      });
+  
+      this.salesSummary = Object.keys(resumen).map(date => ({
+        date,
+        amount: resumen[date].amount,
+        tickets: resumen[date].tickets
+      }));
+  
+      console.log('Resumen de ventas por día:', this.salesSummary); // 🔥
+    });
   }
+  
+
+  handleSeeActivity() {
+    this.showActivityList = true;
+  }
+
+  handleBackToSummary() {
+    this.showActivityList = false;
+  }
+
   onStartDateChange(event: any) {
     this.startDate = event.value ? event.value.toISOString().split('T')[0] : null;
     this.store.dispatch(setStartDate({ startDate: this.startDate }));
@@ -68,7 +119,6 @@ export class SalesComponent {
     this.selectedCashRegisterId = event.value;
     this.store.dispatch(setCashRegisterId({ cashRegisterId: this.selectedCashRegisterId }));
 
-    // Filtrar cajeros según la caja seleccionada
     this.sales$.subscribe(sales => {
       const cashiersInSelectedRegister = sales
         .filter(sale => sale.cashRegister?.id === this.selectedCashRegisterId)
@@ -130,25 +180,30 @@ export class SalesComponent {
         }
       };
 
-      pdfMake.createPdf(documentDefinition).download('Reporte-Ventas.pdf');
+      (window as any).pdfMake.createPdf(documentDefinition).download('Reporte-Ventas.pdf');
     });
   }
 
-   openSaleDetailModal(sale: any): void {
-    console.log(sale)
-      this.dialog.open(SaleDetailModalComponent, {
-        width: '600px',
-        data: {
-          sale: sale
-        }
-      });
-    }
+  openSaleDetailModal(sale: any): void {
+    this.dialog.open(SaleDetailModalComponent, {
+      width: '600px',
+      data: { sale }
+    });
+  }
 
-    onCreateClick() {
-      console.log('Crear nueva venta');
-      // O abrir un modal, o navegar a una ruta nueva
-    }
-    onSearch(searchValue: string) {
-      this.store.dispatch(setSearchTerm({ searchTerm: searchValue }));
-    }  
+  onCreateClick() {
+    console.log('Crear nueva venta');
+  }
+
+  onSearch(searchValue: string) {
+    this.store.dispatch(setSearchTerm({ searchTerm: searchValue }));
+  }
+  onEdit(item: any) {
+    console.log('Editar:', item);
+  }
+  
+  onDelete(item: any) {
+    console.log('Eliminar:', item);
+  }
+  
 }

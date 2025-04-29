@@ -7,7 +7,6 @@ import { HorizontalMenuComponent } from 'src/app/menu/horizontal-menu-dump/horiz
 import { CashRegisterComponent } from './cash-register/cash-register.component';
 import { SalesComponent } from './sales/sales.component';
 import { SubareaTituloComponent } from 'src/app/shared/subarea-titulo/subarea-titulo.component';
-import { MembershipPaymentComponent } from './membership-payment/membership-payment.component';
 import { ReportComponent } from './report/report.component';
 import { GraphsComponent } from './graphs/graphs.component';
 import { PromotionComponent } from './promotion/promotion.component';
@@ -41,7 +40,6 @@ import { CtnCreateSearchComponent } from './components/components/ctn-create-sea
   declarations: [
     PointOfSaleComponent,
     CashRegisterComponent,
-    SalesComponent,
 
     ReportComponent,
     GraphsComponent,

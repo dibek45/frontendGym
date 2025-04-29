@@ -1,29 +1,36 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { CommonModule } from '@angular/common';
 import { ExpenseCardComponent } from '../components/expense-card/expense-card.component';
+import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { SummaryWeeklyComponent } from '../components/earnings-summary/summary-weekly.component';
+
 export interface ExpenseModel {
   id: number;
   description: string;
   amount: number;
   paymentMethod: string;
-  expenseDate: string; // Fecha del gasto en formato ISO
-  category: string; // Categoría del gasto (e.g., "utilities", "travel")
-  createdBy: string; // Nombre o ID de quien registró el gasto
-  cashierId: number; // ID del cajero asociado al gasto
+  expenseDate: string;
+  category: string;
+  createdBy: string;
+  cashierId: number;
+}
+
+export interface DataPerDay {
+  date: string;
+  amount: number;
+  tickets: number;
 }
 
 @Component({
   selector: 'app-expenses',
+  standalone: true,
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.scss'],
-    standalone: true,
-    imports: [CommonModule, SearchCreateListComponent],
+  imports: [CommonModule, SummaryWeeklyComponent, SearchCreateListComponent],
 })
 export class ExpensesComponent {
-    cardComponent = ExpenseCardComponent;
+  cardComponent = ExpenseCardComponent;
   
-//
   displayedColumns: string[] = [
     'id',
     'description',
@@ -38,52 +45,63 @@ export class ExpensesComponent {
   data: ExpenseModel[] = [
     {
       id: 1,
-      description: "Pago de electricidad",
-      amount: 120.50,
-      paymentMethod: "credit",
-      expenseDate: "2024-11-01T08:30:00.000Z",
-      category: "utilities",
-      createdBy: "John Doe",
+      description: 'Pago de luz',
+      amount: 120,
+      paymentMethod: 'cash',
+      expenseDate: '2024-10-28T10:00:00Z',
+      category: 'utilities',
+      createdBy: 'John',
       cashierId: 1
     },
     {
       id: 2,
-      description: "Compra de suministros",
-      amount: 75.20,
-      paymentMethod: "cash",
-      expenseDate: "2024-11-03T14:15:00.000Z",
-      category: "office supplies",
-      createdBy: "Jane Smith",
+      description: 'Pago de agua',
+      amount: 90,
+      paymentMethod: 'card',
+      expenseDate: '2024-10-30T14:00:00Z',
+      category: 'utilities',
+      createdBy: 'Alice',
       cashierId: 2
     },
     {
       id: 3,
-      description: "Viaje de negocio",
-      amount: 300.00,
-      paymentMethod: "debit",
-      expenseDate: "2024-11-05T10:00:00.000Z",
-      category: "travel",
-      createdBy: "Alice Brown",
+      description: 'Internet',
+      amount: 150,
+      paymentMethod: 'transfer',
+      expenseDate: '2024-11-01T12:00:00Z',
+      category: 'services',
+      createdBy: 'Bob',
       cashierId: 1
     }
   ];
+
+  startOfWeek = new Date('2024-10-28');
+
+  gastosSemana: DataPerDay[] = this.data.map(gasto => ({
+    date: gasto.expenseDate.split('T')[0],
+    amount: gasto.amount,
+    tickets: 1
+  }));
+
+  showActivityList = false; // 🔵 NUEVA VARIABLE para controlar qué mostrar
+
+  handleSeeActivity() {
+    this.showActivityList = true; // 🔵 Mostrar lista
+  }
+
+  handleBackToSummary() {
+    this.showActivityList = false; // 🔵 Volver al resumen
+  }
+
   onCreate() {
     alert('create:');
-    // Aquí podrías navegar o abrir modal
-    // this.router.navigate(['/ruta/nuevo']);
   }
-  
+
   onEdit(item: any) {
-    alert('Eliminar:'+item);
-    // Puedes abrir modal o ir a una ruta con ID
-    // this.router.navigate(['/ruta/editar', item.id]);
+    alert('Editar: ' + item);
   }
-  
+
   onDelete(item: any) {
-    alert('Eliminar:'+item);
-    // Aquí puedes abrir un diálogo de confirmación
-    // if (confirm('¿Seguro que deseas eliminar?')) {
-    //   this.deleteItem(item.id);
-    // }
-  }  
+    alert('Eliminar: ' + item);
+  }
 }

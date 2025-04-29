@@ -1,8 +1,23 @@
-<app-search-create-list
-  [data]="data"
-  [displayedColumns]="displayedColumns"
-  [cardComponent]="cardComponent"
-  (create)="onCreate()"
-  (edit)="onEdit($event)"
-  (delete)="onDelete($event)">
-</app-search-create-list>
+<div *ngIf="!showActivityList">
+  <app-summary-weekly
+    [weekStartDate]="startOfWeek"
+    [dataPerDay]="paymentsSemana"
+    title="Membresías Pagadas"
+    totalLabel="Total Ingresado"
+    extraLabel="Total de Membresías"
+    (seeActivity)="handleSeeActivity()">
+  </app-summary-weekly>
+</div>
+
+<div *ngIf="showActivityList">
+  <button (click)="handleBackToSummary()" class="back-button">Volver al resumen</button>
+
+  <app-search-create-list
+    [data]="data"
+    [displayedColumns]="displayedColumns"
+    [cardComponent]="cardComponent"
+    (create)="onCreate()"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)">
+  </app-search-create-list>
+</div>

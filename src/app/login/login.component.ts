@@ -16,7 +16,7 @@ import { environment } from 'src/environment.prod';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  username: string = 'david6393@hot';
+  username: string = 'david@gmail.com';
   password: string = '12345678';
   hidePassword: boolean = true; 
   error: string | null = null;

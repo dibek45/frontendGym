@@ -19,7 +19,6 @@
   border-radius: 55px;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
   resize: none;
 }
 
@@ -116,7 +115,7 @@
   
   .filter-textarea {
     width: 50%;
-    margin-top: 55px;
+    margin-top: 65px;
   }
 
   .vista{
@@ -270,3 +269,28 @@
     margin-left: 340px;
   }
 }
+
+.filter-textarea {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #888;
+  pointer-events: none;
+}
+
+.search-textarea {
+  padding-left: 50px;  // 🔹 Esto mueve el texto
+  border-radius: 55px;
+  max-width: 205px;
+  height: 50%;        // 🔸 Se mantiene sin crecer
+  box-sizing: border-box; //
+  padding-top: 10px;
+
+}
+

@@ -1,3 +1,4 @@
+
 html, body {
   overflow-x: hidden;
   width: 100%;
@@ -30,7 +31,6 @@ html, body {
   max-width: 385px;
   border-radius: 55px;
   font-size: 16px;
-  padding: 10px 20px;
   border: none;
   outline: none;
   background-color: #ffffff;
@@ -88,7 +88,6 @@ html, body {
   border-radius: 55px;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
   resize: none;
 }
 /* ==========================
@@ -310,3 +309,25 @@ html, body {
 }
 
   
+.filter-textarea {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #888;
+  pointer-events: none;
+}
+
+.search-textarea {
+  padding-left: 50px;  // 🔹 Esto mueve el texto
+  padding-top: 10px;
+  width: 100%;
+  max-width: 205px;
+  height: 50%;        // 🔸 Se mantiene sin crecer
+  box-sizing: border-box; //
+}

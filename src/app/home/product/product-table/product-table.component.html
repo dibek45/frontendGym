@@ -4,11 +4,15 @@
       <mat-icon>add</mat-icon>Create
     </button>
 
-    <textarea
-      autocomplete="off"
-      (keyup)="applyFilter($event)"
-      class="filter-textarea"
-    ></textarea>
+    <div class="filter-textarea">
+      <mat-icon class="search-icon" style="    z-index: 100;
+    color: black;">search</mat-icon>
+      <textarea
+        autocomplete="off"
+        (keyup)="applyFilter($event)"
+        class="search-textarea"
+      ></textarea>
+    </div>
   </div>
 
   <mat-button-toggle-group name="viewMode" [(ngModel)]="selectedView" class="vista">

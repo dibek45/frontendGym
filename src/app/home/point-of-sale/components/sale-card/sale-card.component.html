@@ -1,0 +1,25 @@
+<div class="sale-card">
+    <div class="sale-info">
+      <h3 class="sale-id">Venta #{{ sale?.id }}</h3>
+      <div class="sale-detail">
+        <span>Total:</span>
+        <strong>{{ sale?.totalAmount | currency:'MXN':'symbol' }}</strong>
+      </div>
+      <div class="sale-detail">
+        <span>Fecha:</span>
+        <strong>{{ sale?.saleDate | date:'dd/MM/yyyy HH:mm' }}</strong>
+      </div>
+    </div>
+  
+    <div class="sale-extra">
+      <div class="sale-detail">
+        <span>Cajero:</span>
+        <strong>{{ sale?.cashRegister?.cashier?.name || '—' }}</strong>
+      </div>
+      <div class="sale-detail">
+        <span>Pago:</span>
+        <strong>{{ sale?.paymentMethod || '—' }}</strong>
+      </div>
+    </div>
+  </div>
+  

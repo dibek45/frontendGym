@@ -1,11 +1,11 @@
 <!-- 🔵 Buscador y Botón Crear Venta -->
-<app-ctn-create-search
+<app-ctn-create-search *ngIf="showActivityList"
   (searchChanged)="onSearch($event)"
   (createClicked)="onCreateClick()">
 </app-ctn-create-search>
 
 <!-- 🔵 Filtros de fechas, caja, cajero -->
-<div class="filters-container" *ngIf="!showActivityList">
+<div class="filters-container" *ngIf="showActivityList">
 
   <!-- Desde (Fecha inicial) -->
   <mat-form-field appearance="outline">

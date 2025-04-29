@@ -229,7 +229,7 @@ html, body {
     margin-left: 50px;
   }
 }
-@media (min-width: 401px) and (max-width: 412px) {
+@media (min-width: 401px) and (max-width: 420px) {
 
   .btn-create{position: relative;
     margin-left: -20px;
@@ -243,20 +243,37 @@ html, body {
     margin-left: 50px;
   }
 }
-@media (min-width: 421px) and (max-width: 450px) {
+@media (min-width: 421px) and (max-width: 439px) {
 
   .btn-create{position: relative;
     margin-left: -20px;
-    left: -140px;
-    top: 5px;
+    left: -132px;
+    top: 58px;
+    width: 100px;
   }
-
   .filter-textarea {
-    
+
+    margin-top: -20px;
     margin-left: 50px;
-    margin-top: -7px;
-    height: 20px;
+  }
+  
+ 
 }
+
+
+@media (min-width: 439px) and (max-width: 449px) {
+
+  .btn-create{position: relative;
+    margin-left: -20px;
+    left: -138px;
+    top: 58px;
+    width: 100px;
+  }
+  .filter-textarea {
+
+    margin-top: -20px;
+    margin-left: 50px;
+  }
   
  
 }
@@ -264,8 +281,14 @@ html, body {
 
   .btn-create{position: relative;
     margin-left: -20px;
-    left: 0px;
-    top: 5px;
+    left: -168px;
+    top: 58px;
+    width: 100px;
+  }
+  .filter-textarea {
+
+    margin-top: -20px;
+    margin-left: 60px;
   }
   
 }
@@ -274,8 +297,14 @@ html, body {
 
   .btn-create{position: relative;
     margin-left: -20px;
-    left: -240px;
-    top: 5px;
+    left: -188px;
+    top: 58px;
+    width: 100px;
+  }
+  .filter-textarea {
+
+    margin-top: -20px;
+    margin-left: 50px;
   }
   
 }

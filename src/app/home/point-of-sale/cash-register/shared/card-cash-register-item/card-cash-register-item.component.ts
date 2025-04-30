@@ -1,16 +1,21 @@
-import { Component, Input } from '@angular/core';
-import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
-import { AddCashRegisterComponent } from "../add-cash-register/add-cash-register.component";
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-card-cash-register-item',
-  templateUrl: './card-cash-register-item.component.html',
-  styleUrls: ['./card-cash-register-item.component.scss'],
-  standalone:true,
-  imports: [CommonModule,]
+  selector: 'app-card-cashregister',
+  standalone: true,
+  templateUrl: './card-cashregister.component.html',
+  styleUrls: ['./card-cashregister.component.scss'],
+  imports: [CommonModule, MatIconModule, MatButtonModule]
 })
-export class CardCashRegisterItemComponent {
-  @Input() cashRegister!: CashRegister;
-
+export class CardCashregisterComponent {
+  constructor(
+    @Inject('membership') public cashRegister: any,
+    @Inject('edit') public onEdit: () => void,
+    @Inject('delete') public onDelete: () => void
+  ) {}
 }
+
+

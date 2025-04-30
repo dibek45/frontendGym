@@ -29,22 +29,18 @@ export class CashierEffects {
     )
   );
 
-  // Efecto para cargar cajeros
   loadCashiers$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CashierActions.loadCashiers),
+      ofType(CashierActions.loadCashiers), // ⛔ si esto fuera `loadCashiers()`, aquí está el error
       mergeMap(() =>
         this.cashierService.getAllCashiers(1).pipe(
-          map((cashiers) =>
-            CashierActions.loadCashiersSuccess({ cashiers })
-          ),
-          catchError((error) =>
-            of(CashierActions.loadCashiersFailure({ error: error.message }))
-          )
+          map((cashiers) => CashierActions.loadCashiersSuccess({ cashiers })),
+          catchError((error) => of(CashierActions.loadCashiersFailure({ error: error.message })))
         )
       )
     )
   );
+  
 
   
 }

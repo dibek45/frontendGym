@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Injector, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { MembershipCardComponent } from '../membership-card/membership-card.component';
 import { CtnCreateSearchComponent } from '../components/ctn-create-search/ctn-create-search.component';
 
 @Component({
@@ -17,7 +16,7 @@ import { CtnCreateSearchComponent } from '../components/ctn-create-search/ctn-cr
     CtnCreateSearchComponent
 ]
 })
-export class SearchCreateListComponent {
+export class SearchCreateListComponent implements OnChanges {
   constructor(private injector: Injector){
 
   }
@@ -33,10 +32,15 @@ export class SearchCreateListComponent {
 
   filteredData: any[] = [];
 
-  ngOnInit(): void {
-    this.filteredData = [...this.data];
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.filteredData = [...this.data];
+      console.log('♻️ SearchCreateListComponent actualizó filteredData:', this.filteredData);
+    }
   }
-  createInjector(item: any): Injector {
+  createInjector(item: any): Injector  {
+    console.log('🧪 Injectando item:', item);
+
     return Injector.create({
       providers: [
         { provide: 'membership', useValue: item }, // para tarjetas como `membership` o `expense`

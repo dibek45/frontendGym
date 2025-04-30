@@ -4,7 +4,6 @@ import { PointOfSaleComponent } from './point-of-sale.component';
 import { PointOfSaleService } from './point-of-sale.service';
 import { PointOfSaleRoutingModule } from './point-of-sale-routing.module';
 import { HorizontalMenuComponent } from 'src/app/menu/horizontal-menu-dump/horizontal-menu.component';
-import { CashRegisterComponent } from './cash-register/cash-register.component';
 import { SalesComponent } from './sales/sales.component';
 import { SubareaTituloComponent } from 'src/app/shared/subarea-titulo/subarea-titulo.component';
 import { ReportComponent } from './report/report.component';
@@ -12,11 +11,6 @@ import { GraphsComponent } from './graphs/graphs.component';
 import { PromotionComponent } from './promotion/promotion.component';
 import { TableMaterialComponent } from 'src/app/shared/table-material/table-material.component';
 import { AddButtonComponent } from "../../shared/add-button/add-button.component";
-import { CardCashRegisterItemComponent } from './cash-register/shared/card-cash-register-item/card-cash-register-item.component';
-import { AddCashRegisterComponent } from './cash-register/shared/add-cash-register/add-cash-register.component';
-import { CasherComponent } from './casher/casher.component';
-import { AddCasherComponent } from "./casher/shared/add-casher/add-casher.component";
-import { CardCasherComponent } from "./casher/shared/card-casher/card-casher.component";
 import { RoutinesComponent } from './routines/routines.component';
 import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
 import { MatTableModule } from '@angular/material/table';
@@ -39,12 +33,10 @@ import { CtnCreateSearchComponent } from './components/components/ctn-create-sea
 @NgModule({
   declarations: [
     PointOfSaleComponent,
-    CashRegisterComponent,
 
     ReportComponent,
     GraphsComponent,
     PromotionComponent,
-    CasherComponent,
     RoutinesComponent,
     PromotionDetailsComponent,
     MachineContainerComponent,
@@ -55,6 +47,7 @@ import { CtnCreateSearchComponent } from './components/components/ctn-create-sea
 
   ],
   imports: [
+   
     CtnCreateSearchComponent,
     CommonModule,
     RolesModule,
@@ -64,10 +57,6 @@ import { CtnCreateSearchComponent } from './components/components/ctn-create-sea
     HorizontalMenuComponent,
     SubareaTituloComponent,
     AddButtonComponent,
-    CardCashRegisterItemComponent,
-    AddCashRegisterComponent,
-    AddCasherComponent,
-    CardCasherComponent,
     MaterialModuleModule,
     TableMaterialComponent,
     MatTableModule,

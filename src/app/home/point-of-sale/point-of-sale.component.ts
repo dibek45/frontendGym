@@ -14,13 +14,14 @@ export class PointOfSaleComponent implements OnInit {
     { label: 'Ventas', color: '#D9EAD3', icon: 'shopping_cart' },
     { label: 'Gastos', color: '#D9EAD3', icon: 'money_off' },
     { label: 'Pagos membresía', color: '#D9EAD3', icon: 'card_membership' },
-    { label: 'Roles y Permisos', color: '#EADAFD', icon: 'lock_open' },
+   // { label: 'Roles y Permisos', color: '#EADAFD', icon: 'lock_open' },
     { label: 'Cajeros', color: '#F4F4F4', icon: 'supervisor_account' },
     { label: 'Gráficas', color: '#EAF6FF', icon: 'insert_chart' },
     { label: 'Rutinas', color: '#FFE5D9', icon: 'fitness_center' },
     { label: 'Promociones', color: '#FFF4E5', icon: 'local_offer' },
-    { label: 'Maquinas', color: '#EAF6FF', icon: 'fitness_center' },
     { label: 'Agenda', color: '#EAF6FF', icon: 'calendar_today' },
+
+    { label: 'Maquinas', color: '#EAF6FF', icon: 'fitness_center' },
   ];
 
   btnBack: boolean = false;

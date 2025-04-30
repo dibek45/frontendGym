@@ -1,7 +1,30 @@
-<div class="card-casher">
-    <h3>{{ cashier?.name }}</h3>
-    <p><strong>Username:</strong> {{ cashier?.username }}</p>
-    <p><strong>Email:</strong> {{ cashier?.email || 'Sin correo' }}</p>
-    <p><strong>Phone:</strong> {{ cashier?.phone }}</p>
+<div class="card-casher" *ngIf="cashier">
+  <div class="card-header">
+    <mat-icon class="avatar">person</mat-icon>
+    <div class="name">{{ cashier?.name }}</div>
   </div>
-  
+
+  <div class="card-content">
+    <div class="info">
+      <mat-icon>alternate_email</mat-icon>
+      <span>{{ cashier?.username }}</span>
+    </div>
+    <div class="info">
+      <mat-icon>mail</mat-icon>
+      <span>{{ cashier?.email || 'Sin correo' }}</span>
+    </div>
+    <div class="info">
+      <mat-icon>phone</mat-icon>
+      <span>{{ cashier?.phone }}</span>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button mat-stroked-button color="primary" (click)="onEdit()">
+      <mat-icon>edit</mat-icon> Editar
+    </button>
+    <button mat-stroked-button color="warn" (click)="onDelete()">
+      <mat-icon>delete</mat-icon> Eliminar
+    </button>
+  </div>
+</div>

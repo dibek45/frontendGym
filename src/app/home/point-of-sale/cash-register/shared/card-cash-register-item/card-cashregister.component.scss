@@ -1,10 +1,11 @@
 .card-casher {
-  background: #ffffff;
+  background: #fff;
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  max-width: 380px;
-  margin: 16px auto;
+  max-width: 360px;
+  width: 100%;
+  margin-left: -20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -31,8 +32,8 @@
 
     h3 {
       margin: 0;
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1.2rem;
+      font-weight: 600;
       color: #333;
     }
 
@@ -61,12 +62,12 @@
       }
 
       .estado.open {
-        color: #2e7d32;
+        color: green;
         font-weight: bold;
       }
 
       .estado.closed {
-        color: #d32f2f;
+        color: red;
         font-weight: bold;
       }
     }
@@ -84,5 +85,11 @@
       align-items: center;
       gap: 6px;
     }
+  }
+}
+@media (min-width: 633px) {
+  .card-casher {
+    margin-right: 20px;
+    width: 80%;
   }
 }

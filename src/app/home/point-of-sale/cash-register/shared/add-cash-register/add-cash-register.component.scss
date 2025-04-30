@@ -1,6 +1,5 @@
 .add-cash-register-container {
     position: fixed;
-    top: 10%; /* Ajusta la distancia desde la parte superior */
     left: 50%;
     transform: translateX(-50%); /* Centra horizontalmente */
     padding: 20px;
@@ -10,7 +9,16 @@
     max-width: 90%; /* Ajusta para pantallas pequeñas */
   }
   .form-card {
-    background-color: #fff;
+    background-color: #fff;.modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+    
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;

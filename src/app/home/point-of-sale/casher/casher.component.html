@@ -1,13 +1,13 @@
-<app-add-button class="add-button" (click)="openModal()"></app-add-button>
-
+<app-search-create-list
+  [data]="data"
+  [displayedColumns]="displayedColumns"
+  [cardComponent]="cardComponent"
+  (create)="openModal()"
+  (edit)="onEdit($event)"
+  (delete)="onDelete($event)">
+</app-search-create-list>
+  
+<!-- Modal para crear cajero -->
 <div class="modal-container" *ngIf="isModalOpen">
   <app-add-casher (closeModal)="handleModalClose($event)"></app-add-casher>
 </div>
-
-<div *ngIf="cashers$ | async as cashiers" class="card-container">
-  <div *ngFor="let cashier of cashiers" class="cashier-card">
-    <app-card-casher [cashier]="cashier"></app-card-casher>
-  </div>
-</div>
-
-  

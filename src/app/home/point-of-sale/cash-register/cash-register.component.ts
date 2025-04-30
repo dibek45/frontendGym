@@ -7,18 +7,58 @@ import { Casher, CashRegister } from 'src/app/state/point-of-sale/cash-register/
 import { selectAllCashRegisters } from 'src/app/state/point-of-sale/cash-register/cash-register.selectors';
 import { loadCashiers } from 'src/app/state/point-of-sale/casher/cashier.actions';
 import { selectAllCashiers } from 'src/app/state/point-of-sale/casher/cashier.selectors';
+import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { CommonModule } from '@angular/common';
+import { AddCasherComponent } from '../casher/shared/add-casher/add-casher.component';
+import { AddCashRegisterComponent } from "./shared/add-cash-register/add-cash-register.component";
+import { CardCasherComponent } from '../casher/shared/card-casher/card-casher.component';
+import { CardCashregisterComponent } from './shared/card-cash-register-item/card-cash-register-item.component';
 
 @Component({
   selector: 'app-cash-register',
   templateUrl: './cash-register.component.html',
   styleUrls: ['./cash-register.component.scss'],
+  standalone:true,
+  imports: [CommonModule, SearchCreateListComponent, SubareaTituloComponent,  AddCashRegisterComponent]
 })
 export class CashRegisterComponent {
-  cashRegisters$: Observable<CashRegister[]>; // Observable para manejar el estado de las cajas registradoras
-  isModalOpen = false; // Variable para controlar la visibilidad del modal
+  // Store data
+  cashRegisters$: Observable<CashRegister[]>;
   cashers$: Observable<Casher[]>;
 
-  
+  // Vista tarjetas
+  cashRegistersList: CashRegister[] = [];
+  displayedColumns = ['cashierId', 'openingBalance', 'status', 'actions'];
+  cardComponent = CardCashregisterComponent;
+
+  // Modal y detalles
+  isModalOpen = false;
+  showDetails = false;
+  selectedCashRegister: CashRegister | null = null;
+
+  constructor(private store: Store) {
+    this.cashRegisters$ = this.store.select(selectAllCashRegisters);
+    this.cashers$ = this.store.select(selectAllCashiers);
+  }
+
+  ngOnInit(): void {
+    this.loadCashRegisters();
+    this.loadCashiers();
+
+    this.cashRegisters$.subscribe(list => {
+      this.cashRegistersList = list;
+    });
+  }
+
+  loadCashRegisters(): void {
+    this.store.dispatch(CashRegisterActions.loadCashRegisters());
+  }
+
+  loadCashiers(): void {
+    this.store.dispatch(loadCashiers());
+  }
+
+  // Abrir modal
   openModal(): void {
     this.isModalOpen = true;
   }
@@ -26,68 +66,44 @@ export class CashRegisterComponent {
   closeModal(): void {
     this.isModalOpen = false;
   }
-  
-  constructor(private store: Store){
-    this.cashRegisters$ = this.store.select(selectAllCashRegisters);
-    this.cashers$ = this.store.select(selectAllCashiers);
 
+  handleModalClose(event?: {
+    action: 'submit';
+    data: {
+      cashierId: number;
+      cashierName: string;
+      openingBalance: number;
+    };
+  }): void {
+    if (event?.action === 'submit') {
+      const { cashierId, cashierName, openingBalance } = event.data;
+      this.addCashRegister(cashierId, cashierName, Number(openingBalance));
+    }
+    this.closeModal();
   }
 
-  ngOnInit(): void {
-    this.loadCashRegisters(); // Carga los registros al iniciar el componente
-    this.loadCashiers();
-
+  addCashRegister(cashierId: number, cashierName: string, openingBalance: number): void {
+    const newCashRegister: CashRegister = {
+      cashierId,
+      openingBalance,
+      gymId: 1
+    };
+    this.store.dispatch(CashRegisterActions.addCashRegister({ cashRegister: newCashRegister }));
   }
 
-  loadCashiers(): void {
-    this.store.dispatch(loadCashiers());
-  }
-  showDetails = false;
-
-  openDetails() {
+  // Acciones de tarjeta
+  openDetails(cashRegister: CashRegister): void {
+    this.selectedCashRegister = cashRegister;
     this.showDetails = true;
   }
 
-  closeDetails() {
+  closeDetails(): void {
+    this.selectedCashRegister = null;
     this.showDetails = false;
   }
 
- 
-
-
-   // Método para cargar todas las cajas registradoras
-   loadCashRegisters(): void {
-    this.store.dispatch(CashRegisterActions['loadCashRegisters']());
+  onDelete(cashRegister: CashRegister): void {
+    console.log('Eliminar caja:', cashRegister);
+    // Aquí podrías despachar acción para cerrar o eliminar caja
   }
-
-  // Método para agregar una nueva caja registradora
-  addCashRegister(cashierId:number,cashierName: string, openingBalance: number): void {
-    // Encuentra la posición del cajero en el mock
-   
-  
-    // Crea un nuevo objeto CashRegister
-    const newCashRegister: CashRegister = {
-      cashierId: cashierId,
-      openingBalance:openingBalance,
-     gymId:1
-    };
-  
-    // Despacha la acción para agregar la nueva caja
-    this.store.dispatch(
-      CashRegisterActions['addCashRegister']({ cashRegister: newCashRegister })
-    );
-  }
-  
-
-  handleModalClose(event?: { action: 'submit'; data: { cashierId: number; cashierName: string; openingBalance: number } }): void {
-    if (event?.action === 'submit') {
-      console.log('Datos del Modal:', event.data);
-      
-      // Llama al método para agregar la caja, pasando también el `cashierId`
-      this.addCashRegister(event.data.cashierId, event.data.cashierName, Number(event.data.openingBalance));
-    } else {
-      console.log('Modal cerrado sin agregar datos.');
-    }
-    this.isModalOpen = false; // Cierra el modal
-  }
-}  
+}

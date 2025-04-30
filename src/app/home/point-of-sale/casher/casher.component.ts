@@ -1,31 +1,50 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Casher, CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
-import {addCashier,loadCashiers } from 'src/app/state/point-of-sale/casher/cashier.actions';
 import { Cashier } from 'src/app/state/point-of-sale/casher/cashier.model';
+import { addCashier, loadCashiers } from 'src/app/state/point-of-sale/casher/cashier.actions';
 import { selectAllCashiers } from 'src/app/state/point-of-sale/casher/cashier.selectors';
+import { CardCasherComponent } from './shared/card-casher/card-casher.component';
+import { AddCasherComponent } from './shared/add-casher/add-casher.component';
+import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-casher',
   templateUrl: './casher.component.html',
+  standalone:true,
+  imports:[ 
+    CommonModule,
+    AddCasherComponent,
+    SearchCreateListComponent,],
   styleUrls: ['./casher.component.scss']
 })
 export class CasherComponent {
-  cashers$: Observable<Casher[]>; // Observable para manejar el estado de las cajas registradoras
+  cashers$: Observable<Cashier[]>;
+  data: Cashier[] = [];
+  displayedColumns: string[] = ['name', 'username', 'status', 'actions'];
+  cardComponent = CardCasherComponent;
 
-  constructor(private store: Store){
+  isModalOpen = false;
+
+  constructor(private store: Store,private cdr: ChangeDetectorRef) {
     this.cashers$ = this.store.select(selectAllCashiers);
-
   }
-
   ngOnInit(): void {
-this.loadCashers();
+    this.loadCashers();
+  
+    this.cashers$.subscribe(cashiers => {
+      this.data = cashiers;
+      console.log('🟢 Datos en tarjetas:', this.data);
+      this.cdr.detectChanges(); // 👈 fuerza que Angular vuelva a pintar las tarjetas
+    });
   }
 
-  isModalOpen = false; // Variable para controlar la visibilidad del modal
 
-  
+  loadCashers(): void {
+    this.store.dispatch(loadCashiers());
+  }
+
   openModal(): void {
     this.isModalOpen = true;
   }
@@ -33,7 +52,6 @@ this.loadCashers();
   closeModal(): void {
     this.isModalOpen = false;
   }
-
 
   handleModalClose(event?: {
     action: 'submit';
@@ -47,42 +65,31 @@ this.loadCashers();
     };
   }): void {
     if (event?.action === 'submit') {
-      console.log('Datos del Modal:', event.data);
-  
-      // Llama al método para agregar el cajero con los datos completos
       this.addCashier(
         event.data.name,
         event.data.email,
         event.data.password,
-
       );
-    } else {
-      console.log('Modal cerrado sin agregar datos.');
     }
-    this.isModalOpen = false; // Cierra el modal
+    this.isModalOpen = false;
   }
-  
-  addCashier(
-    name: string,
-    email: string,
-    password: string,
-  ): void {
-    // Crea un nuevo objeto conforme al modelo
+
+  addCashier(name: string, email: string, password: string): void {
     const newCasher: Cashier = {
       name: name,
       username: email,
       phone: '0',
       password: password,
-      gymId: 1, // Cambia este valor según el gimnasio actual
+      gymId: 1,
     };
-  
-    // Despacha la acción para agregar el nuevo cajero
     this.store.dispatch(addCashier({ cashier: newCasher }));
   }
-  
-  
-     // Método para cargar todas las cajas registradoras
-     loadCashers(): void {
-      this.store.dispatch(loadCashiers());
-    }
+
+  onEdit(cashier: Cashier): void {
+    console.log('Editar:', cashier);
+  }
+
+  onDelete(cashier: Cashier): void {
+    console.log('Eliminar:', cashier);
+  }
 }

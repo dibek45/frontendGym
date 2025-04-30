@@ -1,0 +1,121 @@
+.machine-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 850px;
+    margin: 16px auto;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .machine-info {
+    flex: 1;
+    min-width: 160px;
+  
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #112244;
+    }
+  
+    p {
+      margin: 6px 0 0;
+      color: #555;
+      font-size: 0.95rem;
+    }
+  }
+  
+  .qr-slots {
+    display: grid;
+    grid-template-columns: repeat(4, 60px); // Más pequeños y alineados
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .qr-box {
+    width:  50px;
+    height: 70px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  
+    img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+  
+    .code {
+      font-size: 0.6rem;
+      color: #444;
+      word-break: break-word;
+      line-height: 1;
+      max-width: 100%;
+      text-align: center;
+    }
+  
+    &.add {
+      cursor: pointer;
+      border: 2px dashed #ccc;
+      background-color: #fafafa;
+      transition: background-color 0.3s ease;
+  
+      mat-icon {
+        font-size: 28px;
+        color: #999;
+        margin-bottom: 4px;
+      }
+  
+      &:hover {
+        background-color: #eaeaea;
+      }
+    }
+  }
+  
+  
+  .machine-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 120px;
+  
+    button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .machine-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .machine-actions {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+  
+    .qr-slots {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+  }
+  

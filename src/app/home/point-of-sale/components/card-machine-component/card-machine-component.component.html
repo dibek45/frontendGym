@@ -1,0 +1,39 @@
+<div class="machine-card" *ngIf="machine">
+    <div class="machine-info">
+      <h3>{{ machine.name }}</h3>
+      <p>ID: {{ machine.id }}</p>
+    </div>
+  
+    <div class="qr-slots">
+      <div
+        *ngFor="let qr of machine.qrs; let i = index"
+        class="qr-box"
+        [title]="'QR ' + (i + 1)"
+      >
+        <img
+          [src]="'https://api.qrserver.com/v1/create-qr-code/?data=' + qr.code + '&size=80x80'"
+          alt="QR"
+        />
+      </div>
+  
+      <!-- Si hay menos de 4 QR, muestra "+" para agregar -->
+      <div
+        class="qr-box add"
+        *ngFor="let i of [0,1,2,3] | slice: machine.qrs.length:4"
+        (click)="onAddQr()"
+        title="Agregar nuevo código QR"
+      >
+        <mat-icon>add</mat-icon>
+      </div>
+    </div>
+  
+    <div class="machine-actions">
+      <button mat-button color="primary" (click)="onEdit()">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-button color="warn" (click)="onDelete()">
+        <mat-icon>delete</mat-icon> Eliminar
+      </button>
+    </div>
+  </div>
+  

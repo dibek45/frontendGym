@@ -3,6 +3,8 @@ export interface QRModel {
     code: string;     
     name:string     // Código del QR
     machineId?: number;     // ID de la máquina a la que pertenece (opcional si es nuevo)
+    editing?: boolean;
+
   }
   
   export interface MachineModel {
@@ -15,5 +17,7 @@ export interface QRModel {
     isSynced?: boolean;    // true si ya se sincronizó con backend
     tempId?: string;       // ID temporal para sincronización local
     syncError?: boolean;   // true si hubo error al sincronizar con backend
+     editing?: boolean;
+
   }
    

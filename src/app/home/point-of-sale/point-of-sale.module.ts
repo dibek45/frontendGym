@@ -21,12 +21,13 @@ import { TableMaterialCrudComponent } from "../../shared/table-material-crud/tab
 import { NgChartsModule } from 'ng2-charts';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MachineFormComponent } from '../machine/machine-form/machine-form.component';
-import { MachineListComponent } from '../machine/machine-list/machine-list.component';
 import { MachineContainerComponent } from '../machine/machine-container.component.';
 import { QRCodeModule } from 'angularx-qrcode';
 import { QrModalComponent } from '../machine/qr-modal/qr-modal.component';
 import { QrCardComponent } from '../machine/machine-form/shared/qr-card/qr-card.component';
 import { CtnCreateSearchComponent } from './components/components/ctn-create-search/ctn-create-search.component';
+import { MachineListComponent } from '../machine/machine-list/machine-list.component';
+import { SearchCreateListComponent } from './components/search-create-list/search-create-list.component';
 
 
 
@@ -40,14 +41,14 @@ import { CtnCreateSearchComponent } from './components/components/ctn-create-sea
     RoutinesComponent,
     PromotionDetailsComponent,
     MachineContainerComponent,
-    MachineListComponent,
     MachineFormComponent,
-    QrModalComponent 
+    QrModalComponent,
+    MachineListComponent
 
 
   ],
   imports: [
-   
+    SearchCreateListComponent,
     CtnCreateSearchComponent,
     CommonModule,
     RolesModule,

@@ -1,7 +1,7 @@
 <div class="cash-register-section">
   <app-subarea-titulo [texto]="'Cajas abiertas'"></app-subarea-titulo>
 
-  <app-search-create-list
+  <app-search-create-list *ngIf="!isModalOpen"
     [data]="cashRegistersList"
     [displayedColumns]="displayedColumns"
     [cardComponent]="cardComponent"
@@ -12,23 +12,17 @@
 
   <app-subarea-titulo [texto]="'Historial'"></app-subarea-titulo>
 
-  <!-- Modal de detalles -->
-  <div *ngIf="showDetails" class="details-modal">
-    <div class="modal-header">
-      <h3>Detalles de Caja #{{ selectedCashRegister?.id }}</h3>
-      <button class="close-button" (click)="closeDetails()">X</button>
-    </div>
-    <div class="modal-body">
-      <!-- Detalles aquí -->
-    </div>
-  </div>
 
   <!-- Modal agregar caja -->
-  <div class="modal-backdrop" *ngIf="isModalOpen"></div>
-  <div class="modal-container" *ngIf="isModalOpen">
+  <div class="modal-backdrop" *ngIf="isModalOpen">
+
     <app-add-cash-register 
     [cashiers$]="cashers$"
     (closeModal)="handleModalClose($event)">
     </app-add-cash-register>
+
+
   </div>
+  
+  
 </div>

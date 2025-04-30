@@ -29,6 +29,7 @@ export class SearchCreateListComponent implements OnChanges {
   @Output() create = new EventEmitter<void>();
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
+  @Output() addQr = new EventEmitter<any>();
 
   filteredData: any[] = [];
 
@@ -43,9 +44,10 @@ export class SearchCreateListComponent implements OnChanges {
 
     return Injector.create({
       providers: [
-        { provide: 'membership', useValue: item }, // para tarjetas como `membership` o `expense`
+        { provide: 'membership', useValue: item },
         { provide: 'edit', useValue: () => this.onEdit(item) },
-        { provide: 'delete', useValue: () => this.onDelete(item) }
+        { provide: 'delete', useValue: () => this.onDelete(item) },
+        { provide: 'addQr', useValue: () => this.onAddQr(item) }
       ],
       parent: this.injector
     });
@@ -74,7 +76,8 @@ export class SearchCreateListComponent implements OnChanges {
   onDelete(item: any) {
     this.delete.emit(item);
   }
-
+  onAddQr(item: any) {
+  }
 
 
  //necesarios en el padre

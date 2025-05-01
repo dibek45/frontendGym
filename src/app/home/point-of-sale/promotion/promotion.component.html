@@ -1,6 +1,6 @@
 <ng-container *ngIf="promotionTypes$ | async as types">
   <app-horizontal-filter-buttons
-    [title]="'Promociones'"
+    [title]="'Selecciona tipo de Promocion'"
     [items]="types"
     [selectedItem]="selectedType"
     (selectItem)="selectTypeById($event.id)">

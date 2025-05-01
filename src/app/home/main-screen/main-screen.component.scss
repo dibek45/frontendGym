@@ -1,0 +1,231 @@
+.main-wrapper {
+    position: relative;
+    top: 45px;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom, #eaf3ff, #ffffff);
+    color: #1c1c1c;
+  }
+  
+  // Top Bar
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .top-left h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .date {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 16px;
+  }
+  
+  .top-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  
+    mat-icon {
+      font-size: 22px;
+      color: #4b5563;
+    }
+  
+    span {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+  }
+  
+  // KPI Section
+  .kpis {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .kpi-card {
+    flex: 1;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      
+      color: #1c1c1c;
+    }
+
+    .value.time {
+      font-weight: 600;
+      color: #6b7280;
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+
+    .caja{
+      margin-top: 10px;
+
+      margin-bottom: 0;
+
+    }
+
+    .checado{
+      margin-bottom: 0;
+      margin-top: 10px;
+
+    }
+
+    .asistencias{
+      margin-top: 10px;
+
+      margin-bottom: 0;
+    }
+    .label {
+      letter-spacing: 0.5px;
+      font-weight: 500;
+      color: #9ca3af;
+      margin-top: 4px;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: transparent;
+      color: #6b7280;
+    }
+
+    mat-icon {
+      font-size: 24px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    &.green .value { color: #2ecc71; }
+    &.blue  .value { color: #3498db; }
+  }
+}
+
+  
+  
+  // Search
+  .search-bar {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    margin-bottom: 24px;
+  
+    mat-icon {
+      color: #9ca3af; // gris suave
+      font-size: 22px;
+      margin-right: 12px;
+    }
+  
+    input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 0.95rem;
+      font-weight: 500; // ✅ más gruesa
+      background: transparent;
+      color: #6b7280; // ✅ tono gris moderno
+    }
+  }
+  
+  
+  
+  // Quick Actions
+  .quick-actions {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 24px;
+  
+    .action-box {
+      flex: 0 0 auto;
+      width: 86px;
+      height: 86px;
+      background-color: #ddd;
+      border-radius: 16px;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  
+      mat-icon {
+        font-size: 36px; // ✅ sigue grande
+        margin-bottom: 5px;
+        height: 34px;
+      width: 36px;
+      }
+  
+      span {
+        font-size: 0.8rem; // ✅ más grande pero sin desproporcionar
+        font-weight: 500;
+        line-height: 1.1;
+      }
+    }
+  
+    .purple { background-color: #5b46db; }
+    .orange { background-color: #f57c00; }
+    .pink   { background-color: #ec407a; }
+    .blue   { background-color: #42a5f5; }
+    .green  { background-color: #26a69a; }
+  }
+  
+  
+  
+  // Feed
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  
+  .feed {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  
+    .feed-card {
+      background: #fff;
+      padding: 14px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  
+      img, mat-icon {
+        width: 32px;
+        height: 32px;
+      }
+  
+      p {
+        font-weight: 500;
+        font-size: 0.95rem;
+        margin: 0;
+      }
+  
+      small {
+        font-size: 0.75rem;
+        color: #888;
+      }
+    }
+  }
+  

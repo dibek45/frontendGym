@@ -70,7 +70,7 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['home/administration']);
+    this.router.navigate(['home/main-screen']);
   }
 
   private getMenuLabelFromUrl(url: string): string {

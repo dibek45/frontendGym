@@ -1,0 +1,82 @@
+<div class="main-wrapper">
+    <div class="header-bar">
+      <div class="top-left">
+        <h2>Hola, David</h2>
+        <p class="date">34 de abril de 2024</p>
+      </div>
+  
+    </div>
+  
+    <div class="kpis">
+      <div class="kpi-card green ">
+        <p class="value caja">$ 1,750.00</p>
+        <p class="label">Caja</p>
+      </div>
+      <div class="kpi-card blue">
+        <p class="value asistencias">48</p>
+        <p class="label">Asistencias hoy</p>
+      </div>
+      <div class="kpi-card gray  ">
+        <p class="value checado">10:22 a.m.</p>
+        <p class="label">Último check-in    </p>
+      </div>
+    </div>
+  
+    <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Buscar membresía, rutina o nota..." />
+      </div>
+      
+      
+      <div class="quick-actions">
+        <div class="action-box purple" (click)="route('home/user/table')">
+          <mat-icon>person</mat-icon>
+          <span>Renovar<br />membresía</span>
+        </div>
+        <div class="action-box orange" (click)="route('home/administration/Routines')">
+          <mat-icon>fitness_center</mat-icon>
+          <span>Crear<br />rutina rápida</span>
+        </div>
+        <div class="action-box pink" (click)="route('home/administration/Promotions')">
+          <mat-icon>campaign</mat-icon>
+          <span>Nueva<br />promoción</span>
+        </div>
+        <div class="action-box blue" (click)="route('home/administration/exponses')">
+          <mat-icon>receipt</mat-icon>
+          <span>Agregar<br />gasto</span>
+        </div>
+        <div class="action-box green">
+          <mat-icon>groups</mat-icon>
+          <span>Ver<br />asistencia</span>
+        </div>
+      </div>
+      
+      
+  
+    <h3 class="section-title">Todo</h3>
+  
+    <div class="feed">
+      <div class="feed-card">
+        <mat-icon>directions_bike</mat-icon>
+        <div>
+          <p>Clase de spinning empieza en 30 min</p>
+          <small>11:30 a.m.</small>
+        </div>
+      </div>
+      <div class="feed-card">
+        <mat-icon>credit_card</mat-icon>
+        <div>
+          <p>Hoy se renovaron 4 membresías nuevas</p>
+          <small>9:20 a.m.</small>
+        </div>
+      </div>
+      <div class="feed-card">
+        <mat-icon color="warn">warning</mat-icon>
+        <div>
+          <p>Faltan 3 días para corte semanal de caja</p>
+          <small>8:00 a.m.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  

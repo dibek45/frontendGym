@@ -69,6 +69,8 @@ html, body {
 }
 /* Estilo base */
 .search-container {
+  position: relative;
+  top: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -330,4 +332,13 @@ html, body {
   max-width: 205px;
   height: 50%;        // 🔸 Se mantiene sin crecer
   box-sizing: border-box; //
+}
+
+.back-button-container {
+  position: absolute; // base (sin desplazamiento)
+  margin-top: 48px;
+  margin-bottom: 10px;
+
+  // Solo aplicar left en pantallas grandes
+  
 }

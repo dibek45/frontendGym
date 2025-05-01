@@ -102,6 +102,10 @@ compareFingerprints(gymId:number): void {
   });
 
 }
+
+goBack() {
+  this.router.navigate(['home/main-screen']);
+}
 isSyncing = false;  // ✅ Flag para evitar dobles llamadas
 
 

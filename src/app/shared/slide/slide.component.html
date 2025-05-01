@@ -5,38 +5,89 @@
 
 <!-- Menú desplegable -->
 <mat-menu #menu="matMenu">
-
-  <!-- Perfil -->
-  <div class="profile-section" style="padding: 12px; text-align: center;">
-    <img src="https://via.placeholder.com/50" alt="David Velázquez" style="border-radius: 50%;" />
-    <div style="margin-top: 5px;">David Velázquez</div>
-  </div>
   <mat-divider></mat-divider>
 
-  <!-- Opciones de navegación -->
-  <button mat-menu-item (click)="user()">
-    <mat-icon>group</mat-icon>
-    <span>Usuarios</span>
+  <button mat-menu-item (click)="route('home/main-screen')">
+    <mat-icon>home</mat-icon>
+    <span>Home</span>
   </button>
-  <button mat-menu-item (click)="product()">
-    <mat-icon>storefront</mat-icon>
-    <span>Productos</span>
+  <!-- 🔹 Operaciones principales -->
+  <button mat-menu-item (click)="route('home/administration/cash-register')">
+    <mat-icon>payments</mat-icon>
+    <span>Caja</span>
   </button>
-  <button mat-menu-item (click)="cart()">
+  <button mat-menu-item (click)="route('home/administration/sales')">
+    <mat-icon>bar_chart</mat-icon>
+    <span>Ventas</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/exponses')">
+    <mat-icon>trending_down</mat-icon>
+    <span>Gastos</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/MembershipPayment')">
+    <mat-icon>credit_card</mat-icon>
+    <span>Pagos membresía</span>
+  </button>
+  <button mat-menu-item (click)="route('home/product/cart')">
     <mat-icon>shopping_cart</mat-icon>
     <span>Carrito</span>
   </button>
-  <button mat-menu-item (click)="agenda()">
-    <mat-icon>event</mat-icon>
-    <span>Agenda</span>
+
+  <mat-divider></mat-divider>
+
+  <!-- 🔹 Gestión de personas y rutinas -->
+  <button mat-menu-item (click)="route('home/user/table')">
+    <mat-icon>group</mat-icon>
+    <span>Usuarios</span>
   </button>
-  <button mat-menu-item (click)="pointOfSale()">
-    <mat-icon>point_of_sale</mat-icon>
-    <span>Administración</span>
+  <button mat-menu-item (click)="route('home/administration/roles')">
+    <mat-icon>admin_panel_settings</mat-icon>
+    <span>Roles y Permisos</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/PermissionSection')">
+    <mat-icon>lock</mat-icon>
+    <span>Permisos</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/Cajeros')">
+    <mat-icon>person_outline</mat-icon>
+    <span>Cajeros</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/Routines')">
+    <mat-icon>fitness_center</mat-icon>
+    <span>Rutinas</span>
   </button>
 
   <mat-divider></mat-divider>
 
+  <!-- 🔹 Recursos -->
+  <button mat-menu-item (click)="route('home/product/table')">
+    <mat-icon>storefront</mat-icon>
+    <span>Productos</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/Promotions')">
+    <mat-icon>local_offer</mat-icon>
+    <span>Promociones</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/maquinas')">
+    <mat-icon>precision_manufacturing</mat-icon>
+    <span>Maquinas</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <!-- 🔹 Análisis e informes -->
+  <button mat-menu-item (click)="route('home/administration/Reports')">
+    <mat-icon>summarize</mat-icon>
+    <span>Reportes</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/Graphs')">
+    <mat-icon>insights</mat-icon>
+    <span>Gráficas</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <!-- Salida -->
   <button mat-menu-item (click)="exit()">
     <mat-icon>logout</mat-icon>
     <span>Salir</span>

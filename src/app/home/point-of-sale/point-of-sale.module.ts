@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { PointOfSaleComponent } from './point-of-sale.component';
 import { PointOfSaleService } from './point-of-sale.service';
 import { PointOfSaleRoutingModule } from './point-of-sale-routing.module';
-import { HorizontalMenuComponent } from 'src/app/menu/horizontal-menu-dump/horizontal-menu.component';
 import { SalesComponent } from './sales/sales.component';
 import { SubareaTituloComponent } from 'src/app/shared/subarea-titulo/subarea-titulo.component';
 import { ReportComponent } from './report/report.component';
@@ -51,7 +50,6 @@ import { SearchCreateListComponent } from './components/search-create-list/searc
     MatTableModule,
     PointOfSaleRoutingModule,
     NgChartsModule,
-    HorizontalMenuComponent,
     SubareaTituloComponent,
     AddButtonComponent,
     MaterialModuleModule,

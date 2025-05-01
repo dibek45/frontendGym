@@ -10,49 +10,30 @@ import { VideoIAComponent } from './auth-face/video-ia/video-ia.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { PointOfSaleComponent } from './point-of-sale/point-of-sale.component';
 import { AgendaComponent } from '../agenda/component/agenda.component';
+import { MainScreenComponent } from './main-screen/main-screen.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-        children: [
-                    {
-                      path: '',
-                      component: UserComponent, 
-                    },
-                  
-                    {
-                      path: 'agenda',
-                      component: AgendaComponent
-                    },
-                    {
-                      path: 'user',
-                      component: UserComponent// another child route component that the router renders
-                    },
-                    {
-                      path: 'auth-face', // child route path
-                      component: AuthFaceComponent,canActivate: [AuthGuard]  // child route component that the router renders
-                    },
-                    {
-                      path: 'finger-print',
-                      component: FingerPrintComponent, canActivate: [AuthGuard] // another child route component that the router renders
-                    },
-                    {
-                      path: 'product',
-                      component: ProductComponent,canActivate: [AuthGuard] },
-                    {
-                      path: 'camera-video',
-                      component: VideoIAComponent, canActivate: [AuthGuard] // another child route component that the router renders
-                    },
-                    {
-                      path: 'administration',
-                      component: PointOfSaleComponent // another child route component that the router renders
-                    }
-        ], 
+    children: [
+      {
+        path: '',
+        component: MainScreenComponent,
+      },
+      {
+        path: 'main-screen',
+        component: MainScreenComponent, // ✅ Nueva ruta añadida
+      },
+      {
+        path: 'agenda',
+        component: AgendaComponent
+      },
+      // ...
+    ],
   },
-  
-  // Otras rutas y componentes relacionados del módulo
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

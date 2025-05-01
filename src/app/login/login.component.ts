@@ -97,7 +97,7 @@ export class LoginComponent {
         this.authService.login(user, user.token);
 
         // 🔥 Navegamos a la página donde se listan los miembros
-        this.router.navigate(['home/user/table']);
+        this.router.navigate(['home/main-screen']);
       },
       (error) => {
         alert(JSON.stringify(error));

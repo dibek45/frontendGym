@@ -1,8 +1,3 @@
-<app-ctn-create-search
-  (searchChanged)="onSearch($event)"
-  (createClicked)="onCreateClick()">
-</app-ctn-create-search>
-
 <div class="routines-container">
   <!-- Exercise Types Section -->
   <div class="exercise-types card">
@@ -19,6 +14,13 @@
       <p>Error loading exercise types: {{ error }}</p>
     </div>
   </div>
+
+  <!-- 🔵 Mostrar solo si hay tipo seleccionado -->
+  <app-ctn-create-search
+    *ngIf="selectedType"
+    (searchChanged)="onSearch($event)"
+    (createClicked)="onCreateClick()">
+  </app-ctn-create-search>
 
   <!-- Routines Section as Cards -->
   <div class="card routines" *ngIf="selectedType">

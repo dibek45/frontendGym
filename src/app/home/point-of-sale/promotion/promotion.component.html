@@ -1,8 +1,3 @@
-<app-ctn-create-search
-  (searchChanged)="onSearch($event)"
-  (createClicked)="onCreateClick()">
-</app-ctn-create-search>
-
 <ng-container *ngIf="promotionTypes$ | async as types">
   <app-horizontal-filter-buttons
     [title]="'Promociones'"
@@ -12,10 +7,17 @@
   </app-horizontal-filter-buttons>
 </ng-container>
 
+<!-- 🔵 Mostrar buscador solo si hay tipo seleccionado -->
+<app-ctn-create-search
+  *ngIf="selectedType"
+  (searchChanged)="onSearch($event)"
+  (createClicked)="onCreateClick()">
+</app-ctn-create-search>
+
 <div class="cards-grid">
   <app-promotion-card
     *ngFor="let promo of filteredPromotions"
-    [typeId]="selectedType?.id"
+    [typeId]="selectedType?.id!"
     [promotion]="promo">
   </app-promotion-card>
 </div>

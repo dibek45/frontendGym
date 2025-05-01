@@ -8,10 +8,8 @@ import { SalesComponent } from './sales/sales.component';
 import { SubareaTituloComponent } from 'src/app/shared/subarea-titulo/subarea-titulo.component';
 import { ReportComponent } from './report/report.component';
 import { GraphsComponent } from './graphs/graphs.component';
-import { PromotionComponent } from './promotion/promotion.component';
 import { TableMaterialComponent } from 'src/app/shared/table-material/table-material.component';
 import { AddButtonComponent } from "../../shared/add-button/add-button.component";
-import { RoutinesComponent } from './routines/routines.component';
 import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
 import { MatTableModule } from '@angular/material/table';
 import { PromotionDetailsComponent } from './promotion/promotion-details/promotion-details.component';
@@ -37,8 +35,6 @@ import { SearchCreateListComponent } from './components/search-create-list/searc
 
     ReportComponent,
     GraphsComponent,
-    PromotionComponent,
-    RoutinesComponent,
     PromotionDetailsComponent,
     MachineContainerComponent,
     MachineFormComponent,

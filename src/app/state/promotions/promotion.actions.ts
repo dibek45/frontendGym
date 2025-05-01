@@ -26,5 +26,7 @@ export const PromotionActions = createActionGroup({
     // New actions for filtering and fetching promotions by type
     'Filter Promotions By Type': props<{ typeId: number }>(), // Filter promotions by type
 
+    'Set Search Term': props<{ searchTerm: string }>(),
+
   },
 });

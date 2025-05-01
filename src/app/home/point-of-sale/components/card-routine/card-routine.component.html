@@ -1,0 +1,23 @@
+<div class="routine-card">
+    <div class="routine-body">
+      <img class="routine-icon" [src]="routine.img || 'assets/sentadilla-con-barra.png'" alt="Routine image" />
+  
+      <div class="routine-info">
+        <div class="routine-top">
+          <h3 class="routine-name">{{ routine.name }}</h3>
+          <div class="routine-actions">
+            <button class="edit-btn" (click)="editExercise(routine)">Edit</button>
+            <button class="delete-btn" (click)="deleteExercise(routine)">Delete</button>
+          </div>
+        </div>
+  
+        <p class="routine-amount">3x4 repeticiones</p>
+        <p class="routine-group">biep</p>
+        <p class="routine-meta">
+          <strong>Link</strong><br />
+          <a [href]="routine.link" target="_blank">{{ routine.link }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  

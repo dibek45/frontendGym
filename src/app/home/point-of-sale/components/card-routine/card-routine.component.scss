@@ -1,0 +1,89 @@
+.routine-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    font-family: 'Inter', sans-serif;
+    max-width: 90%;
+    margin: 12px auto;
+  }
+  
+  .routine-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .routine-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    margin-top: 40px;
+    object-fit: cover;
+    background: #e5e7eb;
+  }
+  
+  .routine-info {
+    flex: 1;
+  }
+  
+  .routine-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  
+    .routine-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0;
+    }
+  
+    .routine-actions {
+      display: flex;
+  
+      button {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+      }
+  
+      .edit-btn {
+        background-color: #f1f5f9;
+        color: #1e3a8a;
+      }
+  
+      .delete-btn {
+        background-color: #ef4444;
+        color: white;
+      }
+    }
+  }
+  
+  .routine-amount {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #1f2937;
+    margin: 2px 0;
+  }
+  
+  .routine-group {
+    font-size: 0.8rem;
+    color: #4b5563;
+    margin-bottom: 4px;
+  }
+  
+  .routine-meta {
+    font-size: 0.75rem;
+  
+    a {
+      color: #2563eb;
+      text-decoration: underline;
+      word-break: break-word;
+    }
+  }
+  

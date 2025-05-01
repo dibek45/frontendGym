@@ -9,6 +9,7 @@ export interface Routine {
   exerciseTypeId: number; // ID of the associated exercise type
   createdAt: Date; // Timestamp for when the routine was created
   updatedAt: Date; // Timestamp for when the routine was last updated
+  img?:string
 }
 
 

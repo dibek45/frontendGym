@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   selectExerciseTypes,
   selectRoutinesByTypeId,
@@ -18,13 +18,38 @@ import {
 import { Routine, ExerciseType } from 'src/app/state/point-of-sale/routines/routines.model';
 import { AddExerciseDialogComponent } from './add-exercise-dialog.component';
 import { EditExerciseDialogComponent } from './edit-exercise-dialog.component';
+import { HorizontalFilterButtonsComponent } from '../components/horizontal-filter-buttons-component/horizontal-filter-buttons-component.component';
+import { CommonModule } from '@angular/common';
+import { CtnCreateSearchComponent } from '../components/components/ctn-create-search/ctn-create-search.component';
+import { CardRoutineComponent } from '../components/card-routine/card-routine.component';
 
 @Component({
   selector: 'app-routines',
   templateUrl: './routines.component.html',
+  standalone:true,
+  imports:[CommonModule, HorizontalFilterButtonsComponent,CtnCreateSearchComponent,CardRoutineComponent],
   styleUrls: ['./routines.component.scss'],
 })
 export class RoutinesComponent implements OnInit {
+  searchTerm = '';
+
+onCreateClick() {
+throw new Error('Method not implemented.');
+}
+onSearch(term: string) {
+  this.searchTerm = term;
+
+  if (this.selectedType) {
+    this.routines$ = this.store.select(selectRoutinesByTypeId(this.selectedType.id)).pipe(
+      map(routines =>
+        routines.filter(r =>
+          r.name.toLowerCase().includes(term.toLowerCase())
+        )
+      )
+    );
+  }
+}
+
   exerciseTypes$!: Observable<ExerciseType[]>; // Observable for exercise types
   exerciseTypeError$!: Observable<string | null>; // Observable for exercise type errors
   routines$!: Observable<Routine[]>; // Observable for routines
@@ -42,19 +67,7 @@ export class RoutinesComponent implements OnInit {
     this.exerciseTypeError$ = this.store.select(selectExerciseTypeError);
   }
 
-  selectType(type: ExerciseType) {
-    // Set the selected exercise type
-    this.selectedType = type;
 
-    // Dispatch action to load routines for the selected exercise type
-    this.store.dispatch(loadRoutinesByType({ exerciseTypeId: type.id }));
-
-    // Select routines for the chosen type
-    this.routines$ = this.store.select(selectRoutinesByTypeId(type.id));
-
-    // Handle errors for routines
-    this.routineError$ = this.store.select(selectRoutineError);
-  }
 
   addExercise() {
     // Open dialog to add a new routine
@@ -106,4 +119,25 @@ export class RoutinesComponent implements OnInit {
       })
     );
   }
+  selectType(type: { id: number; name: string }) {
+    this.exerciseTypes$.subscribe(types => {
+      const found = types.find(t => t.id === type.id);
+      if (found) {
+        this.selectedType = found;
+        this.store.dispatch(loadRoutinesByType({ exerciseTypeId: found.id }));
+  
+        this.routines$ = this.store.select(selectRoutinesByTypeId(found.id)).pipe(
+          map(routines =>
+            routines.filter(r =>
+              r.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+            )
+          )
+        );
+  
+        this.routineError$ = this.store.select(selectRoutineError);
+      }
+    });
+  }
+  
+  
 }

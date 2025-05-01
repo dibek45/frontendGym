@@ -1,0 +1,42 @@
+.filter-container {
+    padding: 20px;
+  }
+  
+  .filter-header h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  
+  .type-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  
+  .type-scroll button {
+    background: #222;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .type-scroll button.active {
+    background: #007bff;
+  }
+  
+  .type-scroll button:hover {
+    background: #444;
+  }
+  
+  .cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  

@@ -31,8 +31,6 @@
 
 }
 
-.card-item {
-}
 
 /* Responsive */
 
@@ -294,3 +292,11 @@
 
 }
 
+.back-button-container {
+  position: absolute; // base (sin desplazamiento)
+  margin-top: 48px;
+  margin-bottom: 10px;
+
+  // Solo aplicar left en pantallas grandes
+  
+}

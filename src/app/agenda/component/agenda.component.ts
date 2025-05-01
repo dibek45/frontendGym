@@ -513,6 +513,9 @@ export class AgendaComponent implements OnInit {
       end: `${fechaISO}T${config.horaFin}`
     });
   }
-  
+    
+goBack() {
+  this.router.navigate(['home/main-screen']);
+}
   
 }

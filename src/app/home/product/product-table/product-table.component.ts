@@ -28,7 +28,8 @@ export class ProductTableComponent implements OnInit {
   showModal: boolean=false;
   gymIdFromStore: number=1;
 
-  constructor(private service: ProductFormService,private store: Store<AppState>,  private cartService: CartService,   
+  constructor(private service: ProductFormService,private store: Store<AppState>,
+      private cartService: CartService,   
      private router: Router, private _notification:NotificationService,) {}
 
   ngOnInit(): void {
@@ -109,4 +110,9 @@ closeModal() {
       'success'
     );
   }
+
+  
+goBack() {
+  this.router.navigate(['home/main-screen']);
+}
 }

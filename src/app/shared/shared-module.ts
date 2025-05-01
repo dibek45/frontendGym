@@ -5,12 +5,12 @@ import { RightSectionComponent } from "../home/product/cart/right-section/right-
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [CartComponent],  // Declara el CartComponent
+  declarations: [],  // Declara el CartComponent
   imports: [
     FormsModule,
     CommonModule ,
     RightSectionComponent
 ],
-  exports: [CartComponent]  // Exporta el CartComponent para que pueda ser usado en otros módulos
+  exports: [ ]  // Exporta el CartComponent para que pueda ser usado en otros módulos
 })
 export class SharedModule {}

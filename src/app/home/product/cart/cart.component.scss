@@ -1,9 +1,4 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  font-family: Arial, sans-serif;
-}
+
 /* Por defecto oculto */
 .mobile-summary {
   display: none;
@@ -156,6 +151,8 @@ tbody tr {
 // XS y S (hasta 767px) - Teléfonos
 @media (max-width: 767px) {
   .main-layout {
+    position: relative;
+    margin-top: 50px;
     flex-direction: column;
   }
 
@@ -382,4 +379,12 @@ tbody tr {
     width: 200px;
     height: 150px;
   }
+}
+.back-button-container {
+  position: absolute; // base (sin desplazamiento)
+  margin-top: 48px;
+  margin-bottom: 10px;
+
+  // Solo aplicar left en pantallas grandes
+  
 }

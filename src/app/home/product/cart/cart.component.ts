@@ -11,11 +11,16 @@ import { selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
 import { DetailProduct } from 'src/app/core/models/detail-product.state';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { MatIconModule } from '@angular/material/icon';
+import { RightSectionComponent } from './right-section/right-section.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  styleUrls: ['./cart.component.scss'],
+  standalone:true,
+  imports:[CommonModule, MatIconModule,RightSectionComponent]
 })
 export class CartComponent implements OnInit {
   // Observables del carrito
@@ -42,6 +47,8 @@ export class CartComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private store: Store<AppState>,
+    private router: Router,
+
   ) {
     // 1) Inicializamos los selectores
     this.cartItemsRdx$ = this.store.select(selectCartItems);
@@ -183,4 +190,9 @@ export class CartComponent implements OnInit {
       this.store.dispatch(calculateTotal());
     });
   }
+
+  
+goBack() {
+  this.router.navigate(['home/main-screen']);
+}
 }

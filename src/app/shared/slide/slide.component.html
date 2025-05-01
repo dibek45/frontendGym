@@ -1,20 +1,62 @@
-<!-- Botón de menú (3 puntos) -->
+<!-- Botón de menú -->
 <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-toggle">
   <mat-icon>more_vert</mat-icon>
 </button>
 
-<!-- Menú desplegable -->
+<!-- Menú principal -->
 <mat-menu #menu="matMenu">
-  <mat-divider></mat-divider>
 
   <button mat-menu-item (click)="route('home/main-screen')">
     <mat-icon>home</mat-icon>
     <span>Home</span>
   </button>
-  <!-- 🔹 Operaciones principales -->
+  <!-- Usuarios, Productos, Carrito (fuera de submenú) -->
+  <button mat-menu-item (click)="route('home/user/table')">
+    <mat-icon>group</mat-icon>
+    <span>Usuarios</span>
+  </button>
+  <button mat-menu-item (click)="route('home/product/table')">
+    <mat-icon>storefront</mat-icon>
+    <span>Productos</span>
+  </button>
+  <button mat-menu-item (click)="route('home/product/cart')">
+    <mat-icon>shopping_cart</mat-icon>
+    <span>Carrito</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+   <!-- 📅 Agenda -->
+   <button mat-menu-item (click)="route('home/agenda')">
+    <mat-icon>event</mat-icon>
+    <span>Agenda</span>
+  </button>
+
+  <!-- ⚙️ Todo lo demás en Administración -->
+  <button mat-menu-item [matMenuTriggerFor]="adminMenu">
+    <mat-icon>settings</mat-icon>
+    <span>Administración</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+ 
+  <!-- 🚪 Salir -->
+  <button mat-menu-item (click)="exit()">
+    <mat-icon>logout</mat-icon>
+    <span>Salir</span>
+  </button>
+</mat-menu>
+
+<!-- Submenú: Administración -->
+<mat-menu #adminMenu="matMenu">
   <button mat-menu-item (click)="route('home/administration/cash-register')">
     <mat-icon>payments</mat-icon>
     <span>Caja</span>
+  </button>
+  <button mat-menu-item (click)="route('home/administration/MembershipPayment')">
+    <mat-icon>credit_card</mat-icon>
+    <span>Pagos membresía</span>
   </button>
   <button mat-menu-item (click)="route('home/administration/sales')">
     <mat-icon>bar_chart</mat-icon>
@@ -24,62 +66,24 @@
     <mat-icon>trending_down</mat-icon>
     <span>Gastos</span>
   </button>
-  <button mat-menu-item (click)="route('home/administration/MembershipPayment')">
-    <mat-icon>credit_card</mat-icon>
-    <span>Pagos membresía</span>
+  <button mat-menu-item (click)="route('home/administration/Routines')">
+    <mat-icon>fitness_center</mat-icon>
+    <span>Rutinas</span>
   </button>
-
-
-  <mat-divider></mat-divider>
-
-  <!-- 🔹 Gestión de personas y rutinas -->
-  <button mat-menu-item (click)="route('home/user/table')">
-    <mat-icon>group</mat-icon>
-    <span>Usuarios</span>
-  </button>
-  
-  <button mat-menu-item (click)="route('home/administration/PermissionSection')">
-    <mat-icon>lock</mat-icon>
-    <span>Permisos</span>
+  <button mat-menu-item (click)="route('home/administration/maquinas')">
+    <mat-icon>precision_manufacturing</mat-icon>
+    <span>Máquinas</span>
   </button>
   <button mat-menu-item (click)="route('home/administration/Cajeros')">
     <mat-icon>person_outline</mat-icon>
     <span>Cajeros</span>
   </button>
-  <button mat-menu-item (click)="route('home/administration/Routines')">
-    <mat-icon>fitness_center</mat-icon>
-    <span>Rutinas</span>
-  </button>
-
-  <mat-divider></mat-divider>
-
-  <!-- 🔹 Recursos -->
-  <button mat-menu-item (click)="route('home/product/table')">
-    <mat-icon>storefront</mat-icon>
-    <span>Productos</span>
-  </button>
   <button mat-menu-item (click)="route('home/administration/Promotions')">
     <mat-icon>local_offer</mat-icon>
     <span>Promociones</span>
   </button>
-  <button mat-menu-item (click)="route('home/administration/maquinas')">
-    <mat-icon>precision_manufacturing</mat-icon>
-    <span>Maquinas</span>
-  </button>
-
-  <mat-divider></mat-divider>
-
-  
   <button mat-menu-item (click)="route('home/administration/Graphs')">
     <mat-icon>insights</mat-icon>
     <span>Gráficas</span>
-  </button>
-
-  <mat-divider></mat-divider>
-
-  <!-- Salida -->
-  <button mat-menu-item (click)="exit()">
-    <mat-icon>logout</mat-icon>
-    <span>Salir</span>
   </button>
 </mat-menu>

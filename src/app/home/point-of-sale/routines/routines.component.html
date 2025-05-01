@@ -3,7 +3,7 @@
   <div class="exercise-types card">
     <ng-container *ngIf="exerciseTypes$ | async as types">
       <app-horizontal-filter-buttons
-        [title]="'Exercise Types'"
+        [title]="'Selecciona tipo de ejercicio'"
         [items]="types"
         [selectedItem]="selectedType"
         (selectItem)="selectType($event)">

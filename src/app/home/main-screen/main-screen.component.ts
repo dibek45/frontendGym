@@ -25,7 +25,7 @@ constructor(private router: Router, private apollo: Apollo) {
 
   console.log(this.apollo.client.link);
 
-  console.log("**********************************")
+  alert("**********************************")
   this.apollo.subscribe({
     query: gql`
       subscription OnCashRegisterUpdated($gymId: Int!) {

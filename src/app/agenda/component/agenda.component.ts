@@ -100,15 +100,15 @@ export class AgendaComponent implements OnInit {
     dayMaxEvents: 3,
     events: [],
     dateClick: this.handleDateClick.bind(this),
-    eventClick: (info) => {
+    eventClick: (info:any) => {
       info.jsEvent.preventDefault(); // Previene cualquier clic directo en eventos
     },
     eventDisplay: 'none',
     dayCellContent: this.dayCellContent.bind(this),   
-    eventDidMount: (info) => {
+    eventDidMount: (info:any) => {
       // ✅ Desactiva el comportamiento del botón "+n más"
       if (info.el.classList.contains('fc-more')) {
-        info.el.addEventListener('click', (e) => {
+        info.el.addEventListener('click', (e:any) => {
           e.preventDefault();
           e.stopPropagation();
         });

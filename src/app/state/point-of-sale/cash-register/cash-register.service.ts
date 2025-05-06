@@ -9,6 +9,8 @@ import { CashRegisterActions } from './cash-register.actions';
 import { Store } from '@ngrx/store';
 import { selectAllCashRegisters } from './cash-register.selectors';
 import { environment } from 'src/environment.prod';
+import localforage from 'localforage';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root',
@@ -24,8 +26,67 @@ export class CashRegisterService {
   }
 
 
+  async getCashRegistersWithCache(forceBackend = false): Promise<CashRegister[]> {
+    console.log('🔁 getCashRegistersWithCache llamado', { forceBackend });
+  
+    const encrypted = await localforage.getItem<string>('identity.json');
+    if (!encrypted) {
+      console.warn('❌ No hay identity.json');
+      return [];
+    }
+  
+    let identity: any;
+    try {
+      const bytes = CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta');
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      identity = JSON.parse(decrypted);
+      console.log('✅ Identity desencriptado:', identity);
+    } catch (err) {
+      console.error('❌ Error al desencriptar identity.json:', err);
+      return [];
+    }
+  
+    const key = `user-${identity.username}/gym-${identity.gymId}/cashRegisters`;
+    console.log('🔑 Clave de caché:', key);
+  
+    if (!forceBackend) {
+      const cached = await localforage.getItem<string>(key);
+      if (cached) {
+        try {
+          const decrypted = CryptoJS.AES.decrypt(cached, 'clave-super-secreta').toString(CryptoJS.enc.Utf8);
+          const parsed = JSON.parse(decrypted);
+          console.log('📂 Cajas cargadas desde caché local:', parsed);
+          return parsed;
+        } catch (err) {
+          console.error('❌ Error al leer desde caché:', err);
+        }
+      } else {
+        console.log('📭 No se encontró caché local, irá al backend...');
+      }
+    } else {
+      console.log('⚠️ Forzando carga desde backend...');
+    }
+  
+    // Si no hay caché o se fuerza la recarga
+    try {
+      const list = await this.getCashRegistersByGym(identity.gymId).toPromise();
+      console.log('☁️ Cajas desde backend:', list);
+  
+      const encryptedList = CryptoJS.AES.encrypt(JSON.stringify(list), 'clave-super-secreta').toString();
+      await localforage.setItem(key, encryptedList);
+      console.log('💾 Guardado en caché:', key);
+  
+      return list ?? []; // o ya devuelves [] correctamente
 
-  getCashRegistersByGym(gymId: number): Observable<any[]> {
+    } catch (err) {
+      console.error('❌ Error al obtener cajas desde backend:', err);
+      return [];
+    }
+  }
+  
+  
+  
+  getCashRegistersByGym(gymId: number): Observable<CashRegister[]> {
     const query = `
       query GetMovementsByCashRegister($gymId: Int) {
         getAllCashRegisters(gymId: $gymId) {
@@ -46,33 +107,31 @@ export class CashRegisterService {
           }
           gymId
           cashier {
-                    id
-                    name
-                  }
+            id
+            name
+          }
+            updatedAt
         }
-          
       }
     `;
-
+  
     const variables = { gymId };
-
+  
     return this.http
-      .post<{ data: { getAllCashRegisters: any[] } }>(this.graphqlEndpoint, {
+      .post<{ data?: { getAllCashRegisters?: CashRegister[] } }>(this.graphqlEndpoint, {
         query,
         variables,
       })
       .pipe(
         map((response) => {
-            console.log(response);
-         return   response.data.getAllCashRegisters;
-            
-        }),
-        catchError((error) => {
-          console.error('Error al obtener las cajas registradoras:', error);
-          return throwError(() => new Error('No se pudieron obtener las cajas registradoras.'));
+          const list: CashRegister[] = response?.data?.getAllCashRegisters ?? [];
+          console.log('🔍 Desde GraphQL:', list); // <-- Asegura que sí hay datos
+          return list;
         })
+        
       );
   }
+  
   // Obtener todas las cajas registradoras desde el backend GraphQL
   getMovementsByCashRegister(cashRegisterId: number): Observable<any> {
     const query = `
@@ -182,6 +241,7 @@ export class CashRegisterService {
           type
           concept
           movementDate
+          updatedAt
         }
       }
     `;
@@ -201,4 +261,55 @@ export class CashRegisterService {
   loadCashRegisters(): void {
     this.store.dispatch(CashRegisterActions['loadCashRegisters']());
   }
+
+
+  async syncCashRegistersIfNeeded(): Promise<CashRegister[]> {
+    const encrypted = await localforage.getItem<string>('identity.json');
+    if (!encrypted) return [];
+  
+    const identity = JSON.parse(
+      CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta').toString(CryptoJS.enc.Utf8)
+    );
+  
+    const key = `user-${identity.username}/gym-${identity.gymId}/cashRegisters`;
+    const cachedStr = await localforage.getItem<string>(key);
+    let local: CashRegister[] = [];
+  
+    if (cachedStr) {
+      try {
+        const decrypted = CryptoJS.AES.decrypt(cachedStr, 'clave-super-secreta').toString(CryptoJS.enc.Utf8);
+        local = JSON.parse(decrypted) ?? [];
+      } catch {
+        local = [];
+      }
+    }
+  
+    const remote = await this.getCashRegistersByGym(identity.gymId).toPromise() ?? [];
+  
+    const localLatest = local.length
+      ? local.reduce((acc, cur) => (acc.openingTime && cur.openingTime && cur.openingTime > acc.openingTime ? cur : acc))
+      : undefined;
+  
+    const remoteLatest = remote.length
+      ? remote.reduce((acc, cur) => (acc.openingTime && cur.openingTime && cur.openingTime > acc.openingTime ? cur : acc))
+      : undefined;
+  
+    const isRemoteNewer =
+      !localLatest || !localLatest.openingTime ||
+      (remoteLatest?.openingTime && remoteLatest.openingTime > localLatest.openingTime);
+  
+    const isLengthDifferent = remote.length !== local.length;
+  
+    if (isRemoteNewer || isLengthDifferent) {
+      const encryptedRemote = CryptoJS.AES.encrypt(JSON.stringify(remote), 'clave-super-secreta').toString();
+      await localforage.setItem(key, encryptedRemote);
+      console.log('🔄 Se actualizó la caché desde backend');
+      return remote;
+    }
+  
+    console.log('✅ Datos locales ya están actualizados');
+    return local;
+  }
+  
+  
 }

@@ -4,4 +4,6 @@ export interface userModel{
   gymId: number;  // Opcional si no siempre recibes el nombre
   roll?: number; // Opcional si no siempre recibes el email
   token?: string; // Opcional si lo usas para manejar autenticación
+  username?: string; // ✅ Agrega esta línea
+
 }

@@ -12,7 +12,9 @@ export interface CashRegister {
   status?: string;           // Estado de la caja ('open', 'closed', etc.)
   openingTime?: Date;        // Fecha de apertura
   cashier?:any,
-  gymId:number
+  gymId:number,
+  updatedAt?:number      
+
 }
 
 

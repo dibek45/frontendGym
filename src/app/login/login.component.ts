@@ -9,6 +9,7 @@ import { UserInterface } from '../auth/user.interface';
 import { jwtDecode } from 'jwt-decode';
 import { FingerprintPersonaService } from '../shared/fingerprint.service';
 import { environment } from 'src/environment.prod';
+import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service.ts.service';
 
 @Component({
   selector: 'app-login',
@@ -26,16 +27,14 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private http: HttpClient,
-    private WebSocketService:FingerprintPersonaService,
- 
+    private WebSocketService: FingerprintPersonaService,
+    private localStorage: LocalEncryptedStorageService // ✅ Inyectado
   ) {}
+
   ngOnInit(): void {
-    alert(window.innerWidth);
-
+  //  alert(window.innerWidth);
   }
-  
 
-   
   onSubmit(): void {
     console.log('🔹 Nombre de usuario:', this.username);
     console.log('🔹 Contraseña:', this.password);
@@ -51,15 +50,13 @@ export class LoginComponent {
         password: this.password
       }
     };
-//alert(environment.apiUrl)
+
     this.http.post<{ data: { login: string } }>(
       environment.apiUrl,
-
       graphqlQuery
     ).subscribe(
-      (response) => {
-
-        if (!response?.data?.login) { // ✅ Ahora usamos "login" en lugar de "loginmember"
+      async (response) => {
+        if (!response?.data?.login) {
           console.error('❌ Invalid credentials');
           this.error = 'Invalid credentials. Please try again.';
           return;
@@ -67,7 +64,7 @@ export class LoginComponent {
 
         console.log('✅ Token received:', response.data.login);
 
-        // 🛠️ Decodificar el token para obtener gymId, id, roll, etc.
+        // Decodificar el token
         let decodedToken: any;
         try {
           decodedToken = jwtDecode(response.data.login);
@@ -78,7 +75,6 @@ export class LoginComponent {
           return;
         }
 
-        // Extraemos gymId del token
         const gymId = decodedToken?.gymId || 0;
 
         const user: UserInterface = {
@@ -90,13 +86,23 @@ export class LoginComponent {
           token: response.data.login
         };
 
-        // Dispatch Redux action para guardar el usuario en el estado
+        // ✅ Guardar en Redux
         this.store.dispatch(setUser(user));
+// ✅ Guardar encriptado local
+await this.localStorage.saveIdentity({
+  userId: user.id,
+  gymId: user.gymId,
+  username: user.username
+});
 
-        // Autenticamos al usuario
+// ✅ Confirmación visual
+alert(`🟢 Identity guardado:\nUsuario: ${user.username}\nGym ID: ${user.gymId}`);
+
+
+        // ✅ Autenticación interna
         this.authService.login(user, user.token);
 
-        // 🔥 Navegamos a la página donde se listan los miembros
+        // ✅ Navegación
         this.router.navigate(['home/main-screen']);
       },
       (error) => {
@@ -106,17 +112,14 @@ export class LoginComponent {
     );
   }
 
-  compareFingerprints(gymId:number): void {
-  
+  compareFingerprints(gymId: number): void {
     this.WebSocketService.verifyFingerprint(1).subscribe({
       next: () => {
         alert('Verificación de huellas en progreso...');
       },
       error: (error) => {
-       alert( JSON.stringify(error));
+        alert(JSON.stringify(error));
       }
     });
-  
   }
-  
 }

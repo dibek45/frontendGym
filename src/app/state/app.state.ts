@@ -12,22 +12,32 @@ import { cartReducer } from './point-of-sale/cart/cart.reducer';
 import { CartState } from '../core/models/cart.state';
 import { categoryReducer, CategoryState } from './reducers/category.reducer';
 import { DetailProductState } from '../core/models/detail-product.state';
+import { CashRegisterState } from './point-of-sale/cash-register/cash-register.state';
+import { SaleState } from './point-of-sale/sale/sale.state';
+import { cashRegisterReducer } from './point-of-sale/cash-register/cash-register.reducer';
+import { salesReducer } from './point-of-sale/sale/sale.reducer';
 
-export interface AppState{
+
+export interface AppState {
     members: MemberState;
-    products:ProductState,
-    id:HuellaState,
-    user:UserState,
-    cart:CartState,
-    categories:CategoryState
+    products: ProductState;
+    id: HuellaState;
+    user: UserState;
+    cart: CartState;
+    categories: CategoryState;
     detail: DetailProductState;
+    cashRegister: CashRegisterState;  // ✅ agregados
+    sales: SaleState;  
+                  // ✅ agregados
 }
-export const ROOT_REDUCERS:ActionReducerMap<AppState> = {
-        members: MemberReducer,
-        products : ProductReducer,
-        id:HuellaReducer,
-        user:UserReducer,
-        cart:cartReducer,
-        categories:categoryReducer,
-        detail:detailProductReducer
-}
+export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
+    members: MemberReducer,
+    products: ProductReducer,
+    id: HuellaReducer,
+    user: UserReducer,
+    cart: cartReducer,
+    categories: categoryReducer,
+    detail: detailProductReducer,
+    cashRegister: cashRegisterReducer, // ✅ agregado
+    sales: salesReducer                // ✅ agregado
+};

@@ -58,8 +58,43 @@ import { machineReducer } from './state/machine/machine.reducer';
 import { AgendaComponent } from './agenda/component/agenda.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { localStorageMetaReducer } from './local/services/meta-reducers/local-storage-meta.reducer';
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { ApolloClientOptions, InMemoryCache, split } from '@apollo/client/core';
+import { HttpLink } from 'apollo-angular/http';
+import { ApolloLink } from '@apollo/client/core';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
 
 //const config: SocketIoConfig = { url: 'http://localhost:4200', options: {} };
+export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
+  const http = httpLink.create({ uri: 'https://api.dibeksolutions.com/graphql' });
+
+  const ws = new WebSocketLink({
+    uri: 'wss://api.dibeksolutions.com/graphql',
+    options: {
+      reconnect: true,
+    },
+  });
+
+  const splitLink = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    ws,
+    http
+  );
+
+  return {
+    link: ApolloLink.from([splitLink]),
+    cache: new InMemoryCache(),
+  };
+}
+
 
 
 @NgModule({
@@ -84,8 +119,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     FormsModule,
     MatCheckboxModule,
    // SocketIoModule.forRoot(config),
-    StoreModule.forRoot(ROOT_REDUCERS, {}),
-    StoreDevtoolsModule.instrument({
+      StoreDevtoolsModule.instrument({
       name:'test2'
     }),
     EffectsModule.forRoot([MemberEffects, ProductEffects,CashRegisterEffects]),
@@ -94,6 +128,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     StoreModule.forFeature('cashRegisters', cashRegisterReducer), // Registro del feature store
     CashRegisterModule,
     CashierModule,
+    StoreModule.forRoot(ROOT_REDUCERS, {
+      metaReducers: [localStorageMetaReducer]
+    }),
     StoreModule.forFeature('cashers', cashierReducer), // Registro del feature store
     StoreModule.forFeature('category', categoryReducer),
     StoreModule.forFeature('detail', detailProductReducer),
@@ -120,6 +157,17 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   ],
   
   providers: [NotificationService,
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: createApollo,
+      deps: [HttpLink],
+    },
+    HttpLink, // <-- ⚠️ Esto es lo que te falta
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: createApollo,
+      deps: [HttpLink],
+    },
     //SocketProviderConnect,
   ],
   schemas: [NO_ERRORS_SCHEMA], // Agrega esta línea

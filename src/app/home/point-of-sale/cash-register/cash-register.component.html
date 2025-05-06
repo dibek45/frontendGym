@@ -1,6 +1,27 @@
 <div class="cash-register-section">
   <app-subarea-titulo [texto]="'Cajas abiertas'"></app-subarea-titulo>
-
+  <div style="margin-bottom: 16px;">
+    <button mat-raised-button color="primary" (click)="listarClavesGuardadas()">
+      🔍 Ver claves guardadas
+    </button>
+  
+    <button mat-raised-button color="accent" (click)="mostrarIdentityGuardado()">
+      👤 Ver identity.json
+    </button>
+  
+    <button mat-raised-button color="warn" (click)="leerArchivo('david@gmail.com', 1, 'cashRegisters')">
+      📂 Leer cashRegisters (david'gmail.com' / gym 1)
+    </button>
+    
+  </div>
+  <button mat-raised-button color="warn" (click)="limpiarClavesInnecesarias()">
+    🧹 Limpiar claves viejas
+  </button>
+  <button mat-raised-button color="warn" (click)="clearLocalCashRegistersHardcore()">
+    🗑️ Eliminar cajas locales
+  </button>
+  
+  
   <app-search-create-list *ngIf="!isModalOpen"
     [data]="cashRegistersList"
     [displayedColumns]="displayedColumns"

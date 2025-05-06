@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CashRegisterService } from './cash-register.service';
 import { CashRegisterActions } from './cash-register.actions';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 
 @Injectable()
 export class CashRegisterEffects {
@@ -29,22 +29,29 @@ export class CashRegisterEffects {
   );
 
 
-  // Efecto para cargar cajas registradoras
   loadCashRegisters$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CashRegisterActions['loadCashRegisters']),
-      mergeMap(() =>
-        this.cashRegisterService.getCashRegistersByGym(1).pipe(
-          map((cashRegisters) =>
-            CashRegisterActions['loadCashRegistersSuccess']({ cashRegisters }) // Aquí es cashRegisters
-          ),
+      ofType(CashRegisterActions.loadCashRegisters),
+      tap(() => console.log('[Effect] loadCashRegisters triggered')),
+      switchMap(() =>
+        from(this.cashRegisterService.getCashRegistersWithCache()).pipe(
+          tap(data => console.log('✅ Result from getCashRegistersWithCache:', data)),
+          map((cashRegisters) => {
+            console.log('✅ Cajas cargadas con efecto:', cashRegisters);
+            return CashRegisterActions.loadCashRegistersSuccess({ cashRegisters });
+          }),
+          
+          
           catchError((error) =>
-            of(CashRegisterActions['loadCashRegistersFailure']({ error }))
+            of(CashRegisterActions.loadCashRegistersFailure({ error: error.message }))
           )
         )
       )
     )
   );
+  
+
+  
 
 
   addMovement$ = createEffect(() =>

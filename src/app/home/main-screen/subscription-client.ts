@@ -1,31 +1,38 @@
-import { createClient } from 'graphql-ws';
-import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client/core';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { getMainDefinition } from '@apollo/client/utilities';
-
-const wsLink = new GraphQLWsLink(
-    createClient({
-      url: 'wss://api.dibeksolutions.com/graphql', // para subscriptions
-    })
-  );
+import {
+    ApolloClient,
+    InMemoryCache,
+    split,
+    HttpLink,
+  } from '@apollo/client/core';
+  import { getMainDefinition } from '@apollo/client/utilities';
+  import { WebSocketLink } from 'apollo-link-ws';
+  import { ApolloLink } from '@apollo/client/core';
   
   const httpLink = new HttpLink({
-   uri: 'https://api.dibeksolutions.com/graphql', // para queries/mutations
+    uri: 'https://api.dibeksolutions.com/graphql',
   });
   
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  },
-  wsLink,
-  httpLink
-);
-
-export const apolloClient = new ApolloClient({
-  link: splitLink,
-  cache: new InMemoryCache(),
-});
+  const wsLink = new WebSocketLink({
+    uri: 'wss://api.dibeksolutions.com/graphql',
+    options: {
+      reconnect: true,
+    },
+  });
+  
+  const splitLink = split(
+    ({ query }) => {
+      const def = getMainDefinition(query);
+      return (
+        def.kind === 'OperationDefinition' &&
+        def.operation === 'subscription'
+      );
+    },
+    wsLink as unknown as ApolloLink, // ⚠️ necesario para evitar error de tipo
+    httpLink
+  );
+  
+  export const apolloClient = new ApolloClient({
+    link: splitLink,
+    cache: new InMemoryCache(),
+  });
+  

@@ -30,6 +30,9 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 export class MainScreenComponent {
  
   constructor(private router: Router) {
+    
+    console.log('🟢 Subscribing to cashRegisterUpdated...');
+
     apolloClient
       .subscribe({
         query: CASH_REGISTER_SUBSCRIPTION,
@@ -38,11 +41,13 @@ export class MainScreenComponent {
         },
       })
       .subscribe({
-        next: (res:any) => {
+        next: (res: any) => {
+          console.log('✅ Subscription fired:', res);
           alert('Caja actualizada: ' + JSON.stringify(res.data));
         },
-        error: (err:any) => {
-          alert('Subscription error:'+err);
+        error: (err: any) => {
+          console.error('❌ Subscription error:', err);
+          alert('Subscription error: ' + err.message);
         },
       });
   }

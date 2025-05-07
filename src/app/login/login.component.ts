@@ -10,7 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import { FingerprintPersonaService } from '../shared/fingerprint.service';
 import { environment } from 'src/environment.prod';
 import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service.ts.service';
-
+import { SocketService } from './socket.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -28,10 +28,13 @@ export class LoginComponent {
     private router: Router,
     private http: HttpClient,
     private WebSocketService: FingerprintPersonaService,
-    private localStorage: LocalEncryptedStorageService // ✅ Inyectado
+    private localStorage: LocalEncryptedStorageService, // ✅ Inyectado
+    private socketService: SocketService
   ) {}
 
   ngOnInit(): void {
+      this.socketService.sendPing('Hola desde Angular');
+
   //  alert(window.innerWidth);
   }
 

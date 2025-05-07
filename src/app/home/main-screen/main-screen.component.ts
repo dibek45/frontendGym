@@ -6,7 +6,6 @@ import { ApolloClient } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import { gql } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
-import { provideApollo } from 'apollo-angular';
 import { createApollo } from 'src/app/apollo.config';
 @Component({
   selector: 'app-main-screen',
@@ -15,7 +14,6 @@ import { createApollo } from 'src/app/apollo.config';
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.scss'],
   providers: [
-    provideApollo(() => createApollo(inject(HttpLink))),
   ],
 
 })

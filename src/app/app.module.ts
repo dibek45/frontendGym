@@ -156,16 +156,16 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
 
   ],
   
-  providers: [NotificationService,
-    {
-      provide: APOLLO_OPTIONS,
-      useFactory: createApollo,
-      deps: [HttpLink],
-    },
+  providers: [
+    NotificationService,
+    
     HttpLink, // <-- ⚠️ Esto es lo que te falta
     {
       provide: APOLLO_OPTIONS,
-      useFactory: createApollo,
+      useFactory: (httpLink: HttpLink) => ({
+        cache: new InMemoryCache(),
+        link: httpLink.create({ uri: 'https://api.dibeksolutions.com/graphql' }),
+      }),
       deps: [HttpLink],
     },
     //SocketProviderConnect,

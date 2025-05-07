@@ -1,53 +1,54 @@
+import { HttpClientModule } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { NormalizedCacheObject } from '@apollo/client/cache';
 import { ApolloClient } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
-import { gql } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { createApollo } from 'src/app/apollo.config';
+import { gql } from '@apollo/client/core';
+import { apolloClient } from './subscription-client';
+
+const CASH_REGISTER_SUBSCRIPTION = gql`
+  subscription Subscription($gymId: Int!) {
+    cashRegisterUpdated(gymId: $gymId) {
+      id
+    }
+  }
+`;
+
 @Component({
   selector: 'app-main-screen',
   standalone: true,
-  imports: [MatIconModule],
+  imports: [MatIconModule,HttpClientModule],
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.scss'],
-  providers: [
-  ],
+
 
 })
 export class MainScreenComponent {
  
-constructor(private router: Router, private apollo: Apollo) {
-
-  console.log(this.apollo.client.link);
-
-  alert("**********************************")
-  this.apollo.subscribe({
-    query: gql`
-      subscription OnCashRegisterUpdated($gymId: Int!) {
-        cashRegisterUpdated(gymId: $gymId) {
-          id
-          currentBalance
-        }
-      }
-    `,
-    variables: { gymId: 1 }, // ← usa el gymId real si es dinámico
-  }).subscribe({
-    next: (response: any) => {
-      console.log('📡 Suscripción recibida:', response);
-      // Aquí puedes despachar a Redux o actualizar algo si quieres
-    },
-    error: (err:any) => {
-      console.error('❌ Error en suscripción:', err);
-    }
-  });
-}
+  constructor(private router: Router) {
+    apolloClient
+      .subscribe({
+        query: CASH_REGISTER_SUBSCRIPTION,
+        variables: {
+          gymId: 1,
+        },
+      })
+      .subscribe({
+        next: (res:any) => {
+          alert('Caja actualizada: ' + JSON.stringify(res.data));
+        },
+        error: (err:any) => {
+          alert('Subscription error:'+err);
+        },
+      });
+  }
 
   route(route:string){
     this.router.navigate([route]);
   }
+
 }
-
-

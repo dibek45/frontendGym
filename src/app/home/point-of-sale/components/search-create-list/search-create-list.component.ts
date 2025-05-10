@@ -40,7 +40,7 @@ export class SearchCreateListComponent implements OnChanges {
     }
   }
   createInjector(item: any): Injector  {
-    console.log('🧪 Injectando item:', item);
+    //console.log('🧪 Injectando item:', item);
 
     return Injector.create({
       providers: [

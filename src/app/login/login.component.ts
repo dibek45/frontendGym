@@ -9,8 +9,8 @@ import { UserInterface } from '../auth/user.interface';
 import { jwtDecode } from 'jwt-decode';
 import { FingerprintPersonaService } from '../shared/fingerprint.service';
 import { environment } from 'src/environment.prod';
-import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service.ts.service';
 import { SocketService } from './socket.service';
+import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

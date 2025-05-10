@@ -1,6 +1,6 @@
 import { ActionReducer } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
-import { LocalEncryptedStorageService } from '../local-encrypted-storage.service.ts.service'; // ✅ asegúrate que la ruta y nombre de archivo son correctos
+import { LocalEncryptedStorageService } from '../local-encrypted-storage.service';
 
 // Instancia directa porque los meta-reducers no usan inyección de Angular
 const storageService = new LocalEncryptedStorageService();

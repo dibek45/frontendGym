@@ -13,7 +13,7 @@ export interface CashRegister {
   openingTime?: Date;        // Fecha de apertura
   cashier?:any,
   gymId:number,
-  updatedAt?:number      
+  updatedAt:number      
 
 }
 

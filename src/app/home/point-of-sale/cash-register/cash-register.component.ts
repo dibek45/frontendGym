@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { SubareaTituloComponent } from 'src/app/shared/subarea-titulo/subarea-titulo.component';
 import { CashRegisterActions } from 'src/app/state/point-of-sale/cash-register/cash-register.actions';
 import { Casher, CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
@@ -16,13 +16,16 @@ import { CardCashregisterComponent } from './shared/card-cash-register-item/card
 import localforage from 'localforage';
 import * as CryptoJS from 'crypto-js';
 import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/cash-register.service';
+import { CashRegisterSyncService } from 'src/app/local/cash-register-sync.service';
+import { FormsModule } from '@angular/forms';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 
 @Component({
   selector: 'app-cash-register',
   templateUrl: './cash-register.component.html',
   styleUrls: ['./cash-register.component.scss'],
   standalone:true,
-  imports: [CommonModule, SearchCreateListComponent, SubareaTituloComponent,  AddCashRegisterComponent]
+  imports: [CommonModule, FormsModule,SearchCreateListComponent, SubareaTituloComponent,  AddCashRegisterComponent]
 })
 export class CashRegisterComponent {
 
@@ -35,28 +38,38 @@ export class CashRegisterComponent {
   cashRegistersList: CashRegister[] = [];
   displayedColumns = ['cashierId', 'openingBalance', 'status', 'actions'];
   cardComponent = CardCashregisterComponent;
+  idCajaEliminar: number | null = null;
 
   // Modal y detalles
   isModalOpen = false;
   showDetails = false;
   selectedCashRegister: CashRegister | null = null;
+  private destroy$ = new Subject<void>();
 
-  constructor(private store: Store,private cashRegisterService:CashRegisterService) {
+  
+  constructor(  private localStorage: LocalEncryptedStorageService // 👈 agrega esta línea
+,    private store: Store,private cashRegisterService:CashRegisterService,  private cashRegisterSyncService: CashRegisterSyncService
+  ) {
     this.cashRegisters$ = this.store.select(selectAllCashRegisters);
     this.cashers$ = this.store.select(selectAllCashiers);
   }
   ngOnInit(): void {
-    this.store.dispatch(CashRegisterActions.loadCashRegisters());
-    this.store.dispatch(loadCashiers());
-  
-    // ❗️Esta parte es la clave para que el componente reciba la lista
-    this.cashRegisters$.subscribe((list) => {
-      console.log('✅ Lista que llega del store:', list);
+
+  const remoteVersionSimulada =  '2026-01-01T00:00:00.000Z'
+  this.cashRegisterSyncService.syncOnAppStart(remoteVersionSimulada);
+
+  this.cashRegisters$
+    .pipe(takeUntil(this.destroy$)) // ← solo si usas ngOnDestroy
+    .subscribe((list) => {
       this.cashRegistersList = list;
     });
+
   }
   
-  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   
 
   loadCashRegisters(): void {
@@ -96,8 +109,9 @@ export class CashRegisterComponent {
       cashierId,
       openingBalance,
       gymId: 1,
-
+      updatedAt: Date.now() // ✅ devuelve el número de milisegundos desde 1970
     };
+    
     this.store.dispatch(CashRegisterActions.addCashRegister({ cashRegister: newCashRegister }));
   }
 
@@ -176,7 +190,7 @@ export class CashRegisterComponent {
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
     const identity = JSON.parse(decrypted);
   
-    const claveCorrecta = `user-${identity.username}/gym-${identity.gymId}/cashRegisters`;
+    const claveCorrecta = `user-${identity.userId}/gym-${identity.gymId}/cashRegisters`;
   
     const clavesAEliminar = claves.filter(k =>
       k !== 'identity.json' &&
@@ -204,7 +218,7 @@ export class CashRegisterComponent {
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
     const identity = JSON.parse(decrypted);
   
-    const clave = `user-${identity.username}/gym-${identity.gymId}/cashRegisters`;
+    const clave = `user-${identity.userId}/gym-${identity.gymId}/cashRegisters`;
   
     await localforage.removeItem(clave);
     console.log(`🧨 Eliminado localForage: ${clave}`);
@@ -212,5 +226,53 @@ export class CashRegisterComponent {
     alert('🗑️ Cajas locales eliminadas. La próxima carga será desde el backend.');
   }
   
+  async eliminarCajaLocalPorId(id: number | null) {
+    if (!id) {
+      alert('❌ Ingresa un ID válido');
+      return;
+    }
+  
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) {
+      alert('❌ No hay identity.json cargado');
+      return;
+    }
+  
+    const list = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+      identity.userId,
+      identity.gymId,
+      'cashRegisters'
+    );
+  
+    if (!list) {
+      alert('⚠️ No hay cajas locales');
+      return;
+    }
+  
+    const actualizada = list.filter(caja => caja.id !== id);
+  
+    await this.localStorage.saveTableToLocalCache(
+      identity.userId,
+      identity.gymId,
+      'cashRegisters',
+      actualizada
+    );
+  
+    // 👇 Actualizar store manualmente
+    this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: actualizada }));
+  
+    alert(`🗑️ Caja con ID ${id} eliminada de localForage y UI actualizada`);
+  }
+  
+  async borrarCajasYVersion() {
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) {
+      alert('No hay identity.json');
+      return;
+    }
+  
+    await this.localStorage.clearTableAndVersion(identity.userId, identity.gymId, 'cashRegisters');
+    alert('✅ Se borró cashRegisters y su versión. Ahora deberías ver sincronización desde backend.');
+  }
   
 }

@@ -11,6 +11,7 @@ import { selectAllCashRegisters } from './cash-register.selectors';
 import { environment } from 'src/environment.prod';
 import localforage from 'localforage';
 import * as CryptoJS from 'crypto-js';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,10 +21,14 @@ export class CashRegisterService {
 
   cashRegisters$: Observable<CashRegister[]>; // Observable para las cajas registradoras
 
-  constructor(private http: HttpClient, private store: Store) {
+  constructor(private http: HttpClient, private store: Store,  private localStorage: LocalEncryptedStorageService // 👈 aquí lo inyectas
+  ) {
     // Seleccionar cajas registradoras del estado
     this.cashRegisters$ = this.store.select(selectAllCashRegisters);
+     localforage.removeItem('user-david@gmail.com/gym-1/cashRegisters');
+
   }
+  
 
 
   async getCashRegistersWithCache(forceBackend = false): Promise<CashRegister[]> {
@@ -46,7 +51,7 @@ export class CashRegisterService {
       return [];
     }
   
-    const key = `user-${identity.username}/gym-${identity.gymId}/cashRegisters`;
+    const key = `user-${identity.userId}/gym-${identity.gymId}/cashRegisters`;
     console.log('🔑 Clave de caché:', key);
   
     if (!forceBackend) {
@@ -69,12 +74,16 @@ export class CashRegisterService {
   
     // Si no hay caché o se fuerza la recarga
     try {
-      const list = await this.getCashRegistersByGym(identity.gymId).toPromise();
+      const list = (await this.getCashRegistersByGym(identity.gymId).toPromise()) ?? [];
       console.log('☁️ Cajas desde backend:', list);
-  
-      const encryptedList = CryptoJS.AES.encrypt(JSON.stringify(list), 'clave-super-secreta').toString();
-      await localforage.setItem(key, encryptedList);
+      const fixedList = list.map(item => ({
+        ...item,
+        updatedAt: new Date(item.updatedAt ?? 0).toISOString()
+      }));
+      await this.localStorage.saveTableToLocalCache(identity.userId, identity.gymId, 'cashRegisters', fixedList);
+
       console.log('💾 Guardado en caché:', key);
+      
   
       return list ?? []; // o ya devuelves [] correctamente
 
@@ -271,7 +280,7 @@ export class CashRegisterService {
       CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta').toString(CryptoJS.enc.Utf8)
     );
   
-    const key = `user-${identity.username}/gym-${identity.gymId}/cashRegisters`;
+    const key = `user-${identity.userId}/gym-${identity.gymId}/cashRegisters`;
     const cachedStr = await localforage.getItem<string>(key);
     let local: CashRegister[] = [];
   
@@ -311,5 +320,33 @@ export class CashRegisterService {
     return local;
   }
   
+  async eliminarCajaLocalPorId(id: number) {
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) {
+      alert('❌ No hay identity.json cargado');
+      return;
+    }
+  
+    const list = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+      identity.userId,
+      identity.gymId,
+      'cashRegisters'
+    );
+  
+    if (!list) {
+      alert('⚠️ No hay cajas locales');
+      return;
+    }
+  
+    const actualizada = list.filter(caja => caja.id !== id);
+    await this.localStorage.saveTableToLocalCache(
+      identity.userId,
+      identity.gymId,
+      'cashRegisters',
+      actualizada
+    );
+  
+    alert(`🗑️ Caja con ID ${id} eliminada de localForage`);
+  }
   
 }

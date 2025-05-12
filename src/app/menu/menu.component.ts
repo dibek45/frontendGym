@@ -18,6 +18,7 @@ import { CartService } from '../state/point-of-sale/cart/cart.service';
 import { setDetailProduct } from '../state/product/product.actions';
 import { SocketService } from '../login/socket.service';
 import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
+import { CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
 
 @Component({
   selector: 'app-menu',
@@ -77,6 +78,14 @@ barcode: string = ''; // Variable para el código de barras
     return icons.indexOf(icon) + 1;
   }
   ngOnInit(): void {
+this.socketService.onCashRegisterUpdate((cashRegister: CashRegister) => {
+  alert("Evento recibido: cashRegisterUpdated biiien")
+  console.log('📡 Evento recibido: cashRegisterUpdated', cashRegister);
+  // 👉 Aquí puedes:
+  // - Guardar en localForage
+  // - Actualizar Redux
+  // - Actualizar update_versions local
+});
 
 this.socketmetod();
     this.store.select(selectCartTotal).subscribe(res => {

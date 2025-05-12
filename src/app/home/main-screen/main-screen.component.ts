@@ -40,16 +40,10 @@ export class MainScreenComponent {
 
 
   ngOnInit(): void {
-alert("subscrito")
+alert("subscrito 2.0")
 
-    this.socketService.onCashRegisterUpdate((cashRegister: CashRegister) => {
-      alert("Evento recibido: cashRegisterUpdated biiien")
-      console.log('📡 Evento recibido: cashRegisterUpdated', cashRegister);
-      // 👉 Aquí puedes:
-      // - Guardar en localForage
-      // - Actualizar Redux
-      // - Actualizar update_versions local
-    });
+  this.socketService.joinGymRoom(1); // ✅ Se une a sala
+  this.listenToCashRegisterUpdates();    // ✅ Escucha evento y guarda
 /*
     apolloClient
       .subscribe({
@@ -75,6 +69,13 @@ alert("subscrito")
 this.syncService.syncTableIfNeeded('cashRegisters');
 
   }
+
+
+  listenToCashRegisterUpdates() {
+  this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
+    // Tu lógica para actualizar cache y store...
+  });
+}
   route(route:string){
     this.router.navigate([route]);
   }

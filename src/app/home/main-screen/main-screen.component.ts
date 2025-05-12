@@ -12,6 +12,7 @@ import { apolloClient } from './subscription-client';
 import { SyncService } from 'src/app/local/services/sync.service';
 import { SocketService } from 'src/app/login/socket.service';
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -32,7 +33,9 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 })
 export class MainScreenComponent {
  
-  constructor(private router: Router, private syncService:SyncService,    private socketService: SocketService,
+  constructor(private router: Router, private syncService:SyncService,   
+     private socketService: SocketService,
+        private localStorage: LocalEncryptedStorageService
   ) {
     
  
@@ -40,7 +43,7 @@ export class MainScreenComponent {
 
 
   ngOnInit(): void {
-alert("subscrito 2.0")
+alert("subscrito 3.0")
 
   this.socketService.joinGymRoom(1); // ✅ Se une a sala
   this.listenToCashRegisterUpdates();    // ✅ Escucha evento y guarda
@@ -71,9 +74,11 @@ this.syncService.syncTableIfNeeded('cashRegisters');
   }
 
 
-  listenToCashRegisterUpdates() {
+listenToCashRegisterUpdates() {
   this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
-    // Tu lógica para actualizar cache y store...
+   alert('📡 Evento recibido: cashRegisterUpdated');
+
+  
   });
 }
   route(route:string){

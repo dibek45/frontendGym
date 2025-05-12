@@ -10,6 +10,8 @@ import { createApollo } from 'src/app/apollo.config';
 import { gql } from '@apollo/client/core';
 import { apolloClient } from './subscription-client';
 import { SyncService } from 'src/app/local/services/sync.service';
+import { SocketService } from 'src/app/login/socket.service';
+import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -30,13 +32,24 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 })
 export class MainScreenComponent {
  
-  constructor(private router: Router, private syncService:SyncService) {
+  constructor(private router: Router, private syncService:SyncService,    private socketService: SocketService,
+  ) {
     
  
   }
 
 
   ngOnInit(): void {
+alert("subscrito")
+
+    this.socketService.onCashRegisterUpdate((cashRegister: CashRegister) => {
+      alert("Evento recibido: cashRegisterUpdated biiien")
+      console.log('📡 Evento recibido: cashRegisterUpdated', cashRegister);
+      // 👉 Aquí puedes:
+      // - Guardar en localForage
+      // - Actualizar Redux
+      // - Actualizar update_versions local
+    });
 /*
     apolloClient
       .subscribe({

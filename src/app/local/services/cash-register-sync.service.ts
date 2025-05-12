@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
-import { CashRegisterService } from '../state/point-of-sale/cash-register/cash-register.service';
-import { CashRegisterActions } from '../state/point-of-sale/cash-register/cash-register.actions';
-import { CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
+import { CashRegisterService } from '../../state/point-of-sale/cash-register/cash-register.service';
+import { CashRegisterActions } from '../../state/point-of-sale/cash-register/cash-register.actions';
+import { CashRegister } from '../../state/point-of-sale/cash-register/cash-register.model';
 
 @Injectable({ providedIn: 'root' })
 export class CashRegisterSyncService {

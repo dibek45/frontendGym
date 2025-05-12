@@ -9,6 +9,7 @@ import { HttpLink } from 'apollo-angular/http';
 import { createApollo } from 'src/app/apollo.config';
 import { gql } from '@apollo/client/core';
 import { apolloClient } from './subscription-client';
+import { SyncService } from 'src/app/local/services/sync.service';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -29,10 +30,14 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 })
 export class MainScreenComponent {
  
-  constructor(private router: Router) {
+  constructor(private router: Router, private syncService:SyncService) {
     
-    console.log('🟢 Subscribing to cashRegisterUpdated...');
+ 
+  }
 
+
+  ngOnInit(): void {
+/*
     apolloClient
       .subscribe({
         query: CASH_REGISTER_SUBSCRIPTION,
@@ -44,14 +49,19 @@ export class MainScreenComponent {
         next: (res: any) => {
           console.log('✅ Subscription fired:', res);
           alert('Caja actualizada: ' + JSON.stringify(res.data));
+            this.syncService.syncTableIfNeeded('cashRegisters');
+
         },
         error: (err: any) => {
           console.error('❌ Subscription error:', err);
           alert('Subscription error: ' + err.message);
         },
       });
-  }
+*/
 
+this.syncService.syncTableIfNeeded('cashRegisters');
+
+  }
   route(route:string){
     this.router.navigate([route]);
   }

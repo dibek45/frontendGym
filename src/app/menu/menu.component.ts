@@ -16,6 +16,8 @@ import { ProductModel } from '../core/models/product.interface';
 import { selectAllProducts } from 'src/app/state/product/product.selectors';
 import { CartService } from '../state/point-of-sale/cart/cart.service';
 import { setDetailProduct } from '../state/product/product.actions';
+import { SocketService } from '../login/socket.service';
+import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
 
 @Component({
   selector: 'app-menu',
@@ -52,7 +54,10 @@ barcode: string = ''; // Variable para el código de barras
     private _notification:NotificationService,
     private speechService: SpeechService,
     public dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private socketService: SocketService,
+    private localStorage: LocalEncryptedStorageService
+    
   ) { 
      
   
@@ -72,6 +77,8 @@ barcode: string = ''; // Variable para el código de barras
     return icons.indexOf(icon) + 1;
   }
   ngOnInit(): void {
+
+this.socketmetod();
     this.store.select(selectCartTotal).subscribe(res => {
       this.total = res;
       this.checkScreenSize();
@@ -88,7 +95,20 @@ barcode: string = ''; // Variable para el código de barras
   
     this.loading$ = this.store.select(selectLoading);
   }
+  async socketmetod(){
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) {
+      alert('❌ No hay identidad cargada. Cancelando sincronización.');
+      return;
+    }
   
+    const userId = identity.userId;
+    const gymId = identity.gymId;
+    this.socketService.joinGymRoom(gymId);
+    this.socketService.onCashRegisterUpdate((data) => {
+      alert('📦 Caja recibida globalmente:'+JSON.stringify(data));
+    });
+  }
 
   exit(){
     

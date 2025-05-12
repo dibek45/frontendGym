@@ -1,27 +1,52 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
+import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
+import { Subject } from 'rxjs';
+import { CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
   private socket: Socket;
+  private gymId: number | null = null;
+  cashRegisterUpdated$ = new Subject<CashRegister>();
 
-  constructor() {
+  constructor(private localStorage: LocalEncryptedStorageService) {
     this.socket = io('wss://api.dibeksolutions.com', {
       transports: ['websocket'],
     });
 
     this.socket.on('connect', () => {
       console.log('🟢 Conectado al servidor WebSocket');
+      this.loadGymId(); // ✅ Cargar gymId desde identidad
     });
 
     this.socket.on('pong', (data) => {
       console.log('📨 Respuesta del servidor:', data);
     });
-  }
 
-  sendPing(msg: string) {
+    
+  }
+sendPing(msg: string) {
     this.socket.emit('ping', msg);
   }
+
+  joinGymRoom(gymId: number) {
+    this.socket.emit('joinGym', gymId);
+    console.log(`📥 Solicitando unión a la sala: gym-${gymId}`);
+  }
+
+  onCashRegisterUpdate(callback: (data: any) => void) {
+    this.socket.on('cashRegisterUpdated', callback);
+  }
+  async loadGymId() {
+    const identity = await this.localStorage.loadIdentity();
+    if (identity?.gymId) {
+      this.gymId = identity.gymId;
+      console.log('🏋️‍♂️ ID de gimnasio detectado en socket:', this.gymId);
+    }
+  }
+
+ 
 }

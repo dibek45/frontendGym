@@ -197,4 +197,56 @@ async clearTableAndVersion(userId: number, gymId: number, table: string) {
   }
 }
 
+
+
+
+async shouldSyncTable(
+  userId: number,
+  gymId: number,
+  table: string,
+  remoteUpdatedAt: string
+): Promise<boolean> {
+  const versionKey = `user-${userId}/gym-${gymId}/versions`;
+  const encrypted = await localforage.getItem<string>(versionKey);
+
+  if (!encrypted) return true;
+
+  try {
+    const bytes = CryptoJS.AES.decrypt(encrypted, this.encryptionKey);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    const versions = JSON.parse(decrypted);
+
+    const local = versions?.[table];
+if (!local) return true;
+
+const remoteTime = new Date(remoteUpdatedAt).getTime();
+const localTime = new Date(local).getTime();
+const diff = remoteTime - localTime;
+
+console.log(`🕒 Diferencia entre versiones: ${diff} ms`);
+
+return diff > 3000; // Solo sincroniza si hay más de 3 segundos de diferencia
+  } catch (err) {
+    console.warn('⚠️ Error leyendo versiones locales:', err);
+    return true;
+  }
+}
+
+
+async getVersion(userId: number, gymId: number, table: string): Promise<string | null> {
+  const versionKey = `user-${userId}/gym-${gymId}/versions`;
+  const encrypted = await localforage.getItem<string>(versionKey);
+  if (!encrypted) return null;
+
+  try {
+    const bytes = CryptoJS.AES.decrypt(encrypted, this.encryptionKey);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    const versions = JSON.parse(decrypted);
+    return versions[table] ?? null;
+  } catch (e) {
+    console.error('❌ Error leyendo versión local:', e);
+    return null;
+  }
+}
+
 }

@@ -53,5 +53,39 @@ export class CashRegisterSyncService {
   
     console.log('🟢 Sincronización de cashRegisters completada.\n');
   }
-  
+  async handleRemoteUpdate(updatedCashRegister: CashRegister): Promise<void> {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) return;
+
+  const { userId, gymId } = identity;
+
+  const list = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+    userId,
+    gymId,
+    'cashRegisters'
+  ) ?? [];
+
+  const exists = list.some(c => c.id === updatedCashRegister.id);
+  const updatedList = exists
+    ? list.map(c => c.id === updatedCashRegister.id ? updatedCashRegister : c)
+    : [...list, updatedCashRegister];
+
+  await this.localStorage.saveTableToLocalCache(
+    userId,
+    gymId,
+    'cashRegisters',
+    updatedList
+  );
+
+  await this.localStorage.saveVersion(
+    userId,
+    gymId,
+    'cashRegisters',
+  new Date(updatedCashRegister.updatedAt).toISOString() // 👈 aquí
+  );
+
+  this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: updatedList }));
+  console.log(`📦 Caja ${updatedCashRegister.id} sincronizada desde WebSocket`);
+}
+
 }

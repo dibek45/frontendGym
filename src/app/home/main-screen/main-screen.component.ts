@@ -13,6 +13,7 @@ import { SyncService } from 'src/app/local/services/sync.service';
 import { SocketService } from 'src/app/login/socket.service';
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
+import { CashRegisterSyncService } from 'src/app/local/services/cash-register-sync.service';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -35,7 +36,8 @@ export class MainScreenComponent {
  
   constructor(private router: Router, private syncService:SyncService,   
      private socketService: SocketService,
-        private localStorage: LocalEncryptedStorageService
+        private localStorage: LocalEncryptedStorageService,
+       private cashRegisterSyncService: CashRegisterSyncService
   ) {
     
  
@@ -76,7 +78,8 @@ this.syncService.syncTableIfNeeded('cashRegisters');
 
 listenToCashRegisterUpdates() {
   this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
-   alert('📡 Evento recibido: cashRegisterUpdated');
+   console.log('📡 Evento recibido: cashRegisterUpdated'+updatedCashRegister);
+  this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
 
   
   });

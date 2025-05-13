@@ -31,67 +31,7 @@ export class CashRegisterService {
   
 
 
-  async getCashRegistersWithCache(forceBackend = false): Promise<CashRegister[]> {
-    console.log('🔁 getCashRegistersWithCache llamado', { forceBackend });
-  
-    const encrypted = await localforage.getItem<string>('identity.json');
-    if (!encrypted) {
-      console.warn('❌ No hay identity.json');
-      return [];
-    }
-  
-    let identity: any;
-    try {
-      const bytes = CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta');
-      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      identity = JSON.parse(decrypted);
-      console.log('✅ Identity desencriptado:', identity);
-    } catch (err) {
-      console.error('❌ Error al desencriptar identity.json:', err);
-      return [];
-    }
-  
-    const key = `user-${identity.userId}/gym-${identity.gymId}/cashRegisters`;
-    console.log('🔑 Clave de caché:', key);
-  
-    if (!forceBackend) {
-      const cached = await localforage.getItem<string>(key);
-      if (cached) {
-        try {
-          const decrypted = CryptoJS.AES.decrypt(cached, 'clave-super-secreta').toString(CryptoJS.enc.Utf8);
-          const parsed = JSON.parse(decrypted);
-          console.log('📂 Cajas cargadas desde caché local:', parsed);
-          return parsed;
-        } catch (err) {
-          console.error('❌ Error al leer desde caché:', err);
-        }
-      } else {
-        console.log('📭 No se encontró caché local, irá al backend...');
-      }
-    } else {
-      console.log('⚠️ Forzando carga desde backend...');
-    }
-  
-    // Si no hay caché o se fuerza la recarga
-    try {
-      const list = (await this.getCashRegistersByGym(identity.gymId).toPromise()) ?? [];
-      console.log('☁️ Cajas desde backend:', list);
-      const fixedList = list.map(item => ({
-        ...item,
-        updatedAt: new Date(item.updatedAt ?? 0).toISOString()
-      }));
-      await this.localStorage.saveTableToLocalCache(identity.userId, identity.gymId, 'cashRegisters', fixedList);
 
-      console.log('💾 Guardado en caché:', key);
-      
-  
-      return list ?? []; // o ya devuelves [] correctamente
-
-    } catch (err) {
-      console.error('❌ Error al obtener cajas desde backend:', err);
-      return [];
-    }
-  }
   
   
   

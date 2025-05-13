@@ -13,46 +13,7 @@ export class CashRegisterSyncService {
     private localStorage: LocalEncryptedStorageService
   ) {}
 
-  async syncOnAppStart(remoteUpdatedAt: string): Promise<void> {
-    console.log('🟡 Iniciando sincronización de cashRegisters...');
-  
-    const identity = await this.localStorage.loadIdentity();
-    if (!identity) {
-      console.warn('❌ No hay identidad cargada. Cancelando sincronización.');
-      return;
-    }
-  
-    const userId = identity.userId;
-    const gymId = identity.gymId;
-  
-    console.log(`📄 Identity detectada: userId=${userId}, gymId=${gymId}`);
-    console.log(`🌐 Versión remota simulada: ${remoteUpdatedAt}`);
-  
-    const needsUpdate = await this.localStorage.isRemoteVersionNewer(
-      userId,
-      gymId,
-      'cashRegisters',
-      remoteUpdatedAt
-    );
-  
-    if (needsUpdate) {
-      console.log('🔄 Versión local desactualizada. Cargando desde backend...');
-      const data = await this.cashRegisterService.getCashRegistersWithCache(true);
-      console.log(`✅ Datos recibidos del backend: ${data.length} registros`);
-  
-      this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: data }));
-      console.log('📦 Store actualizado con datos del backend');
-    } else {
-      console.log('✅ La versión local está actualizada. Cargando desde caché local...');
-      const data = await this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters');
-      console.log(`📂 Datos locales cargados: ${data?.length ?? 0} registros`);
-  
-      this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: data ?? [] }));
-      console.log('📦 Store actualizado con datos locales');
-    }
-  
-    console.log('🟢 Sincronización de cashRegisters completada.\n');
-  }
+ 
   async handleRemoteUpdate(updatedCashRegister: CashRegister): Promise<void> {
   const identity = await this.localStorage.loadIdentity();
   if (!identity) return;

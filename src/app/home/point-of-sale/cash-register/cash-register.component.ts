@@ -55,8 +55,6 @@ export class CashRegisterComponent {
   }
   ngOnInit(): void {
 
-  const remoteVersionSimulada =  '2026-01-01T00:00:00.000Z'
-  this.cashRegisterSyncService.syncOnAppStart(remoteVersionSimulada);
 
   this.cashRegisters$
     .pipe(takeUntil(this.destroy$)) // ← solo si usas ngOnDestroy
@@ -72,10 +70,7 @@ export class CashRegisterComponent {
   }
   
 
-  loadCashRegisters(): void {
-    this.store.dispatch(CashRegisterActions.loadCashRegisters());
-  }
-
+ 
   loadCashiers(): void {
     this.store.dispatch(loadCashiers());
   }

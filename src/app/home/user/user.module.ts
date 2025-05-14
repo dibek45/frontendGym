@@ -3,7 +3,6 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { UserComponent } from './user.component';
 import { MaterialModuleModule } from 'src/shared/material-module/material-module.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { EmployeeService } from 'src/app/shared/employee.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -16,6 +15,7 @@ import { CreateFormComponent } from './create-form/create-form.component';
 import { RegisterHuellaComponent } from './create-form/register-huella/register-huella.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { DialogRegistroCompletadoComponent } from './dialog-registro-completado/dialog-registro-completado.component';
+import { MemberService } from 'src/app/state/member/member.service';
 
   
 
@@ -34,6 +34,6 @@ import { DialogRegistroCompletadoComponent } from './dialog-registro-completado/
     
 ],
   exports:[],
-  providers:[EmployeeService,DatePipe,NotificationService]
+  providers:[MemberService,DatePipe,NotificationService]
 })
 export class UsuarioModule { }

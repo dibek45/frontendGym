@@ -1,6 +1,5 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { EmployeeService } from 'src/app/shared/employee.service';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -8,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MemberModel } from 'src/app/core/models/member.interface';
 import { Observable, Subject } from 'rxjs';
+import { MemberService } from 'src/app/state/member/member.service';
 //import { SocketProviderConnect } from 'src/shared/soket.service';
 ////import { Socket } from 'ngx-socket-io';
 
@@ -21,7 +21,7 @@ import { Observable, Subject } from 'rxjs';
 export class UserComponent {
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private service:EmployeeService,private dialog: MatDialog,private router: Router){
+  constructor(private service:MemberService,private dialog: MatDialog,private router: Router){
 
   
 

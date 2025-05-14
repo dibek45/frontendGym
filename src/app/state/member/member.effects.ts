@@ -6,6 +6,7 @@ import { loadMemberDetail, loadMemberDetailFailed, loadMembers, loadedMemberDeta
 import { MemberService } from 'src/app/state/member/member.service';
 import * as MemberActions from './member.actions';
 import { MemberModel } from 'src/app/core/models/member.interface';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class MemberEffects {
@@ -13,24 +14,33 @@ export class MemberEffects {
   constructor(
 
     private actions$: Actions,
-    private _members: MemberService // Servicio que llama al backend
+  private memberService: MemberService // ✅ esto faltaba
 
   ) {}
 
-  loadMembers$ = createEffect(() => this.actions$.pipe(
-    ofType(loadMembers), // Escucha la acción [Load members]
-    exhaustMap(action => this._members.getData(action.gymId) // Pasa el gymId al servicio
-      .pipe(
-        map(members => loadedMembers({ members })), // Usa la acción `loadedMembers` definida
-        catchError(() => EMPTY) // Maneja errores
-      ))
+ loadMembers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MemberActions.loadMembers),
+      tap(() => console.log('🟡 [Effect] loadMembers triggered')),
+      switchMap(() =>
+        from(this.memberService.getMembersWithCache()).pipe(
+          tap((members) => console.log('📦 Members from cache/backend:', members)),
+          map((members) =>
+            MemberActions.loadedMembers({ members })
+          ),
+          catchError((error) => {
+            console.error('❌ Error in loadMembers effect:', error);
+            return of(MemberActions.loadMembersFailed({ error }));
+          })
+        )
+      )
     )
   );
 
   loadMemberDetail$ = createEffect(() => this.actions$.pipe(
     ofType(loadMemberDetail), // Escucha la acción [Load Member Detail]
     exhaustMap(action =>
-      this._members.getMemberDetail(action.gymId, action.memberId).pipe( // Llamada al servicio con gymId y memberId
+      this.memberService.getMemberDetail(action.gymId, action.memberId).pipe( // Llamada al servicio con gymId y memberId
         map(member => loadedMemberDetail({ member })), // Si la llamada es exitosa, dispara loadedMemberDetail
         catchError((error) => of(loadMemberDetailFailed({ error }))) // Maneja errores
       )
@@ -42,7 +52,7 @@ updateAvailableDays$ = createEffect(() =>
   this.actions$.pipe(
     ofType(MemberActions.updateAvailableDays),
     mergeMap(action =>
-      this._members.updateDays(action.memberId, action.days).pipe(
+      this.memberService.updateDays(action.memberId, action.days).pipe(
         map(updatedDays =>
           MemberActions.updateAvailableDaysSuccess({ days: updatedDays })
         ),
@@ -66,7 +76,7 @@ private async syncMemberAsync(member: MemberModel) {
     console.log('🔥 Inicia sincronización de miembro:', member);
 
     // ✅ Llamada al backend con await (requiere que tengas createMemberAsync en el servicio)
-    const response = await this._members.createMemberAsync(member);
+    const response = await this.memberService.createMemberAsync(member);
 
     console.log('✅ Backend respondió correctamente:', response);
 

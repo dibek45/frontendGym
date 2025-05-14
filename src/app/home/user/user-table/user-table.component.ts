@@ -1,5 +1,4 @@
 import { Component} from '@angular/core';
-import { EmployeeService } from 'src/app/shared/employee.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, of, take } from 'rxjs';
@@ -18,6 +17,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { loadedMembers, loadMembers, setSearchTerm, syncMember } from 'src/app/state/member/member.actions';
 import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
 import { selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
+import { MemberService } from 'src/app/state/member/member.service';
 
 @Component({
   selector: 'app-user-table',
@@ -42,7 +42,7 @@ membersWithSyncError$: Observable<MemberModel[]> = of([]);
   plans$: Observable<any[]> = this.store.select(selectPlansByGymId(1));
 
   constructor( private WebSocketService:FingerprintPersonaService, 
-               private store:Store<AppState>,private service:EmployeeService,
+               private store:Store<AppState>,private service:MemberService,
                private router: Router,
               public notificationService: NotificationService,
                 

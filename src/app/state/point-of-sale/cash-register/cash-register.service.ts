@@ -271,7 +271,7 @@ export class CashRegisterService {
     this.store.dispatch(CashRegisterActions['loadCashRegisters']());
   }
 
-
+/*
   async syncCashRegistersIfNeeded(): Promise<CashRegister[]> {
     const encrypted = await localforage.getItem<string>('identity.json');
     if (!encrypted) return [];
@@ -319,7 +319,7 @@ export class CashRegisterService {
     console.log('✅ Datos locales ya están actualizados');
     return local;
   }
-  
+  */
   async eliminarCajaLocalPorId(id: number) {
     const identity = await this.localStorage.loadIdentity();
     if (!identity) {

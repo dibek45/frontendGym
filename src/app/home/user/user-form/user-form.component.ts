@@ -2,8 +2,8 @@ import { Component, HostListener } from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebcamImage } from 'ngx-webcam';
-import { EmployeeService } from 'src/app/shared/employee.service';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { MemberService } from 'src/app/state/member/member.service';
 
 @Component({
   selector: 'app-user-form',
@@ -15,6 +15,7 @@ export class UserFormComponent {
 
   webcamImage: WebcamImage | undefined;
   takePhoto:boolean=true;
+  image: any;
   
   handleImage($event: WebcamImage) {
     this.webcamImage = $event;
@@ -23,7 +24,7 @@ export class UserFormComponent {
   constructor(
     public notificationService: NotificationService,
     private router: Router,
-    public service:EmployeeService,
+    public service:MemberService,
     ){
 
   }
@@ -49,22 +50,39 @@ export class UserFormComponent {
     this.service.initializeFormGroup();
     this.notificationService.mostrarSnackbar(':: Submitted successfully','success');
   }
+  
+onSubmit() {
+  if (this.service.form.valid) {
+    const formData = {
+      ...this.service.form.value,
+      img: this.image // asegurarte de que esto esté bien cargado
+    };
 
-  onSubmit() {
-    if (this.service.form.valid) {
-      this.service.insertEmployee(this.service.form.value);
-      this.service.form.reset();
-      this.service.initializeFormGroup();
-      this.notificationService.mostrarSnackbar(':: Submitted successfully','success');
-    }
+    this.service.insertEmployee(formData).subscribe({
+      next: (res) => {
+        console.log('Usuario creado:', res);
+        this.notificationService.mostrarSnackbar('✅ Usuario guardado', 'success');
+        this.service.form.reset();
+        this.service.initializeFormGroup();
+        this.router.navigate(['home/user/table']);
+      },
+      error: (err) => {
+        console.error('Error al guardar:', err);
+        this.notificationService.mostrarSnackbar('❌ Error al guardar', 'error');
+      }
+    });
   }
+}
 
 
+getImg(img: string) {
+  this.image = img;
+}
   onClose() {
     this.router.navigate(['home/user/table']);
     this.service.form.reset();
     this.service.initializeFormGroup();
-    this.notificationService.mostrarSnackbar(':: Cerrado','success');
+   // this.notificationService.mostrarSnackbar(':: Cerrado','success');
   }
 
   addItem(value: boolean) {

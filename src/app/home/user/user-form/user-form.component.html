@@ -12,7 +12,8 @@
     <mat-icon>clear</mat-icon>
   </button>
 </mat-toolbar>
-<app-photo  (newItemEvent)="addItem($event)"></app-photo>
+<app-photo  (newItemEvent)="addItem($event)"   (imgEmmit)="getImg($event)"> <!-- 👈 nombre exacto -->
+></app-photo>
 
 <form [formGroup]="service.form" class="normal-form" (submit)="onSubmit()" *ngIf="takePhoto">
   

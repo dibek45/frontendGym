@@ -16,7 +16,7 @@ import { CardCashregisterComponent } from './shared/card-cash-register-item/card
 import localforage from 'localforage';
 import * as CryptoJS from 'crypto-js';
 import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/cash-register.service';
-import { CashRegisterSyncService } from 'src/app/local/cash-register/cash-register-sync.service';
+import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
 import { FormsModule } from '@angular/forms';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 
@@ -267,6 +267,8 @@ export class CashRegisterComponent {
     }
   
     await this.localStorage.clearTableAndVersion(identity.userId, identity.gymId, 'cashRegisters');
+        await this.localStorage.clearTableAndVersion(identity.userId, identity.gymId, 'members');
+
     alert('✅ Se borró cashRegisters y su versión. Ahora deberías ver sincronización desde backend.');
   }
   

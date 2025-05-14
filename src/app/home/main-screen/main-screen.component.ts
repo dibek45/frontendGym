@@ -8,12 +8,13 @@ import { Apollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { createApollo } from 'src/app/apollo.config';
 import { gql } from '@apollo/client/core';
-import { apolloClient } from './subscription-client';
 import { SyncService } from 'src/app/local/services/sync.service';
 import { SocketService } from 'src/app/login/socket.service';
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
-import { CashRegisterSyncService } from 'src/app/local/cash-register/cash-register-sync.service';
+import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
+import { MemberSyncService } from 'src/app/local/tables-sync/member-sync.service';
+import { ProductSyncService } from 'src/app/local/tables-sync/product-sync.service';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -37,7 +38,9 @@ export class MainScreenComponent {
   constructor(private router: Router, private syncService:SyncService,   
      private socketService: SocketService,
         private localStorage: LocalEncryptedStorageService,
-       private cashRegisterSyncService: CashRegisterSyncService
+       private cashRegisterSyncService: CashRegisterSyncService,
+       private memberSyncService:MemberSyncService,
+       private productSyncService:ProductSyncService
   ) {
     
  
@@ -45,37 +48,31 @@ export class MainScreenComponent {
 
 
   ngOnInit(): void {
-alert("subscrito 3.0")
+  alert("subscrito 4.0")
 
   this.socketService.joinGymRoom(1); // ✅ Se une a sala
   this.listenToCashRegisterUpdates();    // ✅ Escucha evento y guarda
-/*
-    apolloClient
-      .subscribe({
-        query: CASH_REGISTER_SUBSCRIPTION,
-        variables: {
-          gymId: 1,
-        },
-      })
-      .subscribe({
-        next: (res: any) => {
-          console.log('✅ Subscription fired:', res);
-          alert('Caja actualizada: ' + JSON.stringify(res.data));
-            this.syncService.syncTableIfNeeded('cashRegisters');
+  this.listenProductUpdates();
 
-        },
-        error: (err: any) => {
-          console.error('❌ Subscription error:', err);
-          alert('Subscription error: ' + err.message);
-        },
-      });
-*/
-
-this.syncService.syncTableIfNeeded('cashRegisters');
+this.listenUserUpdates();
+this.syncService.syncAllTablesOnStartup(); // 🔁 esto sincroniza cashRegisters, members, etc.
 
   }
 
+listenUserUpdates(){
+  this.socketService.onMemberUpdate((member) => {
+  console.log('📡 Evento recibido: memberUpdated', member);
+  this.memberSyncService.handleRemoteUpdate(member); // si ya usas esto
+});
 
+}
+
+
+listenProductUpdates(){
+  this.socketService.onProductUpdate((product) => {
+  this.productSyncService.handleRemoteUpdate(product);
+});
+}
 listenToCashRegisterUpdates() {
   this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
    console.log('📡 Evento recibido: cashRegisterUpdated'+updatedCashRegister);

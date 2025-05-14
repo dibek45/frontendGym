@@ -24,7 +24,7 @@ export class MemberEffects {
       tap(() => console.log('🟡 [Effect] loadMembers triggered')),
       switchMap(() =>
         from(this.memberService.getMembersWithCache()).pipe(
-          tap((members) => console.log('📦 Members from cache/backend:', members)),
+          tap((members) => console.log('')),
           map((members) =>
             MemberActions.loadedMembers({ members })
           ),

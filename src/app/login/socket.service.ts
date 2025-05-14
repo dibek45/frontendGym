@@ -3,6 +3,8 @@ import { io, Socket } from 'socket.io-client';
 import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
 import { Subject } from 'rxjs';
 import { CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
+import { MemberModel } from '../core/models/member.interface';
+import { ProductModel } from '../core/models/product.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +13,9 @@ export class SocketService {
   private socket: Socket;
   private gymId: number | null = null;
   cashRegisterUpdated$ = new Subject<CashRegister>();
+  memberUpdated$ = new Subject<MemberModel>();
+  productUpdated$ = new Subject<ProductModel>();
+
 
   constructor(private localStorage: LocalEncryptedStorageService) {
     this.socket = io('wss://api.dibeksolutions.com', {
@@ -28,7 +33,10 @@ export class SocketService {
 
     
   }
-sendPing(msg: string) {
+
+
+
+  sendPing(msg: string) {
     this.socket.emit('ping', msg);
   }
 
@@ -40,6 +48,30 @@ sendPing(msg: string) {
   onCashRegisterUpdate(callback: (data: any) => void) {
     this.socket.on('cashRegisterUpdated', callback);
   }
+
+
+  onMemberUpdate(callback: (data: MemberModel) => void) {
+  this.socket.on('memberUpdated', (data) => {
+        console.log('📡 Evento memberUpdated recibido:', data); // <- este debe salir
+
+    this.memberUpdated$.next(data); // si quieres usar .subscribe()
+    callback(data); // si usas directo como en cashRegister
+     });
+  }
+
+onProductUpdate(callback: (data: ProductModel) => void) {
+  this.socket.on('productUpdated', (data) => {
+    console.log('📡 Evento productUpdated recibido:', data);
+    this.productUpdated$.next(data);
+    callback(data);
+  });
+}
+
+
+
+
+
+
   async loadGymId() {
     const identity = await this.localStorage.loadIdentity();
     if (identity?.gymId) {

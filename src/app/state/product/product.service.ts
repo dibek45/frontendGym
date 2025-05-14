@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, delay, map, of, throwError } from 'rxjs';
+import { Observable, catchError, delay, firstValueFrom, map, of, throwError } from 'rxjs';
 import { ProductModel } from 'src/app/core/models/product.interface';
 import { FileConverter } from 'src/app/shared/converter';
 import { environment } from 'src/environment.prod';
+import localforage from 'localforage';
+import * as CryptoJS from 'crypto-js';
 
 
 @Injectable({
@@ -110,5 +112,52 @@ getData(gymId: number): Observable<ProductModel[]> {
     })
   );
 
+}
+
+
+async getProductsWithCache(forceBackend = false): Promise<ProductModel[]> {
+  const encrypted = await localforage.getItem<string>('identity.json');
+  if (!encrypted) {
+    console.warn('❌ No hay identity.json');
+    return [];
+  }
+
+  let identity: any;
+  try {
+    const bytes = CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta');
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    identity = JSON.parse(decrypted);
+  } catch (err) {
+    console.error('❌ Error al desencriptar identity.json:', err);
+    return [];
+  }
+
+  const key = `user-${identity.userId}/gym-${identity.gymId}/products`;
+
+  if (!forceBackend) {
+    const cached = await localforage.getItem<string>(key);
+    if (cached) {
+      try {
+        const decrypted = CryptoJS.AES.decrypt(cached, 'clave-super-secreta').toString(CryptoJS.enc.Utf8);
+        const parsed = JSON.parse(decrypted);
+        console.log('📂 Productos cargados desde caché local:', parsed);
+        return parsed;
+      } catch (err) {
+        console.error('❌ Error al leer caché de productos:', err);
+      }
+    }
+  }
+
+  try {
+    const backendList = await firstValueFrom(this.getData(identity.gymId));
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(backendList), 'clave-super-secreta').toString();
+    await localforage.setItem(key, encryptedData);
+    console.log('🌐 Productos cargados desde backend:', backendList);
+    console.log('💾 Productos guardados en caché local');
+    return backendList;
+  } catch (err) {
+    console.error('❌ Error al obtener productos desde el backend:', err);
+    return [];
+  }
 }
 }

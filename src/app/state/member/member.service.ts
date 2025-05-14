@@ -268,6 +268,7 @@ insertEmployee(employee: any) {
         try {
           const decrypted = CryptoJS.AES.decrypt(cached, this.encryptionKey).toString(CryptoJS.enc.Utf8);
           const parsed = JSON.parse(decrypted);
+          console.log( '*--------------------------*')
           console.log('📂 Usuarios cargados desde caché local:', parsed);
           return parsed;
         } catch (err) {
@@ -281,6 +282,11 @@ insertEmployee(employee: any) {
       const backendList = await firstValueFrom(this.getData(identity.gymId));
       const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(backendList), this.encryptionKey).toString();
       await localforage.setItem(key, encryptedData);
+            console.log('  *--------------------------*', backendList);
+      await this.localStorage.saveVersion(identity.userId, identity.gymId, 'members', new Date().toISOString());
+
+      console.log('🌐 Usuarios cargados desde backend:', backendList);
+
       console.log('💾 Usuarios guardados en caché local');
       return backendList;
     } catch (err) {

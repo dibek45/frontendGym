@@ -13,6 +13,13 @@ export interface ExpenseModel {
   category: string;
   createdBy: string;
   cashierId: number;
+
+  
+  // 🔄 Campos de sincronización
+  updatedAt?: string;              // Última vez actualizado
+  isSynced?: boolean;              // true si ya se sincronizó con backend
+  syncError?: boolean;             // true si hubo error al sincronizar
+  tempId?: string;                 // ID temporal antes de obtener el ID real
 }
 
 export interface DataPerDay {

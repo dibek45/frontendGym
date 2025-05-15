@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import * as CashierActions from './cashier.actions';
-import { Cashier } from './cashier.model';
+import { Casher } from './cashier.model';
 
 // Estado inicial
 export interface CashierState {
-  cashiers: Cashier[];
+  cashiers: Casher[];
   error: string | null;
 }
 

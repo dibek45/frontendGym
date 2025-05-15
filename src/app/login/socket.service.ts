@@ -2,9 +2,16 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
 import { Subject } from 'rxjs';
-import { CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
+import {  CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
+
 import { MemberModel } from '../core/models/member.interface';
 import { ProductModel } from '../core/models/product.interface';
+import { ExpenseModel } from '../home/point-of-sale/expenses/expenses.component';
+import { SaleModel } from '../state/point-of-sale/cash-register/sale.model';
+import { Routine } from '../state/point-of-sale/routines/routines.model';
+import { MachineModel } from '../state/machine/machine.model';
+import { Sale } from '../state/point-of-sale/sale/sale.model';
+import { Casher } from '../state/point-of-sale/casher/cashier.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +22,11 @@ export class SocketService {
   cashRegisterUpdated$ = new Subject<CashRegister>();
   memberUpdated$ = new Subject<MemberModel>();
   productUpdated$ = new Subject<ProductModel>();
+  public expenseUpdated$ = new Subject<ExpenseModel>();
+  public casherUpdated$ = new Subject<Casher>();
+  public routineUpdated$ = new Subject<Routine>();
+  public machineUpdated$ = new Subject<MachineModel>();
+public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
 
 
   constructor(private localStorage: LocalEncryptedStorageService) {

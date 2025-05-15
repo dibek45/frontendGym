@@ -13,11 +13,15 @@ export interface QRModel {
     gymId: number;         // ID del gym al que pertenece
     qrs?: QRModel[];       // Lista de QRs (0 a 4)
     description:string;
+      updatedAt?: string; // 👈 Agrega esto
+
     // Campos adicionales si quieres offline sync control:
     isSynced?: boolean;    // true si ya se sincronizó con backend
     tempId?: string;       // ID temporal para sincronización local
     syncError?: boolean;   // true si hubo error al sincronizar con backend
      editing?: boolean;
+
+     
 
   }
    

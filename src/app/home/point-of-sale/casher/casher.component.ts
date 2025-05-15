@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Cashier } from 'src/app/state/point-of-sale/casher/cashier.model';
+import { Casher } from 'src/app/state/point-of-sale/casher/cashier.model';
 import { addCashier, loadCashiers } from 'src/app/state/point-of-sale/casher/cashier.actions';
 import { selectAllCashiers } from 'src/app/state/point-of-sale/casher/cashier.selectors';
 import { CardCasherComponent } from './shared/card-casher/card-casher.component';
@@ -20,8 +20,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./casher.component.scss']
 })
 export class CasherComponent {
-  cashers$: Observable<Cashier[]>;
-  data: Cashier[] = [];
+  cashers$: Observable<Casher[]>;
+  data: Casher[] = [];
   displayedColumns: string[] = ['name', 'username', 'status', 'actions'];
   cardComponent = CardCasherComponent;
 
@@ -75,7 +75,7 @@ export class CasherComponent {
   }
 
   addCashier(name: string, email: string, password: string): void {
-    const newCasher: Cashier = {
+    const newCasher: Casher = {
       name: name,
       username: email,
       phone: '0',
@@ -85,11 +85,11 @@ export class CasherComponent {
     this.store.dispatch(addCashier({ cashier: newCasher }));
   }
 
-  onEdit(cashier: Cashier): void {
+  onEdit(cashier: Casher): void {
     console.log('Editar:', cashier);
   }
 
-  onDelete(cashier: Cashier): void {
+  onDelete(cashier: Casher): void {
     console.log('Eliminar:', cashier);
   }
 }

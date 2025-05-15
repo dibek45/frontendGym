@@ -6,6 +6,7 @@ import { FileConverter } from 'src/app/shared/converter';
 import { environment } from 'src/environment.prod';
 import localforage from 'localforage';
 import * as CryptoJS from 'crypto-js';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class ProductService {
   private graphqlEndpoint = environment.apiUrl
    // Reemplaza con tu endpoint GraphQL
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private localStorage: LocalEncryptedStorageService,) { 
   }
 
  
@@ -29,7 +30,9 @@ export class ProductService {
    * @param product Objeto del producto a crear
    * @returns Observable del producto creado
    */
- createProduct(product: ProductModel): Observable<ProductModel> {
+ createProduct(product: ProductModel,
+  
+ ): Observable<ProductModel> {
   const mutation = `
     mutation Mutation($createProduct: CreateProduct!) {
   createProduct(createProduct: $createProduct) {
@@ -152,6 +155,9 @@ async getProductsWithCache(forceBackend = false): Promise<ProductModel[]> {
     const backendList = await firstValueFrom(this.getData(identity.gymId));
     const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(backendList), 'clave-super-secreta').toString();
     await localforage.setItem(key, encryptedData);
+    await this.localStorage.saveVersion(identity.userId, identity.gymId, 'products', new Date().toISOString());
+console.log('✅ Versión de products guardada en local');
+
     console.log('🌐 Productos cargados desde backend:', backendList);
     console.log('💾 Productos guardados en caché local');
     return backendList;

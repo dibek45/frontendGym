@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Cashier } from './cashier.model';
+import { Casher } from './cashier.model';
 import { environment } from 'src/environment.prod';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class CashierService {
   constructor(private http: HttpClient) {}
 
   // Crear un nuevo cajero
-  createCashier(cashier: Cashier): Observable<Cashier> {
+  createCashier(cashier: Casher): Observable<Casher> {
     const mutation = `
       mutation CreateCashier($createCashierInput: CreateCashierDto!) {
         createCashier(createCashierInput: $createCashierInput) {
@@ -35,7 +35,7 @@ export class CashierService {
     };
 
     return this.http
-    .post<{ data: { createCashier: Cashier } }>(this.graphqlEndpoint, {
+    .post<{ data: { createCashier: Casher } }>(this.graphqlEndpoint, {
       query: mutation,
       variables,
     })
@@ -52,7 +52,7 @@ export class CashierService {
   
   }
 
-  getAllCashiers(gymId: number): Observable<Cashier[]> {
+  getAllCashiers(gymId: number): Observable<Casher[]> {
     const query = `
       query Cashier($gymId: Int!) {
   cashiers(gymId: $gymId) {
@@ -69,7 +69,7 @@ export class CashierService {
     const variables = { gymId };
 
     return this.http
-      .post<{ data: { cashier: Cashier[] } }>(this.graphqlEndpoint, {
+      .post<{ data: { cashier: Casher[] } }>(this.graphqlEndpoint, {
         query,
         variables,
       })

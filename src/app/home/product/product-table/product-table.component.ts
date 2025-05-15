@@ -11,6 +11,9 @@ import { CartService } from '../../../state/point-of-sale/cart/cart.service';
 import { ProductFormService } from 'src/app/shared/product.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
+import { SyncService } from 'src/app/local/services/sync.service';
+import { ProductService } from 'src/app/state/product/product.service';
+import { loadedProducts } from 'src/app/state/product/product.actions';
 
 @Component({
   selector: 'app-product-table',
@@ -30,24 +33,35 @@ export class ProductTableComponent implements OnInit {
 
   constructor(private service: ProductFormService,private store: Store<AppState>,
       private cartService: CartService,   
-     private router: Router, private _notification:NotificationService,) {}
+      private syncService:SyncService,  
+     private router: Router, private _notification:NotificationService,
+      private productService: ProductService,
+) {}
 
   ngOnInit(): void {
-    this.store.dispatch(loadProducts());  // Cargar productos desde el store
-    this.loading$ = this.store.select(selectLoading);  // Estado de carga
+
+     this.loadProductsWithCache();
+
+  this.loading$ = this.store.select(selectLoading);
+
+  this.products$ = this.store.select(selectFilteredProducts).pipe(
+    map(products => products.slice())
+  );
+
+  
+this.products$.subscribe(products => {
+  this.products = products;
+});
+
+
 
     // Usar el operador `map` para convertir el array readonly en uno mutable
-    this.products$ = this.store.select(selectFilteredProducts).pipe(
-      map(products => products.slice())  
-    );
-
-    // Asignar productos a la variable mutable `products`
-    this.products$.subscribe((products) => {
-      console.log("Products de table")
-      console.log(this.products)
-      this.products = products;  
-    });
+   
   }
+async loadProductsWithCache() {
+  const products = await this.productService.getProductsWithCache();
+  this.store.dispatch(loadedProducts({ products }));
+}
 
   // Aplicar filtro a la tabla
   applyFilter(event: Event) {

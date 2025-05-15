@@ -4,7 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { CashRegister } from './cash-register.model';
 import { CashMovement } from '../cash-movement/cash-movement.model';
-import { Sale } from './sale.model';
+import { SaleModel } from './sale.model';
 import { CashRegisterActions } from './cash-register.actions';
 import { Store } from '@ngrx/store';
 import { selectAllCashRegisters } from './cash-register.selectors';
@@ -213,7 +213,7 @@ export class CashRegisterService {
   }
 
   // Agregar una venta a una caja registradora
-  addSale(cashRegisterId: number, sale: Sale): Observable<Sale> {
+  addSale(cashRegisterId: number, sale: SaleModel): Observable<SaleModel> {
     const mutation = `
       mutation AddSale($cashRegisterId: Float!, $sale: SaleInput!) {
         addSale(cashRegisterId: $cashRegisterId, sale: $sale) {
@@ -230,7 +230,7 @@ export class CashRegisterService {
     `;
 
     return this.http
-      .post<{ data: { addSale: Sale } }>(this.graphqlEndpoint, {
+      .post<{ data: { addSale: SaleModel } }>(this.graphqlEndpoint, {
         query: mutation,
         variables: {
           cashRegisterId,

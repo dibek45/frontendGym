@@ -8,8 +8,14 @@ export interface Sale {
   totalAmount: number;        // Monto total de la venta
   paymentMethod?: string;     // 🔹 Opcional: Puede haber ventas sin pago registrado
   saleDetails: SaleDetail[];  // Lista de detalles de la venta
+  updatedAt?: string; // 👈 Agrega esto
 
+   // 🔄 Campos de sincronización
+  isSynced?: boolean;              // true si ya se sincronizó con backend
+  syncError?: boolean;             // true si hubo error al sincronizar
+  tempId?: string;                 // ID temporal antes de obtener el ID real
   cashRegister?: {            // 🔹 Opcional: Puede no estar definido en algunos casos
+    
     id: number;
     cashier: {
       id: number;

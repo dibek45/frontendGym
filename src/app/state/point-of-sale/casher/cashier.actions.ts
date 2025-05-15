@@ -1,16 +1,16 @@
 import { createAction, props } from '@ngrx/store';
-import { Cashier } from './cashier.model';
+import { Casher } from './cashier.model';
 
 // Acción para agregar un cajero
 export const addCashier = createAction(
   '[Cashier] Add Cashier',
-  props<{ cashier: Cashier }>()
+  props<{ cashier: Casher }>()
 );
 
 // Acción para indicar éxito al agregar un cajero
 export const addCashierSuccess = createAction(
   '[Cashier] Add Cashier Success',
-  props<{ cashier: Cashier }>()
+  props<{ cashier: Casher }>()
 );
 
 // Acción para manejar errores
@@ -25,7 +25,7 @@ export const loadCashiers = createAction('[Cashier] Load Cashiers');
 // Acción para éxito al cargar cajeros
 export const loadCashiersSuccess = createAction(
   '[Cashier] Load Cashiers Success',
-  props<{ cashiers: Cashier[] }>()
+  props<{ cashiers: Casher[] }>()
 );
 
 // Acción para manejar errores al cargar cajeros

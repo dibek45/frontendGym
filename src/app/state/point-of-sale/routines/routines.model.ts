@@ -10,6 +10,12 @@ export interface Routine {
   createdAt: Date; // Timestamp for when the routine was created
   updatedAt: Date; // Timestamp for when the routine was last updated
   img?:string
+
+  
+  // 🔄 Campos de sincronización
+  isSynced?: boolean;              // true si ya se sincronizó con backend
+  syncError?: boolean;             // true si hubo error al sincronizar
+  tempId?: string;                 // ID temporal antes de obtener el ID real
 }
 
 

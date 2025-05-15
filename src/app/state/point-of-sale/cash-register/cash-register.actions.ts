@@ -1,6 +1,6 @@
 import { createActionGroup, props, emptyProps } from '@ngrx/store';
 import { CashRegister } from './cash-register.model';
-import { Sale } from './sale.model';
+import { SaleModel } from './sale.model';
 import { CashMovement } from '../cash-movement/cash-movement.model';
 
 export const CashRegisterActions = createActionGroup({
@@ -28,8 +28,8 @@ export const CashRegisterActions = createActionGroup({
      'Add Movement Failure': props<{ error: any }>(),
  
      // Agregar una venta
-     'Add Sale': props<{ cashRegisterId: number; sale: Sale }>(),
-     'Add Sale Success': props<{ cashRegisterId: number; sale: Sale }>(),
+     'Add Sale': props<{ cashRegisterId: number; sale: SaleModel }>(),
+     'Add Sale Success': props<{ cashRegisterId: number; sale: SaleModel }>(),
      'Add Sale Failure': props<{ error: any }>(), // Manejo de errores
   },
 });

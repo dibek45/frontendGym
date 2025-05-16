@@ -6,7 +6,7 @@ export interface Casher {
   password: string;  // Contraseña
   gymId: number;     // Identificador del gimnasio
 
-    updatedAt?: string; // 👈 Agrega esto
+  updatedAt?: string; // 👈 Agrega esto
 
    // 🔄 Campos de sincronización
   isSynced?: boolean;              // true si ya se sincronizó con backend

@@ -15,6 +15,7 @@ import { LocalEncryptedStorageService } from 'src/app/local/services/local-encry
 import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
 import { MemberSyncService } from 'src/app/local/tables-sync/member-sync.service';
 import { ProductSyncService } from 'src/app/local/tables-sync/product-sync.service';
+import { CashierSyncService } from 'src/app/local/tables-sync/cashier-sync.service';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -40,7 +41,9 @@ export class MainScreenComponent {
         private localStorage: LocalEncryptedStorageService,
        private cashRegisterSyncService: CashRegisterSyncService,
        private memberSyncService:MemberSyncService,
-       private productSyncService:ProductSyncService
+       private productSyncService:ProductSyncService,
+       private cashierSyncService: CashierSyncService,
+
   ) {
     
  
@@ -53,6 +56,7 @@ export class MainScreenComponent {
   this.socketService.joinGymRoom(1); // ✅ Se une a sala
   this.listenToCashRegisterUpdates();    // ✅ Escucha evento y guarda
   this.listenProductUpdates();
+  
 
 this.listenUserUpdates();
 this.syncService.syncAllTablesOnStartup(); // 🔁 esto sincroniza cashRegisters, members, etc.
@@ -79,6 +83,12 @@ listenToCashRegisterUpdates() {
   this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
 
   
+  });
+}
+
+listenCashierUpdates() {
+  this.socketService.onCashierUpdate((cashier) => {
+    this.cashierSyncService.handleRemoteUpdate(cashier);
   });
 }
   route(route:string){

@@ -26,6 +26,8 @@ export class SocketService {
   public casherUpdated$ = new Subject<Casher>();
   public routineUpdated$ = new Subject<Routine>();
   public machineUpdated$ = new Subject<MachineModel>();
+    public cashierUpdated$ = new Subject<Casher>();
+
 public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
 
 
@@ -79,8 +81,13 @@ onProductUpdate(callback: (data: ProductModel) => void) {
   });
 }
 
-
-
+onCashierUpdate(callback: (data: Casher) => void) {
+    this.socket.on('cashierUpdated', (data) => {
+      console.log('📡 Evento cashierUpdated recibido:', data);
+      this.cashierUpdated$.next(data);
+      callback(data);
+    });
+  }
 
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { of, from } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import * as CashierActions from './cashier.actions';
 import { CashierService } from './cashier.service';
@@ -12,7 +12,7 @@ export class CashierEffects {
     private cashierService: CashierService
   ) {}
 
-  // Efecto para agregar un cajero
+  // ✅ Crear cajero
   addCashier$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CashierActions.addCashier),
@@ -29,18 +29,16 @@ export class CashierEffects {
     )
   );
 
+  // ✅ Cargar cajeros usando Local First
   loadCashiers$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(CashierActions.loadCashiers), // ⛔ si esto fuera `loadCashiers()`, aquí está el error
+      ofType(CashierActions.loadCashiers),
       mergeMap(() =>
-        this.cashierService.getAllCashiers(1).pipe(
+        from(this.cashierService.getCashiersWithCache()).pipe(
           map((cashiers) => CashierActions.loadCashiersSuccess({ cashiers })),
           catchError((error) => of(CashierActions.loadCashiersFailure({ error: error.message })))
         )
       )
     )
   );
-  
-
-  
 }

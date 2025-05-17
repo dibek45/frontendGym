@@ -332,10 +332,14 @@ async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
             };
             await this._productSyncService.handleRemoteUpdate(updatedProduct);
           }
+  this.clearCart();
 
-          // 🖨️ Imprimir ticket
+          const confirmado = await this.notificationService.mostrarConfirmacionCaja('¿Deseas imprimir ticket?');
+          if (confirmado) {
           this.printTicket(formattedCart, response.data.createSale.totalAmount);
 
+          }
+          // 🖨️ Imprimir ticket
           resolve(); // ✅ fin exitoso
         } else {
           console.error("⚠️ Respuesta inesperada:", response);
@@ -363,7 +367,7 @@ async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
     
     await this.printerService.connectToPrinter();
     await this.printerService.generateticketCarrito(gym, customerName, saleDate, cart, totalAmount);
-    this.clearCart();
+  
   }
 
 

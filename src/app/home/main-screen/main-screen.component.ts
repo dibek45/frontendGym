@@ -16,6 +16,10 @@ import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register
 import { MemberSyncService } from 'src/app/local/tables-sync/member-sync.service';
 import { ProductSyncService } from 'src/app/local/tables-sync/product-sync.service';
 import { CashierSyncService } from 'src/app/local/tables-sync/cashier-sync.service';
+import { Store } from '@ngrx/store';
+import { CashRegisterActions } from 'src/app/state/point-of-sale/cash-register/cash-register.actions';
+import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/cash-register.service';
+import { CommonModule } from '@angular/common';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -28,7 +32,7 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 @Component({
   selector: 'app-main-screen',
   standalone: true,
-  imports: [MatIconModule,HttpClientModule],
+  imports: [CommonModule,MatIconModule,HttpClientModule],
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.scss'],
 
@@ -36,6 +40,10 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 })
 export class MainScreenComponent {
  
+
+  public currentBalance: number = 0;
+
+
   constructor(private router: Router, private syncService:SyncService,   
      private socketService: SocketService,
         private localStorage: LocalEncryptedStorageService,
@@ -43,6 +51,8 @@ export class MainScreenComponent {
        private memberSyncService:MemberSyncService,
        private productSyncService:ProductSyncService,
        private cashierSyncService: CashierSyncService,
+       private store:Store,
+       private cashRegisterService:CashRegisterService
 
   ) {
     
@@ -51,18 +61,66 @@ export class MainScreenComponent {
 
 
   ngOnInit(): void {
-  alert("subscrito 4.0")
 
   this.socketService.joinGymRoom(1); // ✅ Se une a sala
   this.listenToCashRegisterUpdates();    // ✅ Escucha evento y guarda
   this.listenProductUpdates();
+  this.listenToCashRegisterDeletes();
   
 
 this.listenUserUpdates();
 this.syncService.syncAllTablesOnStartup(); // 🔁 esto sincroniza cashRegisters, members, etc.
+this.cashRegisterService.getCashRegistersWithCache().then(cajas => {
+  this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: cajas }));
+  console.log('✅ Cajas despachadas a Redux en el arranque:', cajas);
+});
+
+ this.localStorage.loadIdentity().then(identity => {
+    if (!identity) return;
+
+    const { userId, gymId } = identity;
+
+    this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
+      .then(cajas => {
+        console.log('📦 Cajas locales cargadas en ngOnInit:', cajas || []);
+      });
+  });
+
+  this.localStorage.loadIdentity().then(identity => {
+  if (!identity) return;
+
+  const { userId, gymId } = identity;
+
+  this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
+    .then(cajas => {
+      console.log('📦 Cajas locales cargadas en ngOnInit:', cajas || []);
+
+      const cajaAbierta = (cajas || []).find(c => c.status === 'open');
+      this.currentBalance = cajaAbierta?.currentBalance || 0;
+    });
+});
+
+this.traerCaja()
 
   }
 
+
+  traerCaja(){
+    this.localStorage.loadIdentity().then(identity => {
+  if (!identity) return;
+
+  const { userId, gymId } = identity;
+
+  this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
+    .then(cajas => {
+      console.log('📦 Cajas locales cargadas en ngOnInit:', cajas || []);
+
+      const cajaAbierta = (cajas || []).find(c => c.status === 'open');
+      this.currentBalance = cajaAbierta?.currentBalance || 0;
+    });
+});
+
+  }
 listenUserUpdates(){
   this.socketService.onMemberUpdate((member) => {
   console.log('📡 Evento recibido: memberUpdated', member);
@@ -71,20 +129,54 @@ listenUserUpdates(){
 
 }
 
+listenToCashRegisterDeletes() {
+  this.socketService.onCashRegisterDeleted((payload) => {
+    console.log('🗑️ Evento recibido: cashRegisterDeleted', payload);
+    this.cashRegisterSyncService.removeFromLocal(payload.id);
+  });
+}
 
 listenProductUpdates(){
   this.socketService.onProductUpdate((product) => {
   this.productSyncService.handleRemoteUpdate(product);
 });
 }
+
+
 listenToCashRegisterUpdates() {
   this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
-   console.log('📡 Evento recibido: cashRegisterUpdated'+updatedCashRegister);
-  this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
+    console.log('📡 Evento recibido: cashRegisterUpdated', updatedCashRegister);
 
-  
+    // Sincroniza y guarda en caché
+    await this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
+
+    // Carga el caché actualizado
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) return;
+
+    const { userId, gymId } = identity;
+
+    const updatedList = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+      userId,
+      gymId,
+      'cashRegisters'
+    ) || [];
+
+    // ✅ Muestra en consola las cajas locales
+    console.log("777777777777777777777777777777777777");
+    console.log('📦 Cajas locales desde caché:', updatedList);
+this.currentBalance = updatedList.find(c => c.status === 'open')?.currentBalance || 0;
+
+    // Actualiza el store de Redux
+    this.store.dispatch(
+      CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: updatedList })
+    );
+
+    console.log('✅ Cajas locales actualizadas en Redux después de socket');
   });
 }
+
+
 
 listenCashierUpdates() {
   this.socketService.onCashierUpdate((cashier) => {

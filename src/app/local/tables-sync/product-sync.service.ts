@@ -13,40 +13,49 @@ export class ProductSyncService {
     private localStorage: LocalEncryptedStorageService
   ) {}
 
-  async handleRemoteUpdate(updatedProduct: ProductModel): Promise<void> {
-    const identity = await this.localStorage.loadIdentity();
-    if (!identity) {
-      console.warn('❌ No hay identidad local');
-      return;
-    }
-
-    const products = await this.localStorage.loadTableFromLocalCache<ProductModel>(
-      identity.userId,
-      identity.gymId,
-      this.tableName
-    ) ?? [];
-
-    const index = products.findIndex(p => String(p.id) === String(updatedProduct.id));
-    if (index >= 0) {
-      products[index] = { ...products[index], ...updatedProduct };
-      console.log(`✏️ Producto actualizado localmente (ID ${updatedProduct.id})`);
-    } else {
-      products.push(updatedProduct);
-      console.log(`🆕 Producto agregado localmente (ID ${updatedProduct.id})`);
-    }
-
-    const enrichedProducts = products.map(p => ({
-      ...p,
-      updatedAt: p.updatedAt ?? new Date().toISOString()
-    }));
-
-    await this.localStorage.saveTableToLocalCache(
-      identity.userId,
-      identity.gymId,
-      this.tableName,
-      enrichedProducts
-    );
-
-    this.store.dispatch(ProductActions.loadedProducts({ products: enrichedProducts }));
+async handleRemoteUpdate(updatedProduct: ProductModel): Promise<void> {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) {
+    console.warn('❌ No hay identidad local');
+    return;
   }
+
+  const products = await this.localStorage.loadTableFromLocalCache<ProductModel>(
+    identity.userId,
+    identity.gymId,
+    this.tableName
+  ) ?? [];
+
+  const index = products.findIndex(p => String(p.id) === String(updatedProduct.id));
+  if (index >= 0) {
+    products[index] = { ...products[index], ...updatedProduct };
+    console.log(`✏️ Producto actualizado localmente (ID ${updatedProduct.id})`);
+  } else {
+    products.push(updatedProduct);
+    console.log(`🆕 Producto agregado localmente (ID ${updatedProduct.id})`);
+  }
+
+  const enrichedProducts = products.map(p => ({
+    ...p,
+    updatedAt: p.updatedAt ?? new Date().toISOString()
+  }));
+
+  await this.localStorage.saveTableToLocalCache(
+    identity.userId,
+    identity.gymId,
+    this.tableName,
+    enrichedProducts
+  );
+
+  // ✅ Guardar versión actualizada
+  await this.localStorage.saveVersion(
+    identity.userId,
+    identity.gymId,
+    this.tableName,
+    updatedProduct.updatedAt ?? new Date().toISOString()
+  );
+
+  this.store.dispatch(ProductActions.loadedProducts({ products: enrichedProducts }));
+}
+
 }

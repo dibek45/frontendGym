@@ -236,7 +236,7 @@ this.store.dispatch(MachineActions.loadMachinesSuccess({ machines: updatedList }
     const versionMap = await this.updateVersionService.getVersionMapByGym(identity.gymId);
     const remoteUpdatedAt = versionMap.get(table);
     if (!remoteUpdatedAt) {
-      alert(`⚠️ No hay updatedAt remoto para ${table}`);
+    //  alert(`⚠️ No hay updatedAt remoto para ${table}`);
       return;
     }
 
@@ -270,7 +270,7 @@ this.store.dispatch(MachineActions.loadMachinesSuccess({ machines: updatedList }
     await this.syncTableIfNeeded('sale');
     await this.syncTableIfNeeded('routine');
     await this.syncTableIfNeeded('machine');
-    await this.syncTableIfNeeded('cashers');
+    await this.syncTableIfNeeded('cashiers');
 
 
   }

@@ -7,6 +7,8 @@ import { MemberService } from 'src/app/state/member/member.service';
 import { loadedMembers } from 'src/app/state/member/member.actions';
 import { loadedProducts } from 'src/app/state/product/product.actions';
 import { ProductService } from 'src/app/state/product/product.service';
+import { loadCashiersSuccess } from 'src/app/state/point-of-sale/casher/cashier.actions';
+import { CashierService } from 'src/app/state/point-of-sale/casher/cashier.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +19,8 @@ export class SyncServiceDispatcher {
     private memberService: MemberService,
     private productService:ProductService,
     private store: Store,
-    private localStorage: LocalEncryptedStorageService
+    private localStorage: LocalEncryptedStorageService,
+    private cashierService:CashierService
   ) {}
 
   async dispatch(table: string): Promise<void> {
@@ -39,6 +42,11 @@ export class SyncServiceDispatcher {
       const products = await this.productService.getProductsWithCache(true);
       this.store.dispatch(loadedProducts({ products }));
       break;
+      }
+      case 'cashiers': {
+        const cashiers = await this.cashierService.getCashiersWithCache(true);
+        this.store.dispatch(loadCashiersSuccess({ cashiers }));
+        break;
       }
       default:
         console.warn(`⚠️ Tabla no soportada en SyncServiceDispatcher: ${table}`);

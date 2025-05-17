@@ -9,8 +9,9 @@
   
     <div class="kpis">
       <div class="kpi-card green ">
-        <p class="value caja">$ 1,750.00</p>
-        <p class="label">Caja</p>
+        <p class="value caja">$
+          {{ currentBalance | number:'1.2-2' }}
+        </p>
       </div>
       <div class="kpi-card blue">
         <p class="value asistencias">48</p>

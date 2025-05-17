@@ -225,7 +225,7 @@ const diff = remoteTime - localTime;
 
 console.log(`🕒 Diferencia entre versiones: ${diff} ms`);
 
-return diff > 3000; // Solo sincroniza si hay más de 3 segundos de diferencia
+return diff > 5000; // Solo sincroniza si hay más de 3 segundos de diferencia
   } catch (err) {
     console.warn('⚠️ Error leyendo versiones locales:', err);
     return true;
@@ -247,6 +247,11 @@ async getVersion(userId: number, gymId: number, table: string): Promise<string |
     console.error('❌ Error leyendo versión local:', e);
     return null;
   }
+}
+
+
+getTableKey(userId: number, gymId: number, table: string): string {
+  return `user-${userId}/gym-${gymId}/${table}`;
 }
 
 }

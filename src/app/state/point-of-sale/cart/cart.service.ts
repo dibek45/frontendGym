@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable, take } from 'rxjs';
 import { CartItemModel } from '../../../home/product/cart/cart-item.model';
 import { ProductModel } from 'src/app/core/models/product.interface';
+import * as CryptoJS from 'crypto-js';
+
 import { 
   addItemToCart, 
   calculateTotal, 
@@ -17,6 +19,9 @@ import { AppState } from 'src/app/state/app.state';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { PrinterService } from 'src/app/printer.service';
 import { environment } from 'src/environment.prod';
+import { CashRegisterService } from '../cash-register/cash-register.service';
+import localforage from 'localforage';
+import { ProductSyncService } from 'src/app/local/tables-sync/product-sync.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +39,8 @@ export class CartService {
 
   constructor(    private store: Store<AppState>,      private printerService: PrinterService
     ,public notificationService: NotificationService,
+    private _caja:CashRegisterService,
+    private _productSyncService:ProductSyncService,
 
     private http: HttpClient,
   ) {
@@ -255,68 +262,96 @@ export class CartService {
 
 
 
+async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
+  const formattedCart = cart.map(item => ({
+    productId: Number(item.product.id),
+    name: item.product.name,
+    costo: item.product.price,
+    quantity: item.quantity,
+    isMembership: item.product.isMembership || false,
+    idClienteTOMembership: item.product.isMembership ? Number(item.product.idClienteTOMembership) : null
+  }));
 
-  async onSubmit(paymentMethod: string, cart: CartItemModel[]) {
-    const formattedCart = cart.map(item => ({
-      productId: Number(item.product.id),
-      name: item.product.name,
-      costo: item.product.price,
-      quantity: item.quantity,
-      isMembership: item.product.isMembership || false,
-      idClienteTOMembership: item.product.isMembership ? Number(item.product.idClienteTOMembership) : null
-    }));
-  
-    const graphqlQuery = `
-      mutation CreateSale($gymId: Int!, $paymentMethod: String!, $cart: [CartItemInput!]!, $cashRegisterId: Int!) {
-        createSale(gymId: $gymId, paymentMethod: $paymentMethod, cart: $cart, cashRegisterId: $cashRegisterId) {
-          id
-          paymentMethod
-          totalAmount
-          cashRegisterId
-        }
+  // 🔁 Obtener o crear caja
+  let cajaActiva = await this._caja.getCajaActiva();
+
+  if (!cajaActiva) {
+    await this._caja.crearCajaParaUsuarioActualSiNoExiste();
+    await this._caja.getCashRegistersWithCache(true);
+    cajaActiva = await this._caja.getCajaActiva();
+
+    if (!cajaActiva) {
+      this.notificationService.mostrarSnackbar('❌ No se pudo abrir caja.', 'error');
+      return;
+    }
+  }
+
+  // ✅ Obtener identidad
+  const encrypted = await localforage.getItem<string>('identity.json');
+  const identity = JSON.parse(
+    CryptoJS.AES.decrypt(encrypted!, 'clave-super-secreta').toString(CryptoJS.enc.Utf8)
+  );
+
+  const graphqlQuery = `
+    mutation CreateSale($gymId: Int!, $paymentMethod: String!, $cart: [CartItemInput!]!, $cashRegisterId: Int!) {
+      createSale(gymId: $gymId, paymentMethod: $paymentMethod, cart: $cart, cashRegisterId: $cashRegisterId) {
+        id
+        paymentMethod
+        totalAmount
+        cashRegisterId
       }
-    `;
-  
-    // 🔍 Agregar log para verificar valores antes de la petición
-    console.log("📤 Enviando a GraphQL:", {
-      gymId: 1,
-      paymentMethod,
-      cart: formattedCart,
-      cashRegisterId: 168
-    });
-  
-    await this.http.post(
-      environment.apiUrl, 
-      {
-        query: graphqlQuery,
-        variables: {
-          gymId: 1,
-          paymentMethod: paymentMethod,
-          cart: formattedCart,
-          cashRegisterId: 168
-        }
+    }
+  `;
+
+  return new Promise((resolve, reject) => {
+    this.http.post(environment.apiUrl, {
+      query: graphqlQuery,
+      variables: {
+        gymId: identity.gymId,
+        paymentMethod,
+        cart: formattedCart,
+        cashRegisterId: cajaActiva!.id
       }
-    ).subscribe({
-      next: (response:any) => {
-        console.log("✅ Respuesta de la API:", response);
-        if (response.data && response.data.createSale) {
-          this.notificationService.mostrarSnackbar(':: Venta registrada correctamente', 'success');
+    }).subscribe({
+      next: async (response: any) => {
+        if (response.data?.createSale) {
+          this.notificationService.mostrarSnackbar('✅ Venta registrada correctamente.', 'success');
+
+          // 🔁 Actualizar balance local
+          await this._caja.updateBalanceAfterSale(
+            cajaActiva!.id,
+            response.data.createSale.totalAmount
+          );
+
+          // 🔁 Actualizar productos en caché y store
+          for (const item of cart) {
+            const updatedProduct = {
+              ...item.product,
+              stock: item.product.stock - item.quantity,
+              updatedAt: new Date().toISOString()
+            };
+            await this._productSyncService.handleRemoteUpdate(updatedProduct);
+          }
+
+          // 🖨️ Imprimir ticket
           this.printTicket(formattedCart, response.data.createSale.totalAmount);
+
+          resolve(); // ✅ fin exitoso
         } else {
-          console.error("⚠️ Respuesta inesperada de la API:", response);
+          console.error("⚠️ Respuesta inesperada:", response);
+          reject("Respuesta inesperada al crear venta");
         }
       },
       error: (error) => {
-        console.error("❌ GraphQL Error:", error);
-        
-        // 🔥 Agregar logs detallados
-        if (error.error && error.error.errors) {
-          console.error("🔍 Detalles del error:", JSON.stringify(error.error.errors, null, 2));
-        }
+        console.error("❌ Error GraphQL:", error);
+        reject(error);
       }
     });
-    
-  }
+  });
+}
+
+
+
   
   
   
@@ -330,4 +365,9 @@ export class CartService {
     await this.printerService.generateticketCarrito(gym, customerName, saleDate, cart, totalAmount);
     this.clearCart();
   }
+
+
+
+
+
 }

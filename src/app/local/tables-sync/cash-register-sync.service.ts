@@ -27,9 +27,18 @@ export class CashRegisterSyncService {
   ) ?? [];
 
   const exists = list.some(c => c.id === updatedCashRegister.id);
-  const updatedList = exists
-    ? list.map(c => c.id === updatedCashRegister.id ? updatedCashRegister : c)
-    : [...list, updatedCashRegister];
+ const updatedList = exists
+  ? list.map(c => {
+      if (c.id === updatedCashRegister.id) {
+        return {
+          ...updatedCashRegister,
+          cashier: updatedCashRegister.cashier?.userId ? updatedCashRegister.cashier : c.cashier
+        };
+      }
+      return c;
+    })
+  : [...list, updatedCashRegister];
+
 
   await this.localStorage.saveTableToLocalCache(
     userId,
@@ -47,6 +56,26 @@ export class CashRegisterSyncService {
 
   this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: updatedList }));
   console.log(`📦 Caja ${updatedCashRegister.id} sincronizada desde WebSocket`);
+}
+async removeFromLocal(id: number): Promise<void> {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) return;
+
+  const { userId, gymId } = identity;
+
+  const list = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+    userId,
+    gymId,
+    'cashRegisters'
+  ) || [];
+
+  const updatedList = list.filter(c => c.id !== id);
+
+  await this.localStorage.saveTableToLocalCache(userId, gymId, 'cashRegisters', updatedList);
+
+  this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: updatedList }));
+
+  console.log(`🗑️ Caja con ID ${id} eliminada de local y actualizada en Redux`);
 }
 
 }

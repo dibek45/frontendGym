@@ -48,6 +48,7 @@ export class CartComponent implements OnInit {
     private cartService: CartService,
     private store: Store<AppState>,
     private router: Router,
+    private notificationService:NotificationService
 
   ) {
     // 1) Inicializamos los selectores
@@ -88,13 +89,19 @@ export class CartComponent implements OnInit {
   }
 
   // Finalizar venta (ejemplo con “efectivo”)
-  finish() {
-    this.cartItemsRdx$.pipe(take(1)).subscribe(cartItems => {
-      this.items = cartItems;
-      console.log('CARRITO ******', cartItems);
-      this.cartService.onSubmit('efectivo', this.items);
-    });
-  }
+ async finish() {
+  this.cartItemsRdx$.pipe(take(1)).subscribe(async cartItems => {
+    this.items = cartItems;
+    try {
+      await this.cartService.onSubmit('efectivo', this.items);
+      this.router.navigate(['home/main-screen']); // ✅ Solo navega cuando todo terminó
+    } catch (err) {
+      this.notificationService.mostrarSnackbar('❌ Error al procesar venta', 'error');
+      console.error(err);
+    }
+  });
+}
+
 
   // Modal para confirmar eliminación
   openModal(event: MouseEvent, index: number) {

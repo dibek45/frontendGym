@@ -9,24 +9,35 @@ import { from, of } from 'rxjs';
 export class CashRegisterEffects {
   constructor(private actions$: Actions, private cashRegisterService: CashRegisterService) {}
 
-  addCashRegister$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CashRegisterActions['addCashRegister']),
-      tap(() => console.log('Intercepted: Add CashRegister')), // Log para depuración
-      mergeMap(({ cashRegister }) =>
-        this.cashRegisterService.createCashRegister(cashRegister).pipe(
-          tap((newCashRegister) => console.log('Service Response:', newCashRegister)), // Log del servicio
-          map((newCashRegister) =>
-            CashRegisterActions['addCashRegisterSuccess']({ cashRegister: newCashRegister })
-          ),
-          catchError((error) => {
-            console.error('Error in Effect:', error);
-            return of(CashRegisterActions['addCashRegisterFailure']({ error }));
-          })
+addCashRegister$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(CashRegisterActions['addCashRegister']),
+    mergeMap(({ cashRegister }) =>
+      from(this.cashRegisterService.createCashRegisterIfValid(cashRegister)).pipe(
+        map((result) => {
+          if ('error' in result) {
+            return CashRegisterActions['addCashRegisterFailure']({
+              error: result.error === 'already_open'
+                ? 'Este cajero ya tiene una caja abierta.'
+                : result.error === 'max_reached'
+                ? 'Este gimnasio ya tiene 4 cajas abiertas.'
+                : 'El balance inicial no puede ser negativo.',
+            });
+          }
+
+          return CashRegisterActions['addCashRegisterSuccess']({
+            cashRegister: result.cashRegister,
+          });
+        }),
+        catchError((error) =>
+          of(CashRegisterActions['addCashRegisterFailure']({ error: error.message }))
         )
       )
     )
-  );
+  )
+);
+
+
 
 
   loadCashRegisters$ = createEffect(() =>

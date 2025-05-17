@@ -123,4 +123,53 @@ export class NotificationService {
   cart(){
     this.router.navigate(['home/product/cart']);
   }
+
+
+
+
+  mostrarErrorCreacionCaja(error: string) {
+  let mensaje = '❌ Error al crear la caja registradora.';
+
+  if (error.includes('ya tiene una caja abierta')) {
+    mensaje = '❌ Este cajero ya tiene una caja abierta.';
+  } else if (error.includes('ya tiene 4')) {
+    mensaje = '❌ Este gimnasio ya tiene 4 cajas abiertas.';
+  } else if (error.includes('balance')) {
+    mensaje = '❌ El balance inicial no puede ser negativo.';
+  }
+
+  this.mostrarSnackbar(
+    mensaje,
+    'error',
+    'assets/img/icons/error.png'
+  );
+}
+
+
+
+async mostrarConfirmacionCaja(pregunta = '¿Deseas crear una caja?'): Promise<boolean> {
+  return new Promise(resolve => {
+    const div = document.createElement('div');
+    div.className = 'modal-confirm';
+    div.innerHTML = `
+      <div class="modal-content">
+        <p>${pregunta}</p>
+        <button id="btn-si">Sí</button>
+        <button id="btn-no">No</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    document.getElementById('btn-si')!.onclick = () => {
+      div.remove();
+      resolve(true);
+    };
+    document.getElementById('btn-no')!.onclick = () => {
+      div.remove();
+      resolve(false);
+    };
+  });
+}
+
+
+
 }

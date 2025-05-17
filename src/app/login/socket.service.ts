@@ -63,6 +63,9 @@ public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
     this.socket.on('cashRegisterUpdated', callback);
   }
 
+onCashRegisterDeleted(callback: (data: { id: number }) => void) {
+  this.socket.on('cashRegisterDeleted', callback);
+}
 
   onMemberUpdate(callback: (data: MemberModel) => void) {
   this.socket.on('memberUpdated', (data) => {

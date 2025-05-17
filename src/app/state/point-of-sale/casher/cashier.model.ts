@@ -4,6 +4,8 @@ export interface Casher {
   username: string;  // Nombre de usuario
   phone: string;     // Teléfono del cajero
   password: string;  // Contraseña
+  userId?: number; // 👈 agrega esto
+
   gymId: number;     // Identificador del gimnasio
 
   updatedAt?: string; // 👈 Agrega esto

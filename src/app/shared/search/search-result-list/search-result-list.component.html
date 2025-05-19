@@ -1,0 +1,14 @@
+<div *ngIf="filteredItems().length > 0; else sinResultados">
+      <app-search-result-item
+        *ngFor="let item of filteredItems()"
+        [item]="item"
+  [type]="item.__tipo"     
+        (selected)="itemSelected.emit($event)">
+      </app-search-result-item>
+    </div>
+
+    <ng-template #sinResultados>
+      <p style="text-align: center; color: #999; margin-top: 20px;">
+        No se encontraron resultados.
+      </p>
+    </ng-template>

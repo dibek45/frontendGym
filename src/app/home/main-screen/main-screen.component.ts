@@ -20,6 +20,8 @@ import { Store } from '@ngrx/store';
 import { CashRegisterActions } from 'src/app/state/point-of-sale/cash-register/cash-register.actions';
 import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/cash-register.service';
 import { CommonModule } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { SmartSearchComponent } from 'src/app/shared/search/smart-search/smart-search.component';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -32,7 +34,8 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 @Component({
   selector: 'app-main-screen',
   standalone: true,
-  imports: [CommonModule,MatIconModule,HttpClientModule],
+  imports: [CommonModule,MatIconModule,HttpClientModule,   CommonModule,
+    MatDialogModule],
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.scss'],
 
@@ -52,7 +55,8 @@ export class MainScreenComponent {
        private productSyncService:ProductSyncService,
        private cashierSyncService: CashierSyncService,
        private store:Store,
-       private cashRegisterService:CashRegisterService
+       private cashRegisterService:CashRegisterService,
+       private dialog: MatDialog
 
   ) {
     
@@ -187,4 +191,50 @@ listenCashierUpdates() {
     this.router.navigate([route]);
   }
 
+abrirRenovacion() {
+    this.dialog.open(SmartSearchComponent, {
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    panelClass: 'full-screen-dialog',
+    data: { modo: 'miembro' }   // 👈 aquí está el truco
+  }).afterClosed().subscribe(res => {
+    if (res) {
+    //  this.procesarRenovacion(res);
+    }
+  });
+}
+
+
+  renovar(membresia: any) {
+    console.log('Renovando a:', membresia);
+    // lógica de renovación
+  }
+
+  abrirBusquedaGeneral(tipo: 'membresia' | 'rutina' | 'nota') {
+  const dialogRef = this.dialog.open(SmartSearchComponent, {
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    panelClass: 'full-screen-dialog',
+    data: { type: tipo }
+  });
+
+  dialogRef.afterClosed().subscribe(resultado => {
+    if (resultado) {
+      console.log('Seleccionado:', resultado);
+      // Aquí haces lo que corresponda según el tipo
+    }
+  });
+}
+
+ openSearchModal() {
+    this.dialog.open(SmartSearchComponent, {
+      width: '100%',
+      maxWidth: '100%',
+      height: '100vh',
+      panelClass: 'full-screen-modal',
+      data: { modo: 'general' } // o 'miembro', según tu uso
+    });
+  }
 }

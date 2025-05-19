@@ -1,0 +1,43 @@
+<div class="result-item" (click)="selected.emit(item)">
+  <!-- Imagen si existe (miembro o producto) -->
+  <img
+    *ngIf="item.avatarUrl"
+    [src]="item.avatarUrl"
+    alt="avatar"
+  />
+
+  <!-- Fallback por tipo si NO hay imagen -->
+  <mat-icon
+    *ngIf="!item.avatarUrl && item.__tipo === 'rutina'"
+    class="type-icon rutina"
+  >
+    fitness_center
+  </mat-icon>
+
+  <mat-icon
+    *ngIf="!item.avatarUrl && item.__tipo === 'producto'"
+    class="type-icon producto"
+  >
+    shopping_cart
+  </mat-icon>
+
+  <mat-icon
+    *ngIf="!item.avatarUrl && item.__tipo === 'promocion'"
+    class="type-icon promo"
+  >
+    sell
+  </mat-icon>
+
+  <!-- Info -->
+  <div class="info">
+    <strong>{{ item.name }}</strong>
+
+    <small *ngIf="item.__tipo === 'miembro'" [ngClass]="item.status">
+      {{ item.status }}
+    </small>
+
+    <small *ngIf="item.__tipo === 'rutina'" class="tag rutina">Rutina</small>
+    <small *ngIf="item.__tipo === 'producto'" class="tag producto">${{ item.price }}</small>
+    <small *ngIf="item.__tipo === 'promocion'" class="tag promo">Promo</small>
+  </div>
+</div>

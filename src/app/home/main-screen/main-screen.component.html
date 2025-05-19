@@ -25,12 +25,13 @@
   
     <div class="search-bar">
         <mat-icon>search</mat-icon>
-        <input type="text" placeholder="Buscar membresía, rutina o nota..." />
-      </div>
+        <input type="text" placeholder="Buscar membresía, rutina o nota..." 
+        (click)="openSearchModal()" readonly />
+    </div>
       
       
       <div class="quick-actions">
-        <div class="action-box purple" (click)="route('home/user/table')">
+        <div class="action-box purple" (click)="abrirRenovacion()">
           <mat-icon>person</mat-icon>
           <span>Renovar<br />membresía</span>
         </div>

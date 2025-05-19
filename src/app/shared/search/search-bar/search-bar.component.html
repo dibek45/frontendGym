@@ -1,0 +1,12 @@
+<div class="search-bar">
+  <mat-icon class="icon-left">search</mat-icon>
+  <input
+    [(ngModel)]="query"
+    (ngModelChange)="emitChange()"
+    [placeholder]="placeholder" />
+
+  <button class="qr-btn" (click)="qr.emit()">
+    <mat-icon>qr_code_scanner</mat-icon>
+  </button>
+</div>
+

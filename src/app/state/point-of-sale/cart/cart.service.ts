@@ -255,13 +255,6 @@ export class CartService {
   }
   
   
-
-
-
-
-
-
-
 async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
   const formattedCart = cart.map(item => ({
     productId: Number(item.product.id),

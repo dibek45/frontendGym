@@ -1,0 +1,139 @@
+.result-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 16px;
+  }
+
+  .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+
+    strong {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    small {
+      font-size: 14px;
+      font-weight: 500;
+      margin-left: auto;
+
+      &.Activa {
+        color: #2ecc71;
+      }
+
+      &.Vencida {
+        color: #e74c3c;
+      }
+
+      &.Congelada {
+        color: #2980b9;
+      }
+    }
+    small {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: auto;
+
+  &.Activa {
+    color: #2ecc71;
+  }
+
+  &.Vencida {
+    color: #e74c3c;
+  }
+
+  &.Congelada {
+    color: #2980b9;
+  }
+
+  // Genérico si no hay status
+  &:not(.Activa):not(.Vencida):not(.Congelada) {
+    color: #888;
+  }
+}
+
+  }
+}
+.type-icon.rutina {
+  width: 56px;
+  height: 56px;
+  font-size: 28px;
+  border-radius: 50%;
+  background-color: #eaf4ff;
+  color: #1a73e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.tag.rutina {
+  color: #1a73e8;
+  font-weight: 500;
+  font-size: 14px;
+}
+.type-icon.rutina {
+  width: 56px;
+  height: 56px;
+  font-size: 28px;
+  border-radius: 50%;
+  background-color: #eaf4ff;
+  color: #1a73e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.type-icon.producto {
+  width: 56px;
+  height: 56px;
+  font-size: 28px;
+  border-radius: 50%;
+  background-color: #fff3e0;
+  color: #fb8c00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.type-icon.promo {
+  width: 56px;
+  height: 56px;
+  font-size: 28px;
+  border-radius: 50%;
+  background-color: #f3e5f5;
+  color: #ab47bc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.tag.rutina {
+  color: #1a73e8;
+}
+
+.tag.producto {
+  color: #fb8c00;
+}
+
+.tag.promo {
+  color: #ab47bc;
+}

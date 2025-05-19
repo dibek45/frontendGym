@@ -1,0 +1,22 @@
+<div class="search-header">
+  <button mat-icon-button (click)="cerrar()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div style="flex: 1;">
+    <app-search-bar
+      [(query)]="searchTerm"
+      placeholder="Buscar membresía, rutina o nota..."
+      (qr)="abrirEscaneoQr()"
+      (queryChange)="filterItems()"
+      (cleared)="clearSearch()">
+    </app-search-bar>
+  </div>
+</div>
+
+<app-search-result-list
+  [query]="searchTerm"
+  [items]="filteredItems"
+  [type]="'general'"
+  (itemSelected)="handleSelect($event)">
+</app-search-result-list>

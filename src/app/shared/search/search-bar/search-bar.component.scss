@@ -1,0 +1,35 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f5f6f8;
+  border-radius: 12px;
+  padding: 8px 12px;
+  height: 44px;
+  width: 90%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+
+  input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 15px;
+    margin: 0 8px;
+    color: #333;
+  }
+
+  .icon-left {
+    color: #888;
+  }
+
+  .qr-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  mat-icon {
+    font-size: 22px;
+  }
+}

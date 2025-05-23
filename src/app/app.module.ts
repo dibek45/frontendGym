@@ -78,57 +78,68 @@ import { InMemoryCache } from '@apollo/client/core';
     HomeComponent,
     SlideComponent
       ],
-  imports: [
-    HttpClientModule,
-    MatSidenavModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MaterialModuleModule,
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    MatTableModule,
-    FormsModule,
-    MatCheckboxModule,
-   // SocketIoModule.forRoot(config),
-      StoreDevtoolsModule.instrument({
-      name:'test2'
-    }),
-    EffectsModule.forRoot([MemberEffects, ProductEffects,CashRegisterEffects]),
-    ZXingScannerModule,
-    SaleModule,
-    StoreModule.forFeature('cashRegisters', cashRegisterReducer), // Registro del feature store
-    CashRegisterModule,
-    CashierModule,
-    StoreModule.forRoot(ROOT_REDUCERS, {
-      metaReducers: [localStorageMetaReducer]
-    }),
-    StoreModule.forFeature('cashers', cashierReducer), // Registro del feature store
-    StoreModule.forFeature('category', categoryReducer),
-    StoreModule.forFeature('detail', detailProductReducer),
-    StoreModule.forFeature('routine', routinesReducer), // El nombre debe ser 'routine'
-    EffectsModule.forFeature([RoutinesEffects]),
-    StoreModule.forFeature('promotions', promotionReducer), // Register Redux store for promotions
-    EffectsModule.forFeature([PromotionEffects]), // Register Redux effects for promotions
-    EffectsModule.forFeature([CategoryEffects]),
-    StoreModule.forFeature('roles', roleReducer), // ✅ Ensure this matches 'createFeatureSelector'
-    EffectsModule.forFeature([RoleEffects]),
-    StoreModule.forFeature('permissions', permissionReducer),
-    EffectsModule.forFeature([PermissionEffects]),
-    StoreModule.forFeature('plan', planReducer),
-    EffectsModule.forFeature([PlanEffects]),
-    StoreModule.forFeature('machines', machineReducer), // <-- ESTA ES LA CLAVE
-    EffectsModule.forFeature([MachineEffects]), ServiceWorkerModule.register('ngsw-worker.js', {
-  enabled: !isDevMode(),
-  // Register the ServiceWorker as soon as the application is stable
-  // or after 30 seconds (whichever comes first).
-  registrationStrategy: 'registerWhenStable:30000'
-}), 
-  
+ imports: [
+  BrowserModule,
+  AppRoutingModule,
+  BrowserAnimationsModule,
+  HttpClientModule,
+  FormsModule,
+  ReactiveFormsModule,
+  MatTableModule,
+  MatCheckboxModule,
+  MatSidenavModule,
+  ZXingScannerModule,
+  MaterialModuleModule,
+  SharedModule,
+  SaleModule,
+  CashRegisterModule,
+  CashierModule,
 
-  ],
+  // ✅ NgRx: primero el StoreModule.forRoot
+  StoreModule.forRoot(ROOT_REDUCERS, {
+    metaReducers: [localStorageMetaReducer]
+  }),
+
+  // ✅ Luego todos los feature reducers
+  StoreModule.forFeature('cashRegisters', cashRegisterReducer),
+  StoreModule.forFeature('cashers', cashierReducer),
+  StoreModule.forFeature('category', categoryReducer),
+  StoreModule.forFeature('detail', detailProductReducer),
+  StoreModule.forFeature('routine', routinesReducer),
+  StoreModule.forFeature('promotions', promotionReducer),
+  StoreModule.forFeature('roles', roleReducer),
+  StoreModule.forFeature('permissions', permissionReducer),
+  StoreModule.forFeature('plan', planReducer),
+  StoreModule.forFeature('machines', machineReducer),
+
+  // ✅ Effects
+  EffectsModule.forRoot([
+    MemberEffects,
+    ProductEffects,
+    CashRegisterEffects
+  ]),
+  EffectsModule.forFeature([
+    RoutinesEffects,
+    PromotionEffects,
+    CategoryEffects,
+    RoleEffects,
+    PermissionEffects,
+    PlanEffects,
+    MachineEffects
+  ]),
+
+  // ✅ Devtools
+  StoreDevtoolsModule.instrument({
+    name: 'test2'
+  }),
+
+  // ✅ PWA
+  ServiceWorkerModule.register('ngsw-worker.js', {
+    enabled: !isDevMode(),
+    registrationStrategy: 'registerWhenStable:30000'
+  })
+],
+
   
   providers: [
     NotificationService,

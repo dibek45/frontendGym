@@ -53,19 +53,20 @@ ngOnInit(): void {
 
  
 //this.deleteHardcodedMembers()
-  this.store.select(selectUser).subscribe((users: any) => {
-    if (users && users.user) {
-      this.gymIdFromStore = users.user.gymId;
+ this.store.select(selectUser).pipe(take(1)).subscribe((users: any) => {
+  if (users && users.user) {
+    this.gymIdFromStore = users.user.gymId;
 
-      
-      this.store.dispatch(loadPlansByGym({ gymId: this.gymIdFromStore }));
+    this.store.dispatch(loadPlansByGym({ gymId: this.gymIdFromStore }));
 
-        // Opcional: Si hay internet, intentas cargar online también
-      //  if (navigator.onLine) {
-       //   console.log('🌐 Online, cargando miembros del backend');
-          this.store.dispatch(loadMembers({ gymId: this.gymIdFromStore }));
-    }
-  });
+    this.store.select(selectFilteredMembers).pipe(take(1)).subscribe(members => {
+      if (!members || members.length === 0) {
+        this.store.dispatch(loadMembers({ gymId: this.gymIdFromStore }));
+      }
+    });
+  }
+});
+
 
   this.loading$ = this.store.select(selectLoading);
   this.members$ = this.store.select(selectFilteredMembers); // Esto ya lo tienes

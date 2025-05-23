@@ -1,7 +1,29 @@
-<!-- Botón de menú -->
-<button mat-icon-button [matMenuTriggerFor]="menu" class="menu-toggle">
-  <mat-icon>more_vert</mat-icon>
-</button>
+<div class="custom-header-bar">
+
+  <!-- 🍔 Menú con badge -->
+  <button mat-icon-button class="search-button"  (click)="abrirBusqueda()">
+        <mat-icon>search</mat-icon>
+
+
+  </button>
+
+<!-- 💰 Monto centrado con estilo personalizado -->
+<div class="balance-display">
+  <p class="value caja">
+    <span class="currency">MX$</span>
+    {{ currentBalance | number:'1.2-2' }}
+  </p>
+</div>
+
+
+  <!-- 🔍 Lupa a la derecha -->
+  <button mat-icon-button class="menu-button-with-badge" [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+    <span class="badge">156</span>
+  </button>
+
+</div>
+
 
 <!-- Menú principal -->
 <mat-menu #menu="matMenu">

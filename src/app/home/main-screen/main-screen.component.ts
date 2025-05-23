@@ -1,12 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { NormalizedCacheObject } from '@apollo/client/cache';
-import { ApolloClient } from '@apollo/client/core';
-import { Apollo } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
-import { createApollo } from 'src/app/apollo.config';
 import { gql } from '@apollo/client/core';
 import { SyncService } from 'src/app/local/services/sync.service';
 import { SocketService } from 'src/app/login/socket.service';
@@ -22,6 +17,16 @@ import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/c
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SmartSearchComponent } from 'src/app/shared/search/smart-search/smart-search.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { BarcodeFormat } from '@zxing/library';
+import { MemberService } from 'src/app/state/member/member.service';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { SpeechService } from 'src/app/shared/speech.service';
+import { map } from 'rxjs';
+import { selectAllProducts } from 'src/app/state/product/product.selectors';
+import { ProductModel } from 'src/app/core/models/product.interface';
+import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
+import { setDetailProduct } from 'src/app/state/product/product.actions';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -35,7 +40,7 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
   selector: 'app-main-screen',
   standalone: true,
   imports: [CommonModule,MatIconModule,HttpClientModule,   CommonModule,
-    MatDialogModule],
+    MatDialogModule,ZXingScannerModule],
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.scss'],
 
@@ -45,7 +50,11 @@ export class MainScreenComponent {
  
 
   public currentBalance: number = 0;
-
+showScanner: any;
+  allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/ ];
+scannedId: string = ''; 
+  timeout: any; 
+  manualNumber: string | null = "";
 
   constructor(private router: Router, private syncService:SyncService,   
      private socketService: SocketService,
@@ -56,14 +65,30 @@ export class MainScreenComponent {
        private cashierSyncService: CashierSyncService,
        private store:Store,
        private cashRegisterService:CashRegisterService,
-       private dialog: MatDialog
+       private dialog: MatDialog,
+      private _access:MemberService,
+          private _notification:NotificationService,
+    private speechService: SpeechService,
+         private cartService: CartService,
+    
+       
 
   ) {
     
  
   }
 
+ @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    const activeElement = document.activeElement as HTMLElement;
 
+    // Evitar que se procese si el foco está en un input o textarea
+    if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+      return;
+    }
+
+    this.captureScannedData(event);
+  }
   ngOnInit(): void {
 
   this.socketService.joinGymRoom(1); // ✅ Se une a sala
@@ -139,7 +164,35 @@ listenToCashRegisterDeletes() {
     this.cashRegisterSyncService.removeFromLocal(payload.id);
   });
 }
+  async captureScannedData(event: KeyboardEvent) {
+    clearTimeout(this.timeout); // Reinicia el temporizador
 
+    if (event.key === 'Enter') {
+      // Si la tecla es Enter, procesamos directamente
+    //  alert(`ID escaneado completo: ${this.scannedId}`);
+      try {
+        const result = await this.onScanSuccess(this.scannedId);
+        if (result) {
+          this.manualNumber = '';
+        } else {
+        }
+      } catch (error) {
+        console.error('Error en la operación:', error);
+      }
+      this.processScannedId(this.scannedId);
+      this.scannedId = ''; // Reinicia el buffer
+    } else {
+      // Concatenar caracteres enviados por el escáner
+      this.scannedId += event.key;
+
+      // Configura un temporizador para procesar si no hay más teclas
+      this.timeout = setTimeout(() => {
+       // alert(`ID escaneado por timeout: ${this.scannedId}`);
+        this.processScannedId(this.scannedId);
+        this.scannedId = ''; // Reinicia el buffer
+      }, 100); // Tiempo de espera (ajustable según el escáner)
+    }
+  }
 listenProductUpdates(){
   this.socketService.onProductUpdate((product) => {
   this.productSyncService.handleRemoteUpdate(product);
@@ -228,13 +281,84 @@ abrirRenovacion() {
   });
 }
 
- openSearchModal() {
-    this.dialog.open(SmartSearchComponent, {
-      width: '100%',
-      maxWidth: '100%',
-      height: '100vh',
-      panelClass: 'full-screen-modal',
-      data: { modo: 'general' } // o 'miembro', según tu uso
+onScanSuccess(result: any): Promise<boolean> {
+
+  return new Promise((resolve, reject) => {
+
+    
+    if (result.toString().length == 13 ||result.toString().length == 12) {
+
+
+      this.searchProduct(result); 
+      this.manualNumber = '';
+      this.closeScanner(); // 🔥 Cierra el escáner porque ya se detectó un producto
+      resolve(true); // 🔥 Resolver la promesa inmediatamente
+
+
+
+
+    } else {
+      const [gymIdStr, userIdStr] = result.split('-');
+      const gymId = parseFloat(gymIdStr); // Convertir a número
+      const userId = parseFloat(userIdStr); // Convertir a número
+
+      this._access.getUserByCodeQrMovil(result).subscribe({
+        next: (data: any) => {
+          console.log('Usuario obtenido con éxito:', data);
+          this._notification.mostrarSnackbar("Acceso " + data.name, 'success', data.img);
+          this.speechService.speak("Acceso " + data.name);
+          resolve(true); // 🔥 Resolver la promesa cuando se obtiene el usuario
+          this.closeScanner(); // 🔥 Cerrar el escáner después de obtener la respuesta
+        },
+        error: (error) => {
+          console.error('Error al obtener usuario:', error);
+          alert('Error al obtener usuario: ' + error);
+          reject(false); // 🔥 Rechazar la promesa si hay error
+          this.closeScanner(); // 🔥 Cerrar el escáner después de obtener la respuesta
+        }
+      });
+    }
+  });
+}
+
+closeScanner() {
+  this.showScanner = false;
+}
+
+ // Método para buscar un producto por barcode
+ searchProduct(barcode: string) {
+  if (barcode) {
+    alert('Buscando producto con barcode: ' + barcode);
+
+ this.store.select(selectAllProducts as any).pipe(
+  map(products => (products as ProductModel[]).find(p => p.barcode === barcode))
+    ).subscribe(product => {
+      if (product) {
+        this.cartService.openAddToCartModal(product);
+        this.cartService.actualizarImg();
+        this.store.dispatch(setDetailProduct({ product }));
+      } else {
+        console.log('Producto no encontrado');
+      }
     });
+  } else {
+    console.warn('No se ingresó ningún código de barras');
   }
+}
+
+
+  
+processScannedId(id: string) {
+    if (id) {
+      console.log(`Procesando ID: ${id}`);
+      // Aquí puedes validar o enviar el ID al backend
+    } else {
+      console.log('El ID escaneado está vacío');
+    }
+  }
+
+  toggleScanner() {
+  this.showScanner = !this.showScanner;
+
+}
 }

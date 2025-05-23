@@ -1,6 +1,6 @@
 .main-wrapper {
     position: relative;
-    top: 45px;
+    top: 60px;
     padding: 16px;
     font-family: 'Inter', sans-serif;
     background: linear-gradient(to bottom, #eaf3ff, #ffffff);
@@ -92,6 +92,12 @@
 
       margin-bottom: 0;
     }
+
+    .gastos{
+      color: black;
+       font-size: 1rem;
+      font-weight: 550;
+    }
     .label {
       letter-spacing: 0.5px;
       font-weight: 500;
@@ -114,7 +120,18 @@
     &.blue  .value { color: #3498db; }
   }
 }
-
+.value-gastos{
+  color: blacks;
+  letter-spacing: 0.5px;
+      font-weight: 500;
+      color: #9ca3af;
+      margin-top: 4px;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: transparent;
+      color: #6b7280;
+}
   
   
   // Search
@@ -229,3 +246,81 @@
     }
   }
   
+  .scanner-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  background: #111; // fondo oscuro para contraste
+  border-radius: 8px;
+  padding: 8px;
+  height: 370px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Línea animada tipo "láser" */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 255, 0, 0.7);
+  animation: scan-animation 2.5s infinite;
+  z-index: 5;
+}
+
+@keyframes scan-animation {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+/* Ícono de overlay (cámara, QR, etc.) */
+.icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12rem;
+  color: rgba(255, 255, 255, 0.2);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.icon-overlay mat-icon {
+  font-size: inherit;
+  width: 1em;
+  height: 1em;
+}
+
+/* Botón de cerrar */
+.close-scanner-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  padding: 6px;
+  z-index: 50;
+}
+
+.close-scanner-btn:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}

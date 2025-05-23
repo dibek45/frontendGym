@@ -2,45 +2,19 @@
    
   <app-slide class="slider-menu "  ></app-slide>
   
- 
+
+
   <div style="position: absolute;">
     <div style="width: 20%;">
       
     </div>
     
 
-    <div class="icon-bar">
-   
-      
-     <span style="color: white;position: static;">
-      ----------------
-     </span>
-      <button 
-        class="icon-button cart"
-        [class.active]="selectedIcon === 'cart'" 
-        (click)="selectIcon('cart')" (click)="cart()">
-        <i class="fas fa-shopping-cart" style="color: #3f51b5; font-size: 20px; min-width: 24px; text-align: end;"></i>
-      </button>
 
-      
-      <button 
-        class="icon-button" 
-        [class.active]="selectedIcon === 'games'" 
-        (click)="toggleScanner()">
-        <mat-icon>qr_code_scanner</mat-icon>
-      </button>
-      <span style="font-size: 15px;">      ${{total}}
-      </span>
-    </div>
+
     
   
-  
-    <div class="menu-out">
-      
-        name-gym 
-        <mat-icon>fitness_center</mat-icon>
  
-  </div>
   
     
   </div>
@@ -57,29 +31,7 @@
 
 
   <!-- Contenedor para el escáner QR, solo visible cuando `showScanner` es verdadero -->
-  <div *ngIf="showScanner" class="scanner-container">
-    <!-- Cuadro para ingresar número manualmente -->
-   
-
-    <!-- ZXing Scanner para códigos QR -->
-    <zxing-scanner [formats]="allowedFormats"
-      [start]="true" 
-      (scanSuccess)="onScanSuccess($event)">
-    </zxing-scanner>
-
-    <!-- Línea de escaneo animada -->
-    <div class="scan-line"></div>
-
-    <!-- Ícono superpuesto en el centro del escáner -->
-    <div class="icon-overlay">
-      <mat-icon>qr_code_scanner</mat-icon>
-    </div>
-
-    <!-- Botón para cerrar el escáner -->
-    <button mat-icon-button (click)="closeScanner()" class="close-scanner-btn">
-      <mat-icon style="color: azure;">close</mat-icon> <app-slide-menu *ngIf="isLogin" ></app-slide-menu>
-    </button>
-  </div>
+  
 <div>
 
  

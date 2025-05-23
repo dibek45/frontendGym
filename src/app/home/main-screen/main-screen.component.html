@@ -8,11 +8,7 @@
     </div>
   
     <div class="kpis">
-      <div class="kpi-card green ">
-        <p class="value caja">$
-          {{ currentBalance | number:'1.2-2' }}
-        </p>
-      </div>
+      
       <div class="kpi-card blue">
         <p class="value asistencias">48</p>
         <p class="label">Asistencias hoy</p>
@@ -21,13 +17,18 @@
         <p class="value checado">10:22 a.m.</p>
         <p class="label">Último check-in    </p>
       </div>
+
+      <div class="kpi-card green ">
+                <p class="gastos">Gastos</p>
+
+        <p class="value-gastos">$
+          
+          {{ currentBalance | number:'1.2-2' }}
+        </p>
+      </div>
     </div>
   
-    <div class="search-bar">
-        <mat-icon>search</mat-icon>
-        <input type="text" placeholder="Buscar membresía, rutina o nota..." 
-        (click)="openSearchModal()" readonly />
-    </div>
+    
       
       
       <div class="quick-actions">
@@ -35,9 +36,13 @@
           <mat-icon>person</mat-icon>
           <span>Renovar<br />membresía</span>
         </div>
+        <div class="action-box blue" (click)="toggleScanner()">
+          <mat-icon>qr_code_scanner</mat-icon>
+          <span>Scanner</span>
+        </div>
         <div class="action-box orange" (click)="route('home/administration/Routines')">
           <mat-icon>fitness_center</mat-icon>
-          <span>Crear<br />rutina rápida</span>
+          <span>Vender producto</span>
         </div>
         <div class="action-box pink" (click)="route('home/administration/Promotions')">
           <mat-icon>campaign</mat-icon>
@@ -82,3 +87,29 @@
     </div>
   </div>
   
+
+
+    <!-- Contenedor para el escáner QR, solo visible cuando `showScanner` es verdadero -->
+  <div *ngIf="showScanner" class="scanner-container">
+    <!-- Cuadro para ingresar número manualmente -->
+   
+
+    <!-- ZXing Scanner para códigos QR -->
+<zxing-scanner
+  [enable]="true"
+  (scanSuccess)="onScanSuccess($event)">
+</zxing-scanner>
+
+    <!-- Línea de escaneo animada -->
+    <div class="scan-line"></div>
+
+    <!-- Ícono superpuesto en el centro del escáner -->
+    <div class="icon-overlay">
+      <mat-icon>qr_code_scanner</mat-icon>
+    </div>
+
+    <!-- Botón para cerrar el escáner -->
+    <button mat-icon-button (click)="closeScanner()" class="close-scanner-btn">
+      <mat-icon style="color: azure;">close</mat-icon> 
+    </button>
+  </div>

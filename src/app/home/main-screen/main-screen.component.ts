@@ -26,7 +26,8 @@ import { map } from 'rxjs';
 import { selectAllProducts } from 'src/app/state/product/product.selectors';
 import { ProductModel } from 'src/app/core/models/product.interface';
 import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
-import { setDetailProduct } from 'src/app/state/product/product.actions';
+import { loadedProducts, loadProducts, setDetailProduct } from 'src/app/state/product/product.actions';
+import { ProductService } from 'src/app/state/product/product.service';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -47,6 +48,7 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 
 })
 export class MainScreenComponent {
+
  
 
   public currentBalance: number = 0;
@@ -70,6 +72,8 @@ scannedId: string = '';
           private _notification:NotificationService,
     private speechService: SpeechService,
          private cartService: CartService,
+               private productService: ProductService,
+         
     
        
 
@@ -120,6 +124,10 @@ this.cashRegisterService.getCashRegistersWithCache().then(cajas => {
 
   const { userId, gymId } = identity;
 
+this.productService.getProductsWithCache().then(products => {
+    this.store.dispatch(loadedProducts({ products }));
+    console.log('✅ Productos cargados a Redux desde main:', products);
+  });
   this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
     .then(cajas => {
       console.log('📦 Cajas locales cargadas en ngOnInit:', cajas || []);
@@ -361,4 +369,22 @@ processScannedId(id: string) {
   this.showScanner = !this.showScanner;
 
 }
+
+
+venderProducto() {
+  this.dialog.open(SmartSearchComponent, {
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    panelClass: 'full-screen-dialog',
+    data: { modo: 'producto' }
+  }).afterClosed().subscribe(producto => {
+    if (producto) {
+      this.cartService.openAddToCartModal(producto);
+      this.store.dispatch(setDetailProduct({ product: producto }));
+    }
+  });
+}
+
+
 }

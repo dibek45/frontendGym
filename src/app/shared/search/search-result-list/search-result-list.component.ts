@@ -16,8 +16,15 @@ export class SearchResultListComponent {
 @Input() type: string = 'general';
 
   filteredItems(): any[] {
-    return this.items.filter(i =>
-      i.name?.toLowerCase().includes(this.query.toLowerCase())
-    );
-  }
+  const resultados = this.items.filter(i =>
+    i.name?.toLowerCase().includes(this.query.toLowerCase())
+  );
+  console.log('🔍 Resultados filtrados:', resultados);
+  console.log('🔍 Resultados filtrados:', resultados);
+  console.log('📋 query:', this.query);
+  console.log('📦 items:', this.items);
+
+  return resultados;
+}
+
 }

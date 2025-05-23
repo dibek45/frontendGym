@@ -40,14 +40,11 @@
           <mat-icon>qr_code_scanner</mat-icon>
           <span>Scanner</span>
         </div>
-        <div class="action-box orange" (click)="route('home/administration/Routines')">
+        <div class="action-box orange" (click)="venderProducto()">
           <mat-icon>fitness_center</mat-icon>
           <span>Vender producto</span>
         </div>
-        <div class="action-box pink" (click)="route('home/administration/Promotions')">
-          <mat-icon>campaign</mat-icon>
-          <span>Nueva<br />promoción</span>
-        </div>
+      
         <div class="action-box blue" (click)="route('home/administration/exponses')">
           <mat-icon>receipt</mat-icon>
           <span>Agregar<br />gasto</span>
@@ -55,6 +52,10 @@
         <div class="action-box green">
           <mat-icon>groups</mat-icon>
           <span>Ver<br />asistencia</span>
+        </div>
+          <div class="action-box pink" (click)="route('home/administration/Promotions')">
+          <mat-icon>campaign</mat-icon>
+          <span>Nueva<br />promoción</span>
         </div>
       </div>
       

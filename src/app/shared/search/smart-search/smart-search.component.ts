@@ -12,6 +12,8 @@ import { selectFilteredMembers } from 'src/app/state/member/member.selectors';
 import { loadMembers } from 'src/app/state/member/member.actions';
 import { filter, take } from 'rxjs/operators';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
+import { selectAllProducts } from 'src/app/state/product/product.selectors';
+import { ProductModel } from 'src/app/core/models/product.interface';
 
 @Component({
   selector: 'app-smart-search',
@@ -42,19 +44,24 @@ export class SmartSearchComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { modo?: string }
   ) {}
 
-  async ngOnInit() {
-    console.log('🟡 SmartSearch INIT');
+async ngOnInit() {
+  console.log('🟡 SmartSearch INIT');
 
-    const identity = await this.localStorage.loadIdentity();
-    if (!identity || !identity.gymId) {
-      console.warn('❌ No se pudo obtener identidad válida desde el storage');
-      return;
-    }
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity || !identity.gymId) {
+    console.warn('❌ No se pudo obtener identidad válida desde el storage');
+    return;
+  }
+  console.log("++++++++++++++++++++++++++++++++++++++++++++++")
+  
+       
 
-    const gymId = identity.gymId;
-    console.log('✅ Identity desde storage:', identity);
+   
+console.log(this.data?.modo)
+  const gymId = identity.gymId;
+  console.log('✅ Identity desde storage:', identity);
 
-    // 🚀 Usar NgRx solo para miembros
+  if (this.data?.modo === 'miembro') {
     this.store.select(selectFilteredMembers).pipe(take(1)).subscribe(members => {
       if (members.length === 0) {
         console.log('🔄 No hay miembros. Cargando desde backend para gymId:', gymId);
@@ -65,14 +72,36 @@ export class SmartSearchComponent implements OnInit {
           take(1)
         ).subscribe(reloaded => {
           console.log('📥 Miembros recargados:', reloaded);
-this.setItems([...reloaded]);
+          this.setItems([...reloaded]);
         });
       } else {
         console.log('📦 Miembros ya presentes:', members);
-this.setItems([...members]);
+        this.setItems([...members]);
       }
     });
+ } else if (this.data?.modo == 'producto') {
+  console.log('🟢 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢Cargando productos desde Redux');
+
+ this.store.select(selectAllProducts).pipe(take(1)).subscribe((productos) => {
+  console.log('🧪 Productos desde Redux:', productos);
+  const items = Array.from(productos).map(p => ({
+    name: p.name,
+    price: p.price,
+    avatarUrl: p.img,
+    __tipo: 'producto'
+  }));
+      this.miembrosCargados = true; // 👈 Añade esta línea
+
+  this.setItems([], items);
+});
+
+}
+ else {
+    console.log('🟢 Cargando modo mixto (miembros + rutinas + notas + productos)');
+    this.setItems([]); // Asume mezcla
   }
+}
+
 
   rutinas = [
     { name: 'Rutina de Pierna', descripcion: 'Fuerza inferior', __tipo: 'rutina' },
@@ -84,20 +113,7 @@ this.setItems([...members]);
     { titulo: 'Nota de técnica', descripcion: 'Cuidar postura en sentadillas', __tipo: 'nota' }
   ];
 
-  productos = [
-    {
-      name: 'Proteína Whey',
-      price: 599,
-      avatarUrl: 'https://i.imgur.com/abcd123.png',
-      __tipo: 'producto'
-    },
-    {
-      name: 'Creatina Monohidratada',
-      price: 299,
-      __tipo: 'producto'
-    }
-  ];
-
+ 
   abrirEscaneoQr() {
     console.log('🔍 Escaneo QR aún no implementado');
   }
@@ -142,14 +158,18 @@ this.setItems([...members]);
 }
 
 private runFilter(term: string) {
-  this.filteredItems = this.allItems.filter(item =>
-    (item.name?.toLowerCase().includes(term) || '') ||
-    (item.titulo?.toLowerCase().includes(term) || '') ||
-    (item.descripcion?.toLowerCase().includes(term) || '')
-  );
+  const t = term.toLowerCase();
+
+  this.filteredItems = this.allItems.filter(item => {
+    const nombre = item.name?.toLowerCase() || '';
+    const titulo = item.titulo?.toLowerCase() || '';
+    const descripcion = item.descripcion?.toLowerCase() || '';
+
+    return nombre.includes(t) || titulo.includes(t) || descripcion.includes(t);
+  });
 }
 
-private setItems(members: any[]) {
+private setItems(members: any[], productos: any[] = []) {
   const miembros = members.map(member => ({
     name: member.name,
     avatarUrl: member.img,
@@ -159,17 +179,26 @@ private setItems(members: any[]) {
 
   if (this.data?.modo === 'miembro') {
     this.allItems = miembros;
+  } else if (this.data?.modo === 'producto') {
+    this.allItems = productos;
   } else {
     this.allItems = [
       ...miembros,
       ...this.rutinas,
       ...this.notas,
-      ...this.productos
+      ...productos
     ];
   }
 
-  // ❌ NO asignes filteredItems aquí
-  // this.filteredItems = this.allItems;
+  // 🔥 Añade esto para que se muestren inmediatamente al cargar
+  if (this.searchTerm.trim() === '') {
+    this.filteredItems = this.allItems;
+  } else {
+    this.runFilter(this.searchTerm);
+  }
 }
+
+
+
 
 }

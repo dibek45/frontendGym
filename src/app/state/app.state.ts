@@ -16,6 +16,8 @@ import { CashRegisterState } from './point-of-sale/cash-register/cash-register.s
 import { SaleState } from './point-of-sale/sale/sale.state';
 import { cashRegisterReducer } from './point-of-sale/cash-register/cash-register.reducer';
 import { salesReducer } from './point-of-sale/sale/sale.reducer';
+import { UserSessionState } from './user/session/user-session.state';
+import { userSessionReducer } from './user/session/user-session.reducer';
 
 
 export interface AppState {
@@ -28,6 +30,7 @@ export interface AppState {
     detail: DetailProductState;
     cashRegister: CashRegisterState;  // ✅ agregados
     sales: SaleState;  
+    userSession: UserSessionState;
                   // ✅ agregados
 }
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
@@ -39,5 +42,7 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
     categories: categoryReducer,
     detail: detailProductReducer,
     cashRegister: cashRegisterReducer, // ✅ agregado
-    sales: salesReducer                // ✅ agregado
+    sales: salesReducer,
+    userSession: userSessionReducer,
+
 };

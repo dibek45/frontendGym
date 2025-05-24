@@ -32,6 +32,7 @@ import { CartItemModel } from '../product/cart/cart-item.model';
 import { PlanModalComponent } from 'src/app/shared/card/plan-modal/plan-modal.component';
 import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
 import { selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
+import { setCajaState, setUserSession } from 'src/app/state/user/session/user-session.actions';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -81,10 +82,6 @@ scannedId: string = '';
     private speechService: SpeechService,
          private cartService: CartService,
                private productService: ProductService,
-         
-    
-       
-
   ) {
     
  
@@ -101,7 +98,7 @@ scannedId: string = '';
 
     this.captureScannedData(event);
   }
- async ngOnInit(): Promise<void> {
+async ngOnInit(): Promise<void> {
   this.socketService.joinGymRoom(1);
   this.listenToCashRegisterUpdates();
   this.listenProductUpdates();
@@ -112,28 +109,45 @@ scannedId: string = '';
   const identity = await this.localStorage.loadIdentity();
   if (!identity) return;
 
-  const { userId, gymId } = identity;
-this.gymId = gymId; // 👈 almacénalo para usar después
-this.plans$ = this.store.select(selectPlansByGymId(this.gymId));
+  const { userId, gymId, username, role, gymName } = identity;
 
-    this.plans$.subscribe(plans => {
-      this.plans = plans;
-      console.log('🧾 Planes actualizados desde el store:', this.plans);
-    });
+  this.gymId = gymId;
 
-  // Cajas
- const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters') || [];
-const cajaAbierta = cajas.find(c => c.status === 'open');
-this.currentBalance = cajaAbierta?.currentBalance || 0;
+  // ✅ Despachar datos de sesión del usuario
+  this.store.dispatch(setUserSession({
+    userId,
+    userName: username,
+    gymId,
+    gymName: gymName || 'Gym',
+    role: role || 'usuario'
+  }));
 
-this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: cajas }));
+  // Planes
+  this.plans$ = this.store.select(selectPlansByGymId(this.gymId));
+  this.plans$.subscribe(plans => {
+    this.plans = plans;
+    console.log('🧾 Planes actualizados desde el store:', this.plans);
+  });
 
+  // ✅ Cajas
+  const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters') || [];
+  const cajaAbierta = cajas.find(c => c.status === 'open');
+  const currentBalance = cajaAbierta?.currentBalance || 0;
+  const cajaStatus = cajaAbierta ? 'open' : 'closed';
+
+  this.store.dispatch(setCajaState({
+    currentBalance,
+    cajaStatus
+  }));
+
+  this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: cajas }));
 
   // Productos
   const products = await this.productService.getProductsWithCache();
   this.store.dispatch(loadedProducts({ products }));
   console.log('✅ Productos cargados a Redux desde main:', products);
 }
+
 
 
   traerCaja(){

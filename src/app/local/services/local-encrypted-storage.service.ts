@@ -45,13 +45,25 @@ export class LocalEncryptedStorageService {
 
   private identityPath = 'identity.json';
 
-async saveIdentity(data: { userId: number; gymId: number; username: string }): Promise<void> {
+async saveIdentity(data: {
+  userId: number;
+  gymId: number;
+  username: string;
+  role?: string;
+  gymName?: string;
+}): Promise<void> {
   const stringified = JSON.stringify(data);
   const encrypted = CryptoJS.AES.encrypt(stringified, this.encryptionKey).toString();
   await localforage.setItem(this.identityPath, encrypted);
 }
 
-async loadIdentity(): Promise<{ userId: number; gymId: number; username: string } | null> {
+async loadIdentity(): Promise<{
+  userId: number;
+  gymId: number;
+  username: string;
+  role?: string;
+  gymName?: string;
+} | null> {
   const encrypted = await localforage.getItem<string>(this.identityPath);
   if (!encrypted) return null;
 
@@ -64,6 +76,7 @@ async loadIdentity(): Promise<{ userId: number; gymId: number; username: string 
     return null;
   }
 }
+
 
 private getVersionPath(userId: number, gymId: number): string {
   return `user-${userId}/gym-${gymId}/versions`;

@@ -3,11 +3,15 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/auth/auth.service';
 import { SmartSearchComponent } from '../search/smart-search/smart-search.component';
-
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 import { SocketService } from 'src/app/login/socket.service';
 import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectCurrentBalance } from 'src/app/state/user/session/user-session.selectors';
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
+import { setCajaState } from 'src/app/state/user/session/user-session.actions';
+// si usas el servicio extra
 
 @Component({
   selector: 'app-slide',
@@ -16,7 +20,7 @@ import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-reg
 })
 export class SlideComponent implements OnInit {
   showMenu: boolean = false;
-  currentBalance: number = 0;
+  public currentBalance$: Observable<number> | undefined; // observable desde el store
 
   constructor(
     private authService: AuthService,
@@ -24,27 +28,13 @@ export class SlideComponent implements OnInit {
     private dialog: MatDialog,
     private localStorage: LocalEncryptedStorageService,
     private socketService: SocketService,
-    private cashRegisterSyncService: CashRegisterSyncService
+    private cashRegisterSyncService: CashRegisterSyncService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    this.traerCaja();
+    this.currentBalance$ = this.store.select(selectCurrentBalance);
     this.listenToCashRegisterUpdates();
-  }
-
-  traerCaja() {
-    this.localStorage.loadIdentity().then(identity => {
-      if (!identity) return;
-
-      const { userId, gymId } = identity;
-
-      this.localStorage
-        .loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
-        .then(cajas => {
-          const cajaAbierta = (cajas || []).find(c => c.status === 'open');
-          this.currentBalance = cajaAbierta?.currentBalance || 0;
-        });
-    });
   }
 
   listenToCashRegisterUpdates() {
@@ -63,8 +53,13 @@ export class SlideComponent implements OnInit {
           'cashRegisters'
         )) || [];
 
-      this.currentBalance =
-        updatedList.find(c => c.status === 'open')?.currentBalance || 0;
+      const cajaAbierta = updatedList.find(c => c.status === 'open');
+      const currentBalance = cajaAbierta?.currentBalance || 0;
+      const cajaStatus = cajaAbierta ? 'open' : 'closed';
+
+      this.store.dispatch(
+        setCajaState({ currentBalance, cajaStatus }) // asegúrate de importar esto
+      );
     });
   }
 

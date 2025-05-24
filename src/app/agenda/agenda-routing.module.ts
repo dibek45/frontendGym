@@ -5,13 +5,15 @@ import { AgendaComponent } from './component/agenda.component';
 const routes: Routes = [
   {
     path: '',
-    component: AgendaComponent
+    redirectTo: 'clases',
+    pathMatch: 'full'
   },
   {
     path: ':categoria',
     component: AgendaComponent
   }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -48,11 +48,24 @@
 
   <mat-divider></mat-divider>
 
-   <!-- 📅 Agenda -->
-   <button mat-menu-item (click)="route('home/agenda')">
-    <mat-icon>event</mat-icon>
-    <span>Agenda</span>
+  <!-- 📅 Agenda con submenú -->
+<button mat-menu-item [matMenuTriggerFor]="agendaMenu">
+  <mat-icon>event</mat-icon>
+  <span>Agenda</span>
+</button>
+
+<!-- Submenú: Agenda -->
+<mat-menu #agendaMenu="matMenu">
+  <button mat-menu-item (click)="route('/agenda/clases')">
+    <mat-icon>fitness_center</mat-icon>
+    <span>Clases</span>
   </button>
+  <button mat-menu-item (click)="route('/agenda/eventos')">
+    <mat-icon>event_note</mat-icon>
+    <span>Eventos</span>
+  </button>
+</mat-menu>
+
 
   <!-- ⚙️ Todo lo demás en Administración -->
   <button mat-menu-item [matMenuTriggerFor]="adminMenu">

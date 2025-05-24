@@ -93,53 +93,32 @@ scannedId: string = '';
 
     this.captureScannedData(event);
   }
-  ngOnInit(): void {
-
-  this.socketService.joinGymRoom(1); // ✅ Se une a sala
-  this.listenToCashRegisterUpdates();    // ✅ Escucha evento y guarda
+ async ngOnInit(): Promise<void> {
+  this.socketService.joinGymRoom(1);
+  this.listenToCashRegisterUpdates();
   this.listenProductUpdates();
   this.listenToCashRegisterDeletes();
-  
+  this.listenUserUpdates();
+  this.syncService.syncAllTablesOnStartup();
 
-this.listenUserUpdates();
-this.syncService.syncAllTablesOnStartup(); // 🔁 esto sincroniza cashRegisters, members, etc.
-this.cashRegisterService.getCashRegistersWithCache().then(cajas => {
-  this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: cajas }));
-  console.log('✅ Cajas despachadas a Redux en el arranque:', cajas);
-});
-
- this.localStorage.loadIdentity().then(identity => {
-    if (!identity) return;
-
-    const { userId, gymId } = identity;
-
-    this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
-      .then(cajas => {
-        console.log('📦 Cajas locales cargadas en ngOnInit:', cajas || []);
-      });
-  });
-
-  this.localStorage.loadIdentity().then(identity => {
+  const identity = await this.localStorage.loadIdentity();
   if (!identity) return;
 
   const { userId, gymId } = identity;
 
-this.productService.getProductsWithCache().then(products => {
-    this.store.dispatch(loadedProducts({ products }));
-    console.log('✅ Productos cargados a Redux desde main:', products);
-  });
-  this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters')
-    .then(cajas => {
-      console.log('📦 Cajas locales cargadas en ngOnInit:', cajas || []);
+  // Cajas
+ const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters') || [];
+const cajaAbierta = cajas.find(c => c.status === 'open');
+this.currentBalance = cajaAbierta?.currentBalance || 0;
 
-      const cajaAbierta = (cajas || []).find(c => c.status === 'open');
-      this.currentBalance = cajaAbierta?.currentBalance || 0;
-    });
-});
+this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: cajas }));
 
-this.traerCaja()
 
-  }
+  // Productos
+  const products = await this.productService.getProductsWithCache();
+  this.store.dispatch(loadedProducts({ products }));
+  console.log('✅ Productos cargados a Redux desde main:', products);
+}
 
 
   traerCaja(){

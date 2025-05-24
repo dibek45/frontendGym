@@ -55,7 +55,6 @@ import { PlanEffects } from './state/plan/plan.effects';
 import { planReducer } from './state/plan/plan.reducer';
 import { MachineEffects } from './state/machine/machine.effects';
 import { machineReducer } from './state/machine/machine.reducer';
-import { AgendaComponent } from './agenda/component/agenda.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { localStorageMetaReducer } from './local/services/meta-reducers/local-storage-meta.reducer';

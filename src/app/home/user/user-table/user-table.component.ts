@@ -39,7 +39,8 @@ membersWithSyncError$: Observable<MemberModel[]> = of([]);
   members$:Observable<any>=new Observable();
   searchTerm: string="da";
   gymIdFromStore: number=0;
-  plans$: Observable<any[]> = this.store.select(selectPlansByGymId(1));
+plans$: Observable<any[]> = of([]); // valor inicial vacío
+  plans: any;
 
   constructor( private WebSocketService:FingerprintPersonaService, 
                private store:Store<AppState>,private service:MemberService,
@@ -57,7 +58,13 @@ ngOnInit(): void {
   if (users && users.user) {
     this.gymIdFromStore = users.user.gymId;
 
-    this.store.dispatch(loadPlansByGym({ gymId: this.gymIdFromStore }));
+    // Actualiza el observable `plans$` con el gymId correcto
+    this.plans$ = this.store.select(selectPlansByGymId(this.gymIdFromStore));
+
+    this.plans$.subscribe(plans => {
+      this.plans = plans;
+      console.log('🧾 Planes actualizzados desde el store:', this.plans);
+    });
 
     this.store.select(selectFilteredMembers).pipe(take(1)).subscribe(members => {
       if (!members || members.length === 0) {

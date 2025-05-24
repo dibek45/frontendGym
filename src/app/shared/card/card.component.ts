@@ -18,6 +18,7 @@ import { ProductModel } from 'src/app/core/models/product.interface';
 import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
 import { CartItemModel } from 'src/app/home/product/cart/cart-item.model';
 import { CommonModule } from '@angular/common';
+import { SmartSearchComponent } from '../search/smart-search/smart-search.component';
 
 @Component({
   selector: 'app-card',
@@ -57,7 +58,8 @@ throw new Error('Method not implemented.');
     });
    
    }
-constructor(public dialog: MatDialog,private store:Store<AppState>,private printerService:PrinterService,private router: Router,   private _cartService:CartService
+constructor(public dialog: MatDialog,private store:Store<AppState>,private printerService:PrinterService,private router: Router,   
+  private _cartService:CartService
 ){
   this.user={
     id: '0',
@@ -164,5 +166,19 @@ openRenovarModal(userId: string): void {
   });
 }
 
+abrirRenovacion() {
+  this.dialog.open(SmartSearchComponent, {
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    panelClass: 'full-screen-dialog',
+    data: { modo: 'miembro' }
+  }).afterClosed().subscribe(res => {
+    if (res) {
+      // Aquí llamas tu función como querías
+      this.openRenovarModal(res);
+    }
+  });
+}
 
 }

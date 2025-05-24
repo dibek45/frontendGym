@@ -22,12 +22,16 @@ import { BarcodeFormat } from '@zxing/library';
 import { MemberService } from 'src/app/state/member/member.service';
 import { NotificationService } from 'src/app/shared/notification.service';
 import { SpeechService } from 'src/app/shared/speech.service';
-import { map } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { selectAllProducts } from 'src/app/state/product/product.selectors';
 import { ProductModel } from 'src/app/core/models/product.interface';
 import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
 import { loadedProducts, loadProducts, setDetailProduct } from 'src/app/state/product/product.actions';
 import { ProductService } from 'src/app/state/product/product.service';
+import { CartItemModel } from '../product/cart/cart-item.model';
+import { PlanModalComponent } from 'src/app/shared/card/plan-modal/plan-modal.component';
+import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
+import { selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
 
 const CASH_REGISTER_SUBSCRIPTION = gql`
   subscription Subscription($gymId: Int!) {
@@ -48,6 +52,8 @@ const CASH_REGISTER_SUBSCRIPTION = gql`
 
 })
 export class MainScreenComponent {
+public gymId: number = 0;
+plans$: Observable<any[]> = of([]); // valor inicial vacío
 
  
 
@@ -57,6 +63,8 @@ showScanner: any;
 scannedId: string = ''; 
   timeout: any; 
   manualNumber: string | null = "";
+  modalOpened: boolean | undefined;
+  plans: any;
 
   constructor(private router: Router, private syncService:SyncService,   
      private socketService: SocketService,
@@ -105,6 +113,13 @@ scannedId: string = '';
   if (!identity) return;
 
   const { userId, gymId } = identity;
+this.gymId = gymId; // 👈 almacénalo para usar después
+this.plans$ = this.store.select(selectPlansByGymId(this.gymId));
+
+    this.plans$.subscribe(plans => {
+      this.plans = plans;
+      console.log('🧾 Planes actualizados desde el store:', this.plans);
+    });
 
   // Cajas
  const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(userId, gymId, 'cashRegisters') || [];
@@ -232,18 +247,27 @@ listenCashierUpdates() {
   }
 
 abrirRenovacion() {
-    this.dialog.open(SmartSearchComponent, {
+  if (!this.gymId) {
+    console.warn('❌ gymId no disponible');
+    return;
+  }
+
+  this.store.dispatch(loadPlansByGym({ gymId: this.gymId }));
+
+  this.dialog.open(SmartSearchComponent, {
     width: '100vw',
     height: '100vh',
     maxWidth: '100vw',
     panelClass: 'full-screen-dialog',
-    data: { modo: 'miembro' }   // 👈 aquí está el truco
-  }).afterClosed().subscribe(res => {
-    if (res) {
-    //  this.procesarRenovacion(res);
+    data: { modo: 'miembro' }
+  }).afterClosed().subscribe((res: any) => {
+    if (res && res.__tipo === 'miembro') {
+      this.openRenovarModal(res.id);
     }
   });
 }
+
+
 
 
   renovar(membresia: any) {
@@ -365,5 +389,54 @@ venderProducto() {
   });
 }
 
+
+openRenovarModal(userId: string): void {
+  if (this.modalOpened) return;
+
+  // ✅ Verifica si hay planes antes de abrir el modal
+  if (!this.plans || this.plans.length === 0) {
+    console.warn('❗ No hay planes disponibles para mostrar en el modal.');
+    return;
+  }
+
+  // ✅ Abre el modal con los planes que te pasan por @Input()
+  const dialogRef = this.dialog.open(PlanModalComponent, {
+    width: '400px',
+    disableClose: true,
+    data: {
+      plans: this.plans, // <-- Usa el input
+      userId: userId
+    }
+  });
+
+  this.modalOpened = true;
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.modalOpened = false;
+
+    if (result) {
+      console.log('✅ Plan seleccionado en el modal:', result);
+
+      const membership: CartItemModel = {
+        product: {
+          id: Number(result.id),
+          name: result.name,
+          price: result.price,
+          img: 'assets/membership.png',
+          available: true,
+          stock: 9999,
+          isMembership: true,
+          idClienteTOMembership: userId ? Number(userId) : 0 // 🔥 Si `userId` es `null`, se envía `0`
+        },
+        quantity: 1,
+        total: result.price
+      };
+
+      console.log('📌 Agregando membresía al carrito:', membership);
+
+      this.cartService.addItem(membership.product, membership.quantity);
+    }
+  });
+}
 
 }

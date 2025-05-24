@@ -10,7 +10,7 @@
 <!-- 💰 Monto centrado con estilo personalizado -->
 <div class="balance-display">
   <p class="value caja">
-    <span class="currency">MX$</span>
+    
   {{ currentBalance$ | async | currency:'MXN':'symbol':'1.2-2' }}
   </p>
 </div>

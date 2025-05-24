@@ -88,7 +88,7 @@ export class MainScreenComponent {
     this.listenUserUpdates();
     this.syncService.syncAllTablesOnStartup();
 
-    await this.userInitService.restoreUserFromStorage();
+    await this.userInitService.restoreUserFromSactorage();
 
     this.plans$ = this.store.select(selectPlansByGymId(this.gymId));
     this.plans$.subscribe(plans => this.plans = plans);
@@ -112,7 +112,7 @@ export class MainScreenComponent {
   listenToCashRegisterUpdates() {
     this.socketService.onCashRegisterUpdate(async updatedCashRegister => {
       await this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
-      await this.userInitService.restoreUserFromStorage();
+      await this.userInitService.restoreUserFromSactorage();
     });
   }
 

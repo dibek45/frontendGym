@@ -12,6 +12,7 @@ import { selectCurrentBalance, selectUserSessionState } from 'src/app/state/user
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
 import { setCajaState } from 'src/app/state/user/session/user-session.actions';
 // si usas el servicio extra
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-slide',
@@ -29,7 +30,9 @@ export class SlideComponent implements OnInit {
     private localStorage: LocalEncryptedStorageService,
     private socketService: SocketService,
     private cashRegisterSyncService: CashRegisterSyncService,
-    private store: Store
+    private store: Store,
+      private cdr: ChangeDetectorRef // 👈 agrega esto
+
   ) {}
 
   ngOnInit(): void {
@@ -63,10 +66,10 @@ this.currentBalance$ = this.store.select(selectCurrentBalance).pipe(
       const cajaAbierta = updatedList.find(c => c.status === 'open');
       const currentBalance = cajaAbierta?.currentBalance || 0;
       const cajaStatus = cajaAbierta ? 'open' : 'closed';
-
-      this.store.dispatch(
-        setCajaState({ currentBalance, cajaStatus }) // asegúrate de importar esto
-      );
+this.store.dispatch(
+  setCajaState({ currentBalance, cajaStatus })
+);
+this.cdr.detectChanges(); // 👈s
     });
   }
 

@@ -24,6 +24,7 @@ import * as RoutineActions from '../../state/point-of-sale/routines/routines.act
 import * as MachineActions from '../../state/machine/machine.actions';
 
 import { loadedMembers } from '../../state/member/member.actions';
+import { setCajaState } from 'src/app/state/user/session/user-session.actions';
 
 @Injectable({ providedIn: 'root' })
 export class SyncService {
@@ -229,37 +230,54 @@ this.store.dispatch(MachineActions.loadMachinesSuccess({ machines: updatedList }
 
 
   // 🔄 Verifica si se necesita sincronizar una tabla
-  async syncTableIfNeeded(table: string): Promise<void> {
-    const identity = await this.localStorage.loadIdentity();
-    if (!identity) return;
+async syncTableIfNeeded(table: string): Promise<void> {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) return;
 
-    const versionMap = await this.updateVersionService.getVersionMapByGym(identity.gymId);
-    const remoteUpdatedAt = versionMap.get(table);
-    if (!remoteUpdatedAt) {
-    //  alert(`⚠️ No hay updatedAt remoto para ${table}`);
-      return;
+  const versionMap = await this.updateVersionService.getVersionMapByGym(identity.gymId);
+  const remoteUpdatedAt = versionMap.get(table);
+  if (!remoteUpdatedAt) return;
+
+  console.log('-----------------------------------------------------');
+  const localVersion = await this.localStorage.getVersion(identity.userId, identity.gymId, table);
+
+  console.log(`📅 Versión remota de ${table}:`, remoteUpdatedAt);
+  console.log(`📅 Versión local de ${table}:`, localVersion);
+
+  const shouldSync = await this.localStorage.shouldSyncTable(
+    identity.userId,
+    identity.gymId,
+    table,
+    remoteUpdatedAt
+  );
+
+  if (shouldSync) {
+    alert(`🔄 ${table} desactualizado. Ejecutando sync...`);
+    await this.dispatcher.dispatch(table);
+
+    if (table === 'cashRegisters') {
+      console.log('📦 Intentando actualizar caja desde SyncService post-dispatch');
+
+      const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+        identity.userId,
+        identity.gymId,
+        'cashRegisters'
+      ) || [];
+
+      const cajaAbierta = cajas.find(c => c.status === 'open');
+      const currentBalance = cajaAbierta?.currentBalance || 0;
+      const cajaStatus = cajaAbierta ? 'open' : 'closed';
+
+      console.log('🔁 Caja encontrada:', cajaAbierta);
+      console.log('🟢 Balance a despachar:', currentBalance, 'Estado:', cajaStatus);
+
+      this.store.dispatch(setCajaState({ currentBalance, cajaStatus }));
     }
-
-    console.log('-----------------------------------------------------');
-    const localVersion = await this.localStorage.getVersion(identity.userId, identity.gymId, table);
-
-    console.log(`📅 Versión remota de ${table}:`, remoteUpdatedAt);
-    console.log(`📅 Versión local de ${table}:`, localVersion);
-
-    const shouldSync = await this.localStorage.shouldSyncTable(
-      identity.userId,
-      identity.gymId,
-      table,
-      remoteUpdatedAt
-    );
-
-    if (shouldSync) {
-      alert(`🔄 ${table} desactualizado. Ejecutando sync...`);
-      await this.dispatcher.dispatch(table);
-    } else {
-      console.log(`✅ ${table} está actualizado.`);
-    }
+  } else {
+    console.log(`✅ ${table} está actualizado.`);
   }
+}
+
 
   // 🔁 Ejecutar sync al iniciar la app
   async syncAllTablesOnStartup(): Promise<void> {

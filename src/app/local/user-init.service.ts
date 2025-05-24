@@ -18,7 +18,7 @@ export class UserInsitService {
     private store: Store<AppState>
   ) {}
 
-  async restoreUserFromStorage(): Promise<void> {
+  async restoreUserFromSactorage(): Promise<void> {
     if (this.userLoaded) return;
 
     const identity = await this.localStorage.loadIdentity();

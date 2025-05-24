@@ -7,7 +7,7 @@ import { LocalEncryptedStorageService } from 'src/app/local/services/local-encry
 import { SocketService } from 'src/app/login/socket.service';
 import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { distinctUntilChanged, Observable } from 'rxjs';
 import { selectCurrentBalance, selectUserSessionState } from 'src/app/state/user/session/user-session.selectors';
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
 import { setCajaState } from 'src/app/state/user/session/user-session.actions';
@@ -33,12 +33,16 @@ export class SlideComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentBalance$ = this.store.select(selectCurrentBalance);
-    this.store.select(selectUserSessionState).subscribe(state => {
-  console.log('📦 Estado userSession:', state);
-});
-    this.listenToCashRegisterUpdates();
-  }
+this.currentBalance$ = this.store.select(selectCurrentBalance).pipe(
+  distinctUntilChanged()
+);
+  this.store.select(selectUserSessionState).subscribe(state => {
+    console.log('📦 Estado userSession:', state);
+  });
+
+  this.listenToCashRegisterUpdates();
+}
+
 
   listenToCashRegisterUpdates() {
     this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {

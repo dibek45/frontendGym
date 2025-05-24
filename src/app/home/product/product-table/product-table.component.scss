@@ -20,148 +20,74 @@
   padding: 10px;
   font-size: 16px;
   resize: none;
+  position: relative;
 }
 
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #888;
+  pointer-events: none;
+}
+.search-div{
+ position: relative;
+}
+.search-textarea {
+  padding-left: 50px;
+  border-radius: 55px;
+  max-width: 205px;
+  height: 50%;
+  box-sizing: border-box;
+  padding-top: 10px;
+}
+
+.back-button-container {
+  position: absolute;
+  margin-top: 48px;
+  margin-bottom: 10px;
+}
 
 /* Vista de tabla y cards */
 .view-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
 
 }
 
-
-/* Responsive */
-
-/* S */
-@media (min-width: 354px) and (max-width: 370px) {
+/* Media queries pequeñas */
+@media (min-width: 354px) and (max-width: 370px),
+       (min-width: 371px) and (max-width: 400px),
+       (min-width: 400px) and (max-width: 440px),
+       (min-width: 441px) and (max-width: 500px) {
 
   .search-container {
     flex-direction: row;
     justify-content: flex-start;
   }
-  .btn-create{position: relative;
 
-    width: 50px;
+  .btn-create {
+    position: relative;
     left: 20px;
     top: 30px;
     width: 100px;
-
-  }
-  
-  .filter-textarea {
-    width: 50%;
-    margin-top: 55px;
   }
 
-  .vista{
- position: relative;
-      left: 20px;
-    
-  }
- 
-  
-  
-}
-@media (min-width: 371px) and (max-width: 400px) {
-
-  .search-container {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .btn-create{position: relative;
-
-    width: 50px;
-    left: 20px;
-    top: 30px;
-    width: 100px;
-
-  }
-  
-  .filter-textarea {
-    width: 50%;
-    margin-top: 55px;
-  }
-
-  .vista{
- position: relative;
-      left: 20px;
-    
-  }
- 
-  .card-item {
-    margin: 5px;
-    width: 175px;
-    margin: 1px;
-  }
-  
-}
-@media (min-width: 400px) and (max-width: 440px) {
-  .search-container {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .btn-create{position: relative;
-
-    width: 50px;
-    left: 20px;
-    top: 30px;
-    width: 100px;
-
-  }
-  
   .filter-textarea {
     width: 50%;
     margin-top: 65px;
   }
 
-  .vista{
- position: relative;
-      left: 20px;
-    
+  .vista {
+    position: relative;
+    left: 20px;
   }
- 
-  .card-item {
-    margin: 5px;
-    width: 175px;
-    margin: 1px;
-  }
-  
 }
 
-@media (min-width: 441px) and (max-width: 500px) {
-  .search-container {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .btn-create{position: relative;
-
-    width: 50px;
-    top: 30px;
-    width: 100px;
-
-  }
-  
-  .filter-textarea {
-    width: 50%;
-    margin-top: 55px;
-  }
-
-  .vista{
- position: relative;
-      left: 20px;
-    
-  }
- 
-  .card-item {
-    margin: 5px;
-    width: 175px;
-    margin: 1px;
-  }
-  
-}
-/* M */
+/* Media query M */
 @media (min-width: 768px) and (max-width: 991.98px) {
   .search-container {
     flex-direction: row;
@@ -228,14 +154,14 @@
     padding-left: 340px;
   }
 }
-@media (min-width: 600px) and (max-width:800px) {
+
+/* Móvil medio */
+@media (min-width: 600px) and (max-width: 800px) {
   .search-container {
     padding: 0 10px;
-  }
-
-  .btn-create,
-  .filter-textarea {
-    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 340px;
   }
 
   .btn-create {
@@ -243,60 +169,14 @@
     position: relative;
     margin-left: -300px;
   }
-  .search-toolbar {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 10px;
-    width: 10px
-  }
 
   .filter-textarea {
     width: 100%;
     margin-top: -10px;
     margin-left: 20px;
   }
-  .vista{
+
+  .vista {
     left: 38px;
   }
-
-  .search-container {
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-left: 340px;
-  }
-}
-
-.filter-textarea {
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  top: 50%;
-  left: 25px;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: #888;
-  pointer-events: none;
-}
-
-.search-textarea {
-  padding-left: 50px;  // 🔹 Esto mueve el texto
-  border-radius: 55px;
-  max-width: 205px;
-  height: 50%;        // 🔸 Se mantiene sin crecer
-  box-sizing: border-box; //
-  padding-top: 10px;
-
-}
-
-.back-button-container {
-  position: absolute; // base (sin desplazamiento)
-  margin-top: 48px;
-  margin-bottom: 10px;
-
-  // Solo aplicar left en pantallas grandes
-  
 }

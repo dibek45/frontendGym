@@ -74,21 +74,80 @@ export class CartService {
 
       // Contenido del modal
       modalContainer.innerHTML = `
-        <div class="modal-content">
-          <h2>Seleccionar Cantidad</h2>
-          <div class="product-name">${product.name}</div>
-          <div class="quantity-controller">
-            <button id="decrease-button">-</button>
-            <span id="quantity-display">1</span>
-            <button id="increase-button">+</button>
-          </div>
-          <div class="modal-actions">
-            <button id="cancel-button">Cancelar</button>
-            <button id="confirm-button">Confirmar</button>
+      <style>
+        
 
-          </div>
+        .modal h2 {
+          margin-top: 0;
+          text-align: center;
+        }
+
+        .product-name {
+          text-align: center;
+          margin: 12px 0;
+          font-weight: 600;
+        }
+
+        .quantity-controller {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          margin: 16px 0;
+        }
+
+        .quantity-controller button {
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+          border: none;
+          border-radius: 8px;
+          background: #f0f0f0;
+          cursor: pointer;
+        }
+
+        .modal-actions {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+        }
+
+        .modal-actions button {
+          flex: 1;
+          margin: 0 6px;
+          padding: 10px;
+          font-size: 15px;
+          font-weight: bold;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+
+        #cancel-button {
+          background-color: #f44336;
+          color: white;
+        }
+
+        #confirm-button {
+          background-color: #4caf50;
+          color: white;
+        }
+      </style>
+
+      <div class="modal-content">
+        <h2>Seleccionar Cantidad</h2>
+        <div class="product-name">${product.name}</div>
+        <div class="quantity-controller">
+          <button id="decrease-button">-</button>
+          <span id="quantity-display">1</span>
+          <button id="increase-button">+</button>
         </div>
-      `;
+        <div class="modal-actions">
+          <button id="cancel-button">Cancelar</button>
+          <button id="confirm-button">Confirmar</button>
+        </div>
+      </div>
+    `;
 
       document.body.appendChild(modalContainer);
       const modal = document.getElementById('quantity-modal')!;

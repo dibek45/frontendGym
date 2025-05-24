@@ -4,7 +4,6 @@ import { AuthService } from './auth/auth.service';
 import { AppState } from './state/app.state';
 import { Store } from '@ngrx/store';
 import { setUser } from './state/user/user.actions';
-import { UserInitService } from './local/user-init.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,6 @@ export class AppComponent {
   isLoginPage: boolean = false;
 
   constructor(
-    private userInitService: UserInitService,
     private router: Router, 
     private authService :AuthService,   private store: Store<AppState>,){
 
@@ -26,7 +24,6 @@ export class AppComponent {
   ngOnInit(): void {
     this.router.events.subscribe(async () => {
       this.isLoginPage = this.router.url === '/login';
-          await this.userInitService.restoreUserFromStorage();
 
     });
     

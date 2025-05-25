@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Observable, of, map } from 'rxjs';
+import { Observable, of, map, take, filter } from 'rxjs';
 import { BarcodeFormat } from '@zxing/library';
 
 import { SmartSearchComponent } from 'src/app/shared/search/smart-search/smart-search.component';
@@ -31,6 +31,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { selectGymId } from 'src/app/state/user/session/user-session.selectors';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 
 
 @Component({
@@ -70,7 +72,8 @@ export class MainScreenComponent {
     private memberSyncService: MemberSyncService,
     private productSyncService: ProductSyncService,
     private cashierSyncService: CashierSyncService,
-    private userInitService: UserInsitService
+    private userInitService: UserInsitService,
+    private localStorage:LocalEncryptedStorageService
   ) {}
 
   @HostListener('document:keydown', ['$event'])
@@ -90,8 +93,29 @@ export class MainScreenComponent {
 
     await this.userInitService.restoreUserFromSactorage();
 
-    this.plans$ = this.store.select(selectPlansByGymId(this.gymId));
-    this.plans$.subscribe(plans => this.plans = plans);
+const identity = await this.localStorage.loadIdentity();
+if (!identity) return;
+
+this.gymId = identity.gymId;
+
+// 🔁 Despachar carga de planes
+this.store.dispatch(loadPlansByGym({ gymId: this.gymId }));
+
+// 🔁 Esperar a que lleguen los planes desde el store
+this.store.select(selectPlansByGymId(this.gymId))
+  .pipe(
+    filter(plans => plans && plans.length > 0),
+    take(1)
+  )
+  .subscribe(plans => {
+    this.plans = plans;
+    console.log('✅ Planes cargados desde identity:', this.plans);
+  });
+
+
+
+
+
 
     const products = await this.productService.getProductsWithCache();
     this.store.dispatch(loadedProducts({ products }));
@@ -196,20 +220,27 @@ export class MainScreenComponent {
   }
 
   abrirRenovacion() {
-    if (!this.gymId) return;
-    this.store.dispatch(loadPlansByGym({ gymId: this.gymId }));
     this.dialog.open(SmartSearchComponent, {
-      width: '100vw',
-      height: '100vh',
-      panelClass: 'full-screen-dialog',
+       panelClass: 'full-screen-dialog', // 👈 este nombre es importante
+  width: '100vw',
+  height: '100vh',
+  maxWidth: '100vw',
+  disableClose: true,
       data: { modo: 'miembro' }
     }).afterClosed().subscribe((res: any) => {
-      if (res?.__tipo === 'miembro') this.openRenovarModal(res.id);
+      if (res?.__tipo === 'miembro'){
+         this.openRenovarModal(res.id);
+
+
+      }
     });
   }
 
   openRenovarModal(userId: string): void {
-    if (this.modalOpened || !this.plans?.length) return;
+    if ( !this.plans?.length) {
+      alert("return")
+      return
+    };
     const dialogRef = this.dialog.open(PlanModalComponent, {
       width: '400px',
       disableClose: true,
@@ -244,9 +275,11 @@ export class MainScreenComponent {
 
   venderProducto() {
     this.dialog.open(SmartSearchComponent, {
-      width: '100vw',
-      height: '100vh',
-      panelClass: 'full-screen-dialog',
+       panelClass: 'full-screen-dialog', // 👈 este nombre es importante
+  width: '100vw',
+  height: '100vh',
+  maxWidth: '100vw',
+  disableClose: true,
       data: { modo: 'producto' }
     }).afterClosed().subscribe(producto => {
       if (producto) {

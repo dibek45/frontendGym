@@ -6,6 +6,7 @@ import { AppState } from '../state/app.state';
 import { setUser } from '../state/user/user.actions';
 import { CashRegister } from '../state/point-of-sale/cash-register/cash-register.model';
 import { setCajaState } from '../state/user/session/user-session.actions';
+import { loadPlansByGym } from '../state/plan/plan.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,9 @@ export class UserInsitService {
       console.log('♻️ Restaurando usuario desde local storage:', user);
       this.userLoaded = true;
       this.store.dispatch(setUser(user));
+            console.log('♻️        ________________________________ID:', identity.gymId);
+
+this.store.dispatch(loadPlansByGym({ gymId: identity.gymId }));
 
       // 🔁 Cargar caja también
       const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(

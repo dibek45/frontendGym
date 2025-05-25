@@ -54,16 +54,20 @@ export class CartService {
     
   }
   async openAddToCartModal(product: ProductModel) {
+    console.log(" :");
+
+console.log('🛒 Abriendo modal para producto:', product);
     const quantity = await this.createModal(product);
     if (quantity && quantity > 0) {
       this.addItem(product, quantity);
       this.notificationService.showProductAddToCart(
-        product.name,
-       '',
-       product.img,
-       'success',
- 
-     );    }
+  product.name,
+  '',
+  product.img || (product as any).avatarUrl || '',
+  'success',
+);
+
+}
   }
   createModal(product: ProductModel): Promise<number> {
     return new Promise((resolve) => {

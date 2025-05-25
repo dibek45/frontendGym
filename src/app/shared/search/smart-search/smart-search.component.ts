@@ -85,11 +85,10 @@ console.log(this.data?.modo)
  this.store.select(selectAllProducts).pipe(take(1)).subscribe((productos) => {
   console.log('🧪 Productos desde Redux:', productos);
   const items = Array.from(productos).map(p => ({
-    name: p.name,
-    price: p.price,
-    avatarUrl: p.img,
-    __tipo: 'producto'
-  }));
+  ...p, // ⬅️ incluye id, stock, etc.
+  __tipo: 'producto'
+}));
+
       this.miembrosCargados = true; // 👈 Añade esta línea
 
   this.setItems([], items);
@@ -122,9 +121,24 @@ console.log(this.data?.modo)
     this.dialogRef.close();
   }
 
-  handleSelect(item: any) {
+ handleSelect(item: any) {
+  if (item.__tipo === 'producto') {
+    const normalizado: ProductModel = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      img: item.img || '',
+      created_at: item.created_at || new Date().toISOString(),
+      stock: item.stock ?? 9999,
+      available: item.available ?? true
+    };
+
+    this.dialogRef.close(normalizado);
+  } else {
     this.dialogRef.close(item);
   }
+}
+
 
   clearSearch() {
     this.searchTerm = '';

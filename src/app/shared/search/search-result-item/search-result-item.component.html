@@ -1,10 +1,7 @@
 <div class="result-item" (click)="selected.emit(item)">
   <!-- Imagen si existe (miembro o producto) -->
-  <img
-    *ngIf="item.avatarUrl"
-    [src]="item.avatarUrl"
-    alt="avatar"
-  />
+ <img *ngIf="item.img " [src]="item.img " alt="avatar" />
+
 
   <!-- Fallback por tipo si NO hay imagen -->
   <mat-icon
@@ -14,12 +11,7 @@
     fitness_center
   </mat-icon>
 
-  <mat-icon
-    *ngIf="!item.avatarUrl && item.__tipo === 'producto'"
-    class="type-icon producto"
-  >
-    shopping_cart
-  </mat-icon>
+
 
   <mat-icon
     *ngIf="!item.avatarUrl && item.__tipo === 'promocion'"

@@ -274,20 +274,22 @@ this.store.select(selectPlansByGymId(this.gymId))
   }
 
   venderProducto() {
-    this.dialog.open(SmartSearchComponent, {
-       panelClass: 'full-screen-dialog', // 👈 este nombre es importante
-  width: '100vw',
-  height: '100vh',
-  maxWidth: '100vw',
-  disableClose: true,
-      data: { modo: 'producto' }
-    }).afterClosed().subscribe(producto => {
-      if (producto) {
-        this.cartService.openAddToCartModal(producto);
-        this.store.dispatch(setDetailProduct({ product: producto }));
-      }
-    });
-  }
+  this.dialog.open(SmartSearchComponent, {
+    panelClass: 'full-screen-dialog',
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    disableClose: true,
+    data: { modo: 'producto' }
+  }).afterClosed().subscribe((producto: ProductModel | undefined) => {
+    if (producto) {
+      console.log('🛒 Abriendo modal para producto:', producto);
+      this.cartService.openAddToCartModal(producto);
+      this.store.dispatch(setDetailProduct({ product: producto }));
+    }
+  });
+}
+
 
   abrirBusquedaGeneral(tipo: 'membresia' | 'rutina' | 'nota') {
     const dialogRef = this.dialog.open(SmartSearchComponent, {

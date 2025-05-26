@@ -1,6 +1,6 @@
 <div class="result-item" (click)="selected.emit(item)">
   <!-- Imagen si existe (miembro o producto) -->
- <img *ngIf="item.img " [src]="item.img " alt="avatar" />
+ <img *ngIf="item.img || item.avatarUrl" [src]="item.img || item.avatarUrl " alt="" />
 
 
   <!-- Fallback por tipo si NO hay imagen -->

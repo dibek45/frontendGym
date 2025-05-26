@@ -33,6 +33,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { selectGymId } from 'src/app/state/user/session/user-session.selectors';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
+import { CheckinListComponent } from './components/checkin-list/checkin-list.component';
+import { CheckinModalComponent } from './components/checkin-modal/checkin-modal.component';
+import { ModalExpenseComponent } from './components/expense/modal/modal-expense.component';
 
 
 @Component({
@@ -41,7 +44,8 @@ import { LocalEncryptedStorageService } from 'src/app/local/services/local-encry
   styleUrls: ['./main-screen.component.scss'],
    standalone: true,
   imports: [CommonModule,MatIconModule,HttpClientModule,   CommonModule,
-    MatDialogModule,ZXingScannerModule],
+    MatDialogModule,ZXingScannerModule,  
+],
 })
 export class MainScreenComponent {
   public gymId: number = 0;
@@ -309,4 +313,24 @@ this.store.select(selectPlansByGymId(this.gymId))
   renovar(membresia: any) {
     console.log('Renovando a:', membresia);
   }
+
+  openCheckinModal() {
+this.dialog.open(CheckinModalComponent, {
+  width: '100vw',
+  height: '100vh',
+  maxWidth: '100vw',
+  panelClass: 'full-screen-modal'
+});
+
+}
+
+openModalExpense() {
+this.dialog.open(ModalExpenseComponent, {
+  width: '420px',
+  panelClass: 'expense-dialog'
+});
+
+  
+}
+
 }

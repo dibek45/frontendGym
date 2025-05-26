@@ -1,0 +1,22 @@
+<div class="checkin-row">
+  <div class="left">
+    <img [src]="photo" class="avatar" />
+    <div class="info">
+      <span class="name">{{ name }}</span>
+    </div>
+  </div>
+
+  <div class="time">{{ checkinTime }}</div>
+
+  <div class="status" [ngClass]="status">
+    <ng-container [ngSwitch]="status">
+        
+      <span *ngSwitchCase="'inside'">🟡 Dentro del gim</span>
+  
+      <span *ngSwitchCase="'outside'">
+    <mat-icon style="color: #2ecc71; vertical-align: middle;">arrow_circle_right</mat-icon>
+    Ya salió
+    </span>
+    </ng-container>
+  </div>
+</div>

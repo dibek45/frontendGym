@@ -1,0 +1,94 @@
+:host {
+  display: block;
+  padding: 24px;
+  position: relative;
+  max-width: 400px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.floating-icon {
+  position: absolute;
+  font-size: 22px;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2196f3;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;    // ⬅️ centrado vertical
+  justify-content: center; // ⬅️ centrado horizontal
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+  mat-icon {
+    font-size: 22px;
+    color: white;
+    line-height: 1; // ✅ previene que se suba el ícono
+  }
+}
+
+
+.modal-title {
+  margin-top: 48px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding: 0 4px;
+
+  button {
+    flex: 1;
+    margin: 0 4px;
+    height: 40px;
+  }
+}
+
+.categorias {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  overflow-x: auto;
+
+  button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    padding: 12px;
+    min-width: 85px;
+    max-height: 85px;
+    background: white;
+  border: 2px solid #e0e0e0;      // ← borde gris claro
+
+    &.selected {
+      border-color: #2196f3;
+      background-color: #2196f3;  // fondo azul
+    }
+
+    mat-icon {
+      font-size: 28px;
+                color: black;                  // ← icono negro
+
+
+    }
+
+    span {
+      margin-top: 4px;
+      font-size: 12px;
+    }
+  }
+}

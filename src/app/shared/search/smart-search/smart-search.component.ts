@@ -127,7 +127,7 @@ console.log(this.data?.modo)
       id: item.id,
       name: item.name,
       price: item.price,
-      img: item.img || '',
+      img: item.img || item.avatarUrl,
       created_at: item.created_at || new Date().toISOString(),
       stock: item.stock ?? 9999,
       available: item.available ?? true

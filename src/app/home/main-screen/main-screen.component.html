@@ -1,7 +1,7 @@
 <div class="main-wrapper">
     <div class="header-bar">
       <div class="top-left">
-        <h2>Hola, David</h2>
+        <h2>Hola, David </h2>
         <p class="date">34 de abril de 2024</p>
       </div>
   
@@ -36,6 +36,17 @@
           <mat-icon>person</mat-icon>
           <span>Renovar<br />membresía</span>
         </div>
+       
+        <div class="action-box pink" (click)="openModalExpense()">
+          <mat-icon>receipt</mat-icon>
+          <span>Agregar<br />gasto</span>
+        </div>
+
+         <div class="action-box green"  (click)="openCheckinModal()">
+          <mat-icon>groups</mat-icon>
+          <span>Ver<br />asistencia</span>
+        </div>
+        
         <div class="action-box blue" (click)="toggleScanner()">
           <mat-icon>qr_code_scanner</mat-icon>
           <span>Scanner</span>
@@ -45,14 +56,8 @@
           <span>Vender producto</span>
         </div>
       
-        <div class="action-box blue" (click)="route('home/administration/exponses')">
-          <mat-icon>receipt</mat-icon>
-          <span>Agregar<br />gasto</span>
-        </div>
-        <div class="action-box green">
-          <mat-icon>groups</mat-icon>
-          <span>Ver<br />asistencia</span>
-        </div>
+        
+      
           <div class="action-box pink" (click)="route('home/administration/Promotions')">
           <mat-icon>campaign</mat-icon>
           <span>Nueva<br />promoción</span>

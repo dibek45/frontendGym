@@ -1,0 +1,37 @@
+<div class="floating-icon">
+  <mat-icon>receipt_long</mat-icon>
+</div>
+
+<h2 class="modal-title">Agregar gasto</h2>
+
+<mat-form-field appearance="outline">
+  <mat-label>MX$ Monto</mat-label>
+  <input matInput type="number" [(ngModel)]="monto" />
+</mat-form-field>
+
+<mat-form-field appearance="outline">
+  <mat-label>Fecha</mat-label>
+  <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field appearance="outline">
+  <mat-label>Descripción</mat-label>
+  <input matInput [(ngModel)]="descripcion" />
+</mat-form-field>
+
+<h3>Categorías</h3>
+<div class="categorias">
+  <button *ngFor="let cat of categorias"
+          (click)="selectCategoria(cat)"
+          [ngClass]="{ 'selected': cat.nombre === categoriaSeleccionada?.nombre }">
+    <mat-icon>{{ cat.icon }}</mat-icon>
+    <span>{{ cat.nombre }}</span>
+  </button>
+</div>
+
+<div class="actions">
+  <button mat-stroked-button (click)="close()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="save()">Aceptar</button>
+</div>

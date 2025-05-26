@@ -1,0 +1,55 @@
+.checkin-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  width: 40%;
+  gap: 12px;
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .info {
+    .name {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+  }
+}
+
+.time {
+  width: 30%;
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+}
+
+.status {
+  width: 30%;
+  font-size: 13px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px; // 🔥 clave para que todos alineen igual
+  text-align: left; // fuerza la alineación del texto
+
+  &.inside {
+    color: #f1c40f;
+  }
+
+  &.outside {
+    color: #2ecc71;
+  }
+}
+

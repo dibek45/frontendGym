@@ -1,0 +1,22 @@
+<div class="filter-section">
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="filterCheckins()">
+    Filtrar
+  </button>
+</div>
+
+<div class="checkin-list">
+  <app-checkin-card
+    *ngFor="let c of filteredCheckins"
+    [name]="c.name"
+    [photo]="c.photo"
+    [checkinTime]="c.time"
+    [status]="c.inside ? 'inside' : 'outside'">
+  </app-checkin-card>
+</div>

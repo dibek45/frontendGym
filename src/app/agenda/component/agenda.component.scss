@@ -102,7 +102,7 @@
 }
 
 .calendar-wrapper {
-  margin-top: 20px;
+  margin-top: 80px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
@@ -192,10 +192,13 @@
 }
 
 }
-
-.back-button-container {
+.close-btn {
   position: absolute;
-  margin-top: -328px;
-  left: 10px;
-  margin-bottom: 10px;
+  top: 4px;
+  left: 12px;
+  z-index: 1000;
+  background: white;
+  color: black;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }

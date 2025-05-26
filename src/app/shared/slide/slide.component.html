@@ -1,38 +1,32 @@
 <div class="custom-header-bar">
-
-  <!-- 🍔 Menú con badge -->
-  <button mat-icon-button class="search-button"  (click)="abrirBusqueda()">
-        <mat-icon>search</mat-icon>
-
-
+  <!-- 🔍 Buscar -->
+  <button mat-icon-button class="search-button" (click)="abrirBusqueda()">
+    <mat-icon>search</mat-icon>
   </button>
 
-<!-- 💰 Monto centrado con estilo personalizado -->
-<div class="balance-display">
-  <p class="value caja">
-    
-  {{ currentBalance$ | async | currency:'MXN':'symbol':'1.2-2' }}
-  </p>
-</div>
+  <!-- 💰 Monto centrado -->
+  <div class="balance-display">
+    <p class="value caja">
+      {{ currentBalance$ | async | currency:'MXN':'symbol':'1.2-2' }}
+    </p>
+  </div>
 
-
-  <!-- 🔍 Lupa a la derecha -->
+  <!-- 📋 Menú principal -->
   <button mat-icon-button class="menu-button-with-badge" [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
+    <mat-icon>menu</mat-icon>
     <span class="badge">156</span>
   </button>
-
 </div>
-
 
 <!-- Menú principal -->
 <mat-menu #menu="matMenu">
-
+  <!-- Inicio -->
   <button mat-menu-item (click)="route('home/main-screen')">
     <mat-icon>home</mat-icon>
     <span>Home</span>
   </button>
-  <!-- Usuarios, Productos, Carrito (fuera de submenú) -->
+
+  <!-- Usuarios, Productos, Carrito -->
   <button mat-menu-item (click)="route('home/user/table')">
     <mat-icon>group</mat-icon>
     <span>Usuarios</span>
@@ -48,11 +42,32 @@
 
   <mat-divider></mat-divider>
 
-  <!-- 📅 Agenda con submenú -->
-<button mat-menu-item [matMenuTriggerFor]="agendaMenu">
-  <mat-icon>event</mat-icon>
-  <span>Agenda</span>
-</button>
+  <!-- 📅 Agenda -->
+  <button mat-menu-item [matMenuTriggerFor]="agendaMenu">
+    <mat-icon>event</mat-icon>
+    <span>Agenda</span>
+  </button>
+
+  <!-- 🧾 Ventas y gastos -->
+  <button mat-menu-item [matMenuTriggerFor]="ventasMenu">
+    <mat-icon>request_quote</mat-icon>
+    <span>Ventas y gastos</span>
+  </button>
+
+  <!-- ⚙️ Administración -->
+  <button mat-menu-item [matMenuTriggerFor]="adminMenu">
+    <mat-icon>settings</mat-icon>
+    <span>Administración</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <!-- 🚪 Salir -->
+  <button mat-menu-item (click)="exit()">
+    <mat-icon>logout</mat-icon>
+    <span>Salir</span>
+  </button>
+</mat-menu>
 
 <!-- Submenú: Agenda -->
 <mat-menu #agendaMenu="matMenu">
@@ -66,32 +81,11 @@
   </button>
 </mat-menu>
 
-
-  <!-- ⚙️ Todo lo demás en Administración -->
-  <button mat-menu-item [matMenuTriggerFor]="adminMenu">
-    <mat-icon>settings</mat-icon>
-    <span>Administración</span>
-  </button>
-
-  <mat-divider></mat-divider>
-
- 
-  <!-- 🚪 Salir -->
-  <button mat-menu-item (click)="exit()">
-    <mat-icon>logout</mat-icon>
-    <span>Salir</span>
-  </button>
-</mat-menu>
-
-<!-- Submenú: Administración -->
-<mat-menu #adminMenu="matMenu">
+<!-- Submenú: Ventas y gastos -->
+<mat-menu #ventasMenu="matMenu">
   <button mat-menu-item (click)="route('home/administration/cash-register')">
     <mat-icon>payments</mat-icon>
     <span>Caja</span>
-  </button>
-  <button mat-menu-item (click)="route('home/administration/MembershipPayment')">
-    <mat-icon>credit_card</mat-icon>
-    <span>Pagos membresía</span>
   </button>
   <button mat-menu-item (click)="route('home/administration/sales')">
     <mat-icon>bar_chart</mat-icon>
@@ -101,6 +95,14 @@
     <mat-icon>trending_down</mat-icon>
     <span>Gastos</span>
   </button>
+  <button mat-menu-item (click)="route('home/administration/MembershipPayment')">
+    <mat-icon>credit_card</mat-icon>
+    <span>Pagos membresía</span>
+  </button>
+</mat-menu>
+
+<!-- Submenú: Administración -->
+<mat-menu #adminMenu="matMenu">
   <button mat-menu-item (click)="route('home/administration/Routines')">
     <mat-icon>fitness_center</mat-icon>
     <span>Rutinas</span>

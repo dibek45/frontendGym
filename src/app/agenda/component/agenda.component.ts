@@ -518,4 +518,10 @@ goBack() {
   this.router.navigate(['home/main-screen']);
 }
   
+
+regresar() {
+  // Redirige o cambia de vista según tu app
+  this.router.navigate(['/home/main-screen']); // o cambia el estado de alguna variable
+}
+
 }

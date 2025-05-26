@@ -25,6 +25,8 @@ import * as MachineActions from '../../state/machine/machine.actions';
 
 import { loadedMembers } from '../../state/member/member.actions';
 import { setCajaState } from 'src/app/state/user/session/user-session.actions';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SyncToastComponent } from '../shared/components/sync-toast.component';
 
 @Injectable({ providedIn: 'root' })
 export class SyncService {
@@ -33,7 +35,9 @@ export class SyncService {
     private updateVersionService: UpdateVersionService,
     private dispatcher: SyncServiceDispatcher,
     private socketService: SocketService,
-    private store: Store
+    private store: Store,
+      private snackBar: MatSnackBar // 👈 agrégalo aquí
+
   ) {
     this.subscribeToCashRegisterUpdates();
     this.subscribeToMemberUpdates();
@@ -251,29 +255,41 @@ async syncTableIfNeeded(table: string): Promise<void> {
     remoteUpdatedAt
   );
 
-  if (shouldSync) {
-    alert(`🔄 ${table} desactualizado. Ejecutando sync...`);
-    await this.dispatcher.dispatch(table);
+ if (shouldSync) {
+  const snackRef = this.snackBar.openFromComponent(SyncToastComponent, {
+    data: table,
+    horizontalPosition: 'center',
+    verticalPosition: 'top',
+    panelClass: ['no-padding-snackbar']
+  });
+const start = Date.now(); // ⏱ marca el inicio
 
-    if (table === 'cashRegisters') {
-      console.log('📦 Intentando actualizar caja desde SyncService post-dispatch');
+  await this.dispatcher.dispatch(table);
+const elapsed = Date.now() - start;
 
-      const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(
-        identity.userId,
-        identity.gymId,
-        'cashRegisters'
-      ) || [];
+  if (table === 'cashRegisters') {
+    const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+      identity.userId,
+      identity.gymId,
+      'cashRegisters'
+    ) || [];
 
-      const cajaAbierta = cajas.find(c => c.status === 'open');
-      const currentBalance = cajaAbierta?.currentBalance || 0;
-      const cajaStatus = cajaAbierta ? 'open' : 'closed';
+    const cajaAbierta = cajas.find(c => c.status === 'open');
+    const currentBalance = cajaAbierta?.currentBalance || 0;
+    const cajaStatus = cajaAbierta ? 'open' : 'closed';
 
-      console.log('🔁 Caja encontrada:', cajaAbierta);
-      console.log('🟢 Balance a despachar:', currentBalance, 'Estado:', cajaStatus);
+    this.store.dispatch(setCajaState({ currentBalance, cajaStatus }));
+  }
 
-      this.store.dispatch(setCajaState({ currentBalance, cajaStatus }));
-    }
-  } else {
+// ✅ Espera mínimo 1.5 segundos para cerrar el toast
+const minDuration = 2000;
+const waitTime = Math.max(0, minDuration - elapsed);
+
+setTimeout(() => {
+  snackRef.dismiss();
+}, waitTime);  snackRef.dismiss();
+}
+ else {
     console.log(`✅ ${table} está actualizado.`);
   }
 }

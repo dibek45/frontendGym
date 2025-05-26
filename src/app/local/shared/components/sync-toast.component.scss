@@ -1,0 +1,11 @@
+.sync-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}

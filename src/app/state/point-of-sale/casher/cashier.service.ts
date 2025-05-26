@@ -98,7 +98,7 @@ const variables = {
       }
     }
   `;
-alert("cragando desde backend")
+console.log("cragando desde backend")
   const variables = { gymId };
 
   return this.http

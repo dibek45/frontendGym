@@ -53,16 +53,32 @@ export class CashRegisterComponent {
     this.cashRegisters$ = this.store.select(selectAllCashRegisters);
     this.cashers$ = this.store.select(selectAllCashiers);
   }
-  ngOnInit(): void {
-
+ngOnInit(): void {
+  this.cargarDesdeLocalSiExiste();
 
   this.cashRegisters$
-    .pipe(takeUntil(this.destroy$)) // ← solo si usas ngOnDestroy
+    .pipe(takeUntil(this.destroy$))
     .subscribe((list) => {
       this.cashRegistersList = list;
     });
+}
 
+private async cargarDesdeLocalSiExiste() {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) return;
+
+  const data = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+    identity.userId,
+    identity.gymId,
+    'cashRegisters'
+  );
+
+  if (data && data.length > 0) {
+    console.log('🗂️ Cargando cajas desde localforage al store');
+    this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: data }));
   }
+}
+
   
   ngOnDestroy(): void {
     this.destroy$.next();

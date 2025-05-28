@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { LocalEncryptedStorageService } from './local-encrypted-storage.service';
 import { UpdateVersionService } from './update-version.service';
 import { SyncServiceDispatcher } from './sync-service-dispatcher.service';
+import { loadExpensesSuccess } from 'src/app/state/expense/expense.actions';
 
 import { SocketService } from '../../login/socket.service';
 import { Casher } from '../../state/point-of-sale/casher/cashier.model';
@@ -10,7 +11,6 @@ import { Casher } from '../../state/point-of-sale/casher/cashier.model';
 import {  CashRegister } from '../../state/point-of-sale/cash-register/cash-register.model';
 import { MemberModel } from '../../core/models/member.interface';
 import { ProductModel } from '../../core/models/product.interface';
-import { ExpenseModel } from '../../home/point-of-sale/expenses/expenses.component';
 import { Routine } from '../../state/point-of-sale/routines/routines.model';
 import { MachineModel } from '../../state/machine/machine.model';
 
@@ -27,6 +27,9 @@ import { loadedMembers } from '../../state/member/member.actions';
 import { setCajaState } from 'src/app/state/user/session/user-session.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SyncToastComponent } from '../shared/components/sync-toast.component';
+import { ExpenseSyncService } from '../tables-sync/expense-sync.service';
+import { ExpenseModel } from 'src/app/state/expense/expense.model';
+import { ExpenseService } from 'src/app/state/expense/expense.service';
 
 @Injectable({ providedIn: 'root' })
 export class SyncService {
@@ -36,7 +39,9 @@ export class SyncService {
     private dispatcher: SyncServiceDispatcher,
     private socketService: SocketService,
     private store: Store,
-      private snackBar: MatSnackBar // 👈 agrégalo aquí
+    private expenseSyncService:ExpenseSyncService,
+      private snackBar: MatSnackBar,
+      private expenseService:ExpenseService
 
   ) {
     this.subscribeToCashRegisterUpdates();
@@ -294,6 +299,12 @@ setTimeout(() => {
   }
 }
 
+private subscribeToExpenseUpdates() {
+  this.socketService.expenseUpdated$.subscribe(async (updated: ExpenseModel) => {
+    console.log('📨 Gasto actualizado recibido por socket:', updated);
+    await this.expenseSyncService.handleRemoteUpdate(updated);
+  });
+}
 
   // 🔁 Ejecutar sync al iniciar la app
   async syncAllTablesOnStartup(): Promise<void> {
@@ -305,6 +316,11 @@ setTimeout(() => {
     await this.syncTableIfNeeded('routine');
     await this.syncTableIfNeeded('machine');
     await this.syncTableIfNeeded('cashiers');
+    await this.expenseService.getExpensesWithCache(true).then((expenses) => {
+  const safeExpenses = expenses ?? [];
+  console.log('🧾 Gastos cargados manualmente:', safeExpenses);
+  this.store.dispatch(loadExpensesSuccess({ expenses: safeExpenses }));
+});
 
 
   }

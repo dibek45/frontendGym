@@ -6,12 +6,12 @@ import {  CashRegister } from '../state/point-of-sale/cash-register/cash-registe
 
 import { MemberModel } from '../core/models/member.interface';
 import { ProductModel } from '../core/models/product.interface';
-import { ExpenseModel } from '../home/point-of-sale/expenses/expenses.component';
 import { SaleModel } from '../state/point-of-sale/cash-register/sale.model';
 import { Routine } from '../state/point-of-sale/routines/routines.model';
 import { MachineModel } from '../state/machine/machine.model';
 import { Sale } from '../state/point-of-sale/sale/sale.model';
 import { Casher } from '../state/point-of-sale/casher/cashier.model';
+import { ExpenseModel } from '../state/expense/expense.model';
 
 @Injectable({
   providedIn: 'root',
@@ -102,5 +102,12 @@ onCashierUpdate(callback: (data: Casher) => void) {
     }
   }
 
- 
+ onExpenseUpdate(callback: (data: ExpenseModel) => void) {
+  this.socket.on('expenseUpdated', (data) => {
+    console.log('📡 Evento expenseUpdated recibido:', data);
+    this.expenseUpdated$.next(data);
+    callback(data);
+  });
+}
+
 }

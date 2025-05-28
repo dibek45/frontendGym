@@ -18,6 +18,9 @@ import { cashRegisterReducer } from './point-of-sale/cash-register/cash-register
 import { salesReducer } from './point-of-sale/sale/sale.reducer';
 import { UserSessionState } from './user/session/user-session.state';
 import { userSessionReducer } from './user/session/user-session.reducer';
+import { ExpenseReducer, ExpenseState } from './expense/expense.reducer';
+import { checkinReducer } from './checkins/checkins.reducer';
+import { CheckinState } from './checkins/checkin.state';
 
 
 export interface AppState {
@@ -31,6 +34,9 @@ export interface AppState {
     cashRegister: CashRegisterState;  // ✅ agregados
     sales: SaleState;  
     userSession: UserSessionState;
+      expense: ExpenseState;
+  checkins: CheckinState; // ✅ AÑADIDO AQUÍ
+
                   // ✅ agregados
 }
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
@@ -44,5 +50,8 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
     cashRegister: cashRegisterReducer, // ✅ agregado
     sales: salesReducer,
     userSession: userSessionReducer,
+      expense: ExpenseReducer, // ✅ AGREGA ESTA LÍNEA
+
+  checkins: checkinReducer // ✅ AÑADIDO AQUÍ
 
 };

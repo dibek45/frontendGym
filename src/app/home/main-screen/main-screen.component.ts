@@ -36,6 +36,7 @@ import { LocalEncryptedStorageService } from 'src/app/local/services/local-encry
 import { CheckinListComponent } from './components/checkin-list/checkin-list.component';
 import { CheckinModalComponent } from './components/checkin-modal/checkin-modal.component';
 import { ModalExpenseComponent } from './components/expense/modal/modal-expense.component';
+import { ExpenseSyncService } from 'src/app/local/tables-sync/expense-sync.service';
 
 
 @Component({
@@ -77,7 +78,9 @@ export class MainScreenComponent {
     private productSyncService: ProductSyncService,
     private cashierSyncService: CashierSyncService,
     private userInitService: UserInsitService,
-    private localStorage:LocalEncryptedStorageService
+    private localStorage:LocalEncryptedStorageService,
+    private expenseSyncService: ExpenseSyncService,
+
   ) {}
 
   @HostListener('document:keydown', ['$event'])
@@ -91,6 +94,8 @@ export class MainScreenComponent {
     this.socketService.joinGymRoom(1);
     this.listenToCashRegisterUpdates();
     this.listenProductUpdates();
+    this.listenExpenseUpdates(); // ✅ <-- agregar esta línea
+
     this.listenToCashRegisterDeletes();
     this.listenUserUpdates();
     this.syncService.syncAllTablesOnStartup();
@@ -154,6 +159,12 @@ this.store.select(selectPlansByGymId(this.gymId))
     if (!id) return;
     console.log(`Procesando ID: ${id}`);
   }
+
+  listenExpenseUpdates() {
+  this.socketService.expenseUpdated$.subscribe(async (expense) => {
+    await this.expenseSyncService.handleRemoteUpdate(expense);
+  });
+}
 
   captureScannedData(event: KeyboardEvent) {
     clearTimeout(this.timeout);

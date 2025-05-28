@@ -9,6 +9,10 @@ import { loadedProducts } from 'src/app/state/product/product.actions';
 import { ProductService } from 'src/app/state/product/product.service';
 import { loadCashiersSuccess } from 'src/app/state/point-of-sale/casher/cashier.actions';
 import { CashierService } from 'src/app/state/point-of-sale/casher/cashier.service';
+import { loadExpensesSuccess } from 'src/app/state/expense/expense.actions';
+import { ExpenseService } from 'src/app/state/expense/expense.service';
+import { CheckinSyncService } from '../tables-sync/checkin-sync.service';
+import { CheckinService } from 'src/app/state/checkins/checkins.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +24,10 @@ export class SyncServiceDispatcher {
     private productService:ProductService,
     private store: Store,
     private localStorage: LocalEncryptedStorageService,
-    private cashierService:CashierService
+    private cashierService:CashierService,
+    private expenseService:ExpenseService,
+     private checkinService: CheckinService,
+  private checkinSync: CheckinSyncService
   ) {}
 
   async dispatch(table: string): Promise<void> {
@@ -48,9 +55,25 @@ export class SyncServiceDispatcher {
         this.store.dispatch(loadCashiersSuccess({ cashiers }));
         break;
       }
-      default:
-        console.warn(`⚠️ Tabla no soportada en SyncServiceDispatcher: ${table}`);
-        break;
-    }
+      case 'expenses': {
+  alert('🔁 Despachando sincronización de expenses...');
+  const expenses = await this.expenseService.getExpensesWithCache(true);
+  console.log('📦 Gastos cargados desde el servicio:', expenses);
+  this.store.dispatch(loadExpensesSuccess({ expenses }));
+  break}
+  case 'checkins': {
+  const checkins = await this.checkinService.getCheckinsWithCache(true);
+  for (const item of checkins) {
+    await this.checkinSync.handleRemoteUpdate(item);
+  }
+  break;
+}
+
+    default:
+      console.warn('⚠️ Tabla no manejada en handleRemoteUpdate:', table);
+}
+
+
+    
   }
 }

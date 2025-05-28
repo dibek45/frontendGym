@@ -1,32 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExpenseCardComponent } from '../components/expense-card/expense-card.component';
+import { Store } from '@ngrx/store';
+import { Observable, of, map } from 'rxjs';
+
+import { ExpenseModel } from 'src/app/state/expense/expense.model';
+import { AppState } from 'src/app/state/app.state';
+
+import {
+  selectAllExpenses,
+  selectUnsyncedExpenses,
+  selectSyncedExpenses,
+  selectExpensesWithSyncError,
+  selectExpensesLoading
+} from 'src/app/state/expense/expenses.selectors';
+
+import { syncExpense } from 'src/app/state/expense/expense.actions';
+
+import { DataPerDay, SummaryWeeklyComponent } from '../components/earnings-summary/summary-weekly.component';
 import { SearchCreateListComponent } from '../components/search-create-list/search-create-list.component';
-import { SummaryWeeklyComponent } from '../components/earnings-summary/summary-weekly.component';
-
-export interface ExpenseModel {
-  id: number;
-  description: string;
-  amount: number;
-  paymentMethod: string;
-  expenseDate: string;
-  category: string;
-  createdBy: string;
-  cashierId: number;
-
-  
-  // 🔄 Campos de sincronización
-  updatedAt?: string;              // Última vez actualizado
-  isSynced?: boolean;              // true si ya se sincronizó con backend
-  syncError?: boolean;             // true si hubo error al sincronizar
-  tempId?: string;                 // ID temporal antes de obtener el ID real
-}
-
-export interface DataPerDay {
-  date: string;
-  amount: number;
-  tickets: number;
-}
+import { ExpenseCardComponent } from '../components/expense-card/expense-card.component';
 
 @Component({
   selector: 'app-expenses',
@@ -35,9 +27,9 @@ export interface DataPerDay {
   styleUrls: ['./expenses.component.scss'],
   imports: [CommonModule, SummaryWeeklyComponent, SearchCreateListComponent],
 })
-export class ExpensesComponent {
+export class ExpensesComponent implements OnInit {
   cardComponent = ExpenseCardComponent;
-  
+
   displayedColumns: string[] = [
     'id',
     'description',
@@ -48,67 +40,75 @@ export class ExpensesComponent {
     'createdBy',
     'actions'
   ];
-  
-  data: ExpenseModel[] = [
-    {
-      id: 1,
-      description: 'Pago de luz',
-      amount: 120,
-      paymentMethod: 'cash',
-      expenseDate: '2024-10-28T10:00:00Z',
-      category: 'utilities',
-      createdBy: 'John',
-      cashierId: 1
-    },
-    {
-      id: 2,
-      description: 'Pago de agua',
-      amount: 90,
-      paymentMethod: 'card',
-      expenseDate: '2024-10-30T14:00:00Z',
-      category: 'utilities',
-      createdBy: 'Alice',
-      cashierId: 2
-    },
-    {
-      id: 3,
-      description: 'Internet',
-      amount: 150,
-      paymentMethod: 'transfer',
-      expenseDate: '2024-11-01T12:00:00Z',
-      category: 'services',
-      createdBy: 'Bob',
-      cashierId: 1
-    }
-  ];
 
-  startOfWeek = new Date('2024-10-28');
+startOfWeek = this.getStartOfWeek(new Date());
 
-  gastosSemana: DataPerDay[] = this.data.map(gasto => ({
-    date: gasto.expenseDate.split('T')[0],
-    amount: gasto.amount,
-    tickets: 1
-  }));
+getStartOfWeek(date: Date): Date {
+  const day = date.getDay(); // 0 (Sun) - 6 (Sat)
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Lunes
+  return new Date(date.setDate(diff));
+}
 
-  showActivityList = false; // 🔵 NUEVA VARIABLE para controlar qué mostrar
+  // Store observables
+  expenses$: Observable<ExpenseModel[]> = this.store.select(selectAllExpenses);
+  syncedExpenses$: Observable<ExpenseModel[]> = this.store.select(selectSyncedExpenses);
+  unsyncedExpenses$: Observable<ExpenseModel[]> = this.store.select(selectUnsyncedExpenses);
+  expensesWithSyncError$: Observable<ExpenseModel[]> = this.store.select(selectExpensesWithSyncError);
+  loading$: Observable<boolean> = this.store.select(selectExpensesLoading);
+
+  // Para la gráfica
+  gastosSemana$: Observable<DataPerDay[]> = this.expenses$.pipe(
+    map((expenses) => {
+      const grouped: { [date: string]: { amount: number; tickets: number } } = {};
+      for (const e of expenses) {
+        const date = e.expenseDate.split('T')[0];
+        if (!grouped[date]) grouped[date] = { amount: 0, tickets: 0 };
+        grouped[date].amount += e.amount;
+        grouped[date].tickets += 1;
+      }
+      return Object.entries(grouped).map(([date, val]) => ({
+        date,
+        amount: val.amount,
+        tickets: val.tickets,
+      }));
+    })
+  );
+
+  showActivityList = false;
+
+  constructor(private store: Store<AppState>) {}
+
+  ngOnInit(): void {
+    this.expenses$.subscribe(expenses => {
+      console.log('📦 Gastos cargados desde el store:', expenses);
+    });
+
+    this.expenses$.subscribe(expenses => {
+  console.log('📦 Gastos cargados desde el store:', expenses);
+});
+  }
 
   handleSeeActivity() {
-    this.showActivityList = true; // 🔵 Mostrar lista
+    this.showActivityList = true;
   }
 
   handleBackToSummary() {
-    this.showActivityList = false; // 🔵 Volver al resumen
+    this.showActivityList = false;
   }
 
   onCreate() {
-    alert('create:');
+    alert('🆕 Agregar nuevo gasto');
   }
 
-  onEdit(item: any) {
-    alert('Editar: ' + item);
+  onEdit(item: ExpenseModel) {
+    alert('✏️ Editar: ' + item.description);
   }
 
-  onDelete(item: any) {
-    alert('Eliminar: ' + item);
+  onDelete(item: ExpenseModel) {
+    alert('🗑️ Eliminar: ' + item.description);
+  }
+
+  onRetrySync(item: ExpenseModel) {
+    this.store.dispatch(syncExpense({ expense: item }));
   }
 }

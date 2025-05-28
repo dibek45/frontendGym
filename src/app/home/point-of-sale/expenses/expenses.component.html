@@ -1,7 +1,7 @@
 <div *ngIf="!showActivityList">
   <app-summary-weekly
     [weekStartDate]="startOfWeek"
-    [dataPerDay]="gastosSemana"
+    [dataPerDay]="(gastosSemana$ | async) ?? []"
     title="Gastos Semanales"
     totalLabel="Total Gastado"
     extraLabel="Total de gastos"
@@ -13,7 +13,7 @@
   <button (click)="handleBackToSummary()" class="back-button">Volver a resumen</button>
 
   <app-search-create-list
-    [data]="data"
+    [data]="(expenses$ | async) ?? []"
     [displayedColumns]="displayedColumns"
     [cardComponent]="cardComponent"
     (create)="onCreate()"

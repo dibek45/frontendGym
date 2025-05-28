@@ -62,6 +62,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
+import { ExpenseReducer } from './state/expense/expense.reducer';
 //const config: SocketIoConfig = { url: 'http://localhost:4200', options: {} };
 
  
@@ -111,6 +112,7 @@ import { InMemoryCache } from '@apollo/client/core';
   StoreModule.forFeature('permissions', permissionReducer),
   StoreModule.forFeature('plan', planReducer),
   StoreModule.forFeature('machines', machineReducer),
+  StoreModule.forFeature('expenses', ExpenseReducer),
 
   // ✅ Effects
   EffectsModule.forRoot([

@@ -19,6 +19,7 @@ import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/c
 import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
 import { FormsModule } from '@angular/forms';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cash-register',
@@ -47,7 +48,9 @@ export class CashRegisterComponent {
   private destroy$ = new Subject<void>();
 
   
-  constructor(  private localStorage: LocalEncryptedStorageService // 👈 agrega esta línea
+  constructor(  private localStorage: LocalEncryptedStorageService,
+        private router: Router 
+
 ,    private store: Store,private cashRegisterService:CashRegisterService,  private cashRegisterSyncService: CashRegisterSyncService
   ) {
     this.cashRegisters$ = this.store.select(selectAllCashRegisters);
@@ -151,6 +154,8 @@ private async cargarDesdeLocalSiExiste() {
     const encrypted = await localforage.getItem<string>('identity.json');
     if (!encrypted) {
       alert('❌ No hay identity.json guardado');
+      this.router.navigate(['/login']); // ⬅️ redirección si no hay usuario
+
       return;
     }
 

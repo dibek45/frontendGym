@@ -47,7 +47,12 @@ export class CheckinSyncService {
       this.tableName,
       enriched
     );
-
+    await this.localStorage.saveVersion(
+      identity.userId,
+      identity.gymId,
+      this.tableName,
+      updatedCheckin.updatedAt?.toString() || new Date().toISOString()
+    );
     this.store.dispatch(CheckinActions.loadCheckinsSuccess({ checkins: enriched }));
   }
 }

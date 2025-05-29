@@ -3,12 +3,12 @@ import { AppState } from '../app.state';
 import { ExpenseState } from './expense.reducer';
 
 // 🔹 Selector base del estado de gastos
-export const selectExpenseState = (state: AppState) => state.expense;
+export const selectExpenseState = (state: AppState) => state.expenses;
 
 // 🔹 Lista completa de gastos
 export const selectAllExpenses = createSelector(
   selectExpenseState,
-  (state: ExpenseState) => state.expenses ?? [] // ✅ asegúrate que siempre devuelva []
+  (state: ExpenseState) => state.list ?? [] // ✅ usa "list" en vez de "expenses"
 );
 
 // 🔹 Estado de carga

@@ -115,10 +115,18 @@ async saveTableToLocalCache<T extends { updatedAt: string | number | undefined }
   if (!list || list.length === 0) return;
 
   // Convertir todos los updatedAt a ISO string
-  const fixedList = list.map(item => ({
-    ...item,
-    updatedAt: new Date(item.updatedAt ?? 0).toISOString()
-  }));
+ const fixedList = list.map(item => ({
+  ...item,
+  updatedAt: isValidDate(item.updatedAt)
+    ? new Date(item.updatedAt!).toISOString()
+    : new Date().toISOString()
+}));
+
+function isValidDate(date: any): boolean {
+  const d = new Date(date);
+  return !isNaN(d.getTime());
+}
+
 
   const path = `user-${userId}/gym-${gymId}/${table}`;
   const json = JSON.stringify(fixedList);

@@ -3,14 +3,14 @@ import { ExpenseModel } from './expense.model';
 import * as ExpenseActions from './expense.actions';
 
 export interface ExpenseState {
-  expenses: ExpenseModel[];
+  list: ExpenseModel[]; // ✅ renamed from "expenses"
   loading: boolean;
   searchTerm: string;
   error?: any;
 }
 
 export const InitialExpenseState: ExpenseState = {
-  expenses: [],
+  list: [],
   loading: false,
   searchTerm: '',
   error: null
@@ -24,12 +24,11 @@ export const ExpenseReducer = createReducer(
     loading: true
   })),
 
-on(ExpenseActions.loadExpensesSuccess, (state, { expenses }) => ({
-  ...state,
-  loading: false,
-  expenses: expenses.slice() // <-- 🔧 Clonamos como array mutable
-})),
-
+  on(ExpenseActions.loadExpensesSuccess, (state, { expenses }) => ({
+    ...state,
+    loading: false,
+    list: expenses.slice() // ✅ updated
+  })),
 
   on(ExpenseActions.loadExpensesFailure, (state, { error }) => ({
     ...state,
@@ -39,33 +38,33 @@ on(ExpenseActions.loadExpensesSuccess, (state, { expenses }) => ({
 
   on(ExpenseActions.addExpense, (state, { expense }) => ({
     ...state,
-    expenses: [...state.expenses, expense]
+    list: [...state.list, expense] // ✅ updated
   })),
 
   on(ExpenseActions.updateExpense, (state, { tempId, updatedExpense }) => ({
     ...state,
-    expenses: state.expenses.map(exp =>
+    list: state.list.map(exp =>
       exp.tempId === tempId ? { ...exp, ...updatedExpense } : exp
     )
   })),
 
   on(ExpenseActions.syncExpense, (state, { expense }) => ({
     ...state,
-    expenses: state.expenses.map(e =>
+    list: state.list.map(e =>
       e.tempId === expense.tempId ? { ...e, syncing: true } : e
     )
   })),
 
   on(ExpenseActions.syncExpenseSuccess, (state, { tempId, updatedExpense }) => ({
     ...state,
-    expenses: state.expenses.map(exp =>
+    list: state.list.map(exp =>
       exp.tempId === tempId ? { ...exp, ...updatedExpense, syncError: false } : exp
     )
   })),
 
   on(ExpenseActions.syncExpenseFailure, (state, { tempId, error }) => ({
     ...state,
-    expenses: state.expenses.map(exp =>
+    list: state.list.map(exp =>
       exp.tempId === tempId ? { ...exp, syncError: true } : exp
     ),
     error

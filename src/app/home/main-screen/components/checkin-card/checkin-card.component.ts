@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class CheckinCardComponent {
   @Input() name: string = '';
-  @Input() photo: string = '';
+  @Input() img: string = '';
   @Input() checkinTime: string = '';
   @Input() status: 'inside' | 'outside' = 'inside';
 }

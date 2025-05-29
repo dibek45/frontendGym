@@ -9,7 +9,6 @@ import { CashRegister } from '../../state/point-of-sale/cash-register/cash-regis
 export class CashRegisterSyncService {
   constructor(
     private store: Store,
-    private cashRegisterService: CashRegisterService,
     private localStorage: LocalEncryptedStorageService
   ) {}
 

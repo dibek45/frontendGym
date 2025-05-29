@@ -41,6 +41,10 @@ export const updateMember = createAction(
         props<{ gymId: number, memberId: number }>()
       );
       
+      export const loadMembersSuccess = createAction(
+  '[Members] Load Members Success',
+  props<{ members: MemberModel[] }>()
+);
       export const loadedMemberDetail = createAction(
         '[Retrieved Member Detail]',
         props<{ member: MemberModel }>()

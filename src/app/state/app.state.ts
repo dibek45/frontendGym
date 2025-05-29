@@ -34,7 +34,7 @@ export interface AppState {
     cashRegister: CashRegisterState;  // ✅ agregados
     sales: SaleState;  
     userSession: UserSessionState;
-      expense: ExpenseState;
+  expenses: ExpenseState; // 👈 cambia el nombre a plural aquí
   checkins: CheckinState; // ✅ AÑADIDO AQUÍ
 
                   // ✅ agregados
@@ -50,7 +50,7 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
     cashRegister: cashRegisterReducer, // ✅ agregado
     sales: salesReducer,
     userSession: userSessionReducer,
-      expense: ExpenseReducer, // ✅ AGREGA ESTA LÍNEA
+  expenses: ExpenseReducer,
 
   checkins: checkinReducer // ✅ AÑADIDO AQUÍ
 

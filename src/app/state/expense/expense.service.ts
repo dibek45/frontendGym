@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
 import localforage from 'localforage';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
+import { CashRegisterService } from '../point-of-sale/cash-register/cash-register.service';
 
 @Injectable({ providedIn: 'root' })
 export class ExpenseService {
@@ -14,7 +15,9 @@ export class ExpenseService {
 
   constructor(
     private http: HttpClient,
-    private localStorage: LocalEncryptedStorageService
+    private localStorage: LocalEncryptedStorageService,
+      private cashRegisterService: CashRegisterService // ← ✅ NUEVO
+
   ) {}
 
   async getExpensesWithCache(forceBackend = false): Promise<ExpenseModel[]> {
@@ -81,7 +84,7 @@ export class ExpenseService {
     return result.data.expensesByGym;
   }
 
-  async createExpense(expense: ExpenseModel): Promise<ExpenseModel> {
+async createExpense(expense: ExpenseModel): Promise<ExpenseModel> {
   const mutation = `
     mutation CreateExpense($createExpense: CreateExpenseInput!) {
       createExpense(createExpense: $createExpense) {
@@ -103,37 +106,49 @@ export class ExpenseService {
     }
   `;
 
-  const variables = {
-    createExpense: {
-      description: expense.description,
-      amount: expense.amount,
-      paymentMethod: expense.paymentMethod,
-      expenseDate: expense.expenseDate,
-      category: expense.category,
-      createdBy: expense.createdBy,
-      cashierId: expense.cashierId,
-      gymId: expense.gymId,
-      tempId: expense.tempId
-    }
-  };
+const input = {
+  amount: expense.amount,
+  description: expense.description,
+  paymentMethod: expense.paymentMethod,
+  expenseDate: expense.expenseDate,
+  category: expense.category,
+  createdBy: String(expense.createdBy), // ⚠️ obligatorio si espera string
+  cashierId: expense.cashierId,
+  gymId: expense.gymId
+};
+
+const variables = { createExpense: input };
 
   try {
     const response = await firstValueFrom(
-      this.http.post<any>(this.graphqlEndpoint, {
-        query: mutation,
-        variables
-      })
+      this.http.post<any>(this.graphqlEndpoint, { query: mutation, variables })
     );
 
-    if (!response.data || !response.data.createExpense) {
-      throw new Error('No se pudo crear el gasto');
+    if (response.errors) {
+  console.error('❌ Errores GraphQL:', response.errors);
+}
+    const createdExpense = response.data?.createExpense;
+    if (!createdExpense) throw new Error('No se pudo crear el gasto');
+
+
+    // ✅ Reducimos el balance de la caja activa
+    const cajaActiva = await this.cashRegisterService.getCajaActiva();
+    if (cajaActiva) {
+      await this.cashRegisterService.updateBalanceAfterSale(cajaActiva.id, -createdExpense.amount);
+    } else {
+      console.warn('⚠️ No se encontró una caja activa para actualizar el balance');
     }
 
-    return response.data.createExpense;
+    return createdExpense;
+
   } catch (err) {
     console.error('❌ Error en createExpense:', err);
     throw err;
   }
 }
+
+
+
+
 
 }

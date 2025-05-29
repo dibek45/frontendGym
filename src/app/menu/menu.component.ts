@@ -108,6 +108,8 @@ this.socketmetod();
     const identity = await this.localStorage.loadIdentity();
     if (!identity) {
       alert('❌ No hay identidad cargada. Cancelando sincronización.');
+            this.router.navigate(['/login']); // ⬅️ redirección si no hay usuario
+
       return;
     }
   

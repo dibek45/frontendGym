@@ -1,13 +1,13 @@
 export interface ExpenseModel {
-  id: string;
+  id?: number;
   description: string;
   amount: number;
   paymentMethod: string;
   expenseDate: string;
   category: string;
-  createdBy: string;
-  cashierId: string;
-  gymId: string;
+  createdBy: number;
+  cashierId: number;
+  gymId: number;
   createdAt?: string;
   updatedAt?: string;
   isSynced?: boolean;

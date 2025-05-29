@@ -30,6 +30,8 @@ import { SyncToastComponent } from '../shared/components/sync-toast.component';
 import { ExpenseSyncService } from '../tables-sync/expense-sync.service';
 import { ExpenseModel } from 'src/app/state/expense/expense.model';
 import { ExpenseService } from 'src/app/state/expense/expense.service';
+import { loadCheckinsSuccess } from 'src/app/state/checkins/checkins.actions';
+import { CheckinModel } from 'src/app/state/checkins/checkins.model';
 
 @Injectable({ providedIn: 'root' })
 export class SyncService {
@@ -244,8 +246,14 @@ async syncTableIfNeeded(table: string): Promise<void> {
   if (!identity) return;
 
   const versionMap = await this.updateVersionService.getVersionMapByGym(identity.gymId);
-  const remoteUpdatedAt = versionMap.get(table);
-  if (!remoteUpdatedAt) return;
+const remoteUpdatedAt = versionMap.get(table.toLowerCase());
+  if (!remoteUpdatedAt) {
+  console.warn(`🚫 No se encontró remoteUpdatedAt para la tabla '${table}'`);
+  console.log('🧭 Versión map actual:', Array.from(versionMap.entries()));
+  alert("❌ No hay remote update para " + table);
+  return;
+}
+
 
   console.log('-----------------------------------------------------');
   const localVersion = await this.localStorage.getVersion(identity.userId, identity.gymId, table);
@@ -267,10 +275,24 @@ async syncTableIfNeeded(table: string): Promise<void> {
     verticalPosition: 'top',
     panelClass: ['no-padding-snackbar']
   });
-const start = Date.now(); // ⏱ marca el inicio
 
-  await this.dispatcher.dispatch(table);
-const elapsed = Date.now() - start;
+  const start = Date.now();
+
+  await this.dispatcher.dispatch(table); // 👈 aquí es donde ya termina el sync
+alert('[DEBUG] Tabla recibida en syncTableIfNeeded:'+table);
+
+  // 🔁 AGREGA ESTO justo después del dispatch:
+  if (table === 'checkins') {
+    const checkins = await this.localStorage.loadTableFromLocalCache<CheckinModel>(
+      identity.userId,
+      identity.gymId,
+      'checkins'
+    ) || [];
+
+    this.store.dispatch(loadCheckinsSuccess({ checkins }));
+    console.log('📋 Checkins sincronizados y cargados:', checkins.length);
+        snackRef.dismiss();
+  }
 
   if (table === 'cashRegisters') {
     const cajas = await this.localStorage.loadTableFromLocalCache<CashRegister>(
@@ -286,14 +308,14 @@ const elapsed = Date.now() - start;
     this.store.dispatch(setCajaState({ currentBalance, cajaStatus }));
   }
 
-// ✅ Espera mínimo 1.5 segundos para cerrar el toast
-const minDuration = 2000;
-const waitTime = Math.max(0, minDuration - elapsed);
-
-setTimeout(() => {
-  snackRef.dismiss();
-}, waitTime);  snackRef.dismiss();
+  const elapsed = Date.now() - start;
+  const minDuration = 2000;
+  const waitTime =5000
+  setTimeout(() => {
+    snackRef.dismiss();
+  }, waitTime);
 }
+
  else {
     console.log(`✅ ${table} está actualizado.`);
   }
@@ -312,15 +334,13 @@ private subscribeToExpenseUpdates() {
     await this.syncTableIfNeeded('members');
     await this.syncTableIfNeeded('products');
     await this.syncTableIfNeeded('expenses');
-    await this.syncTableIfNeeded('sale');
-    await this.syncTableIfNeeded('routine');
-    await this.syncTableIfNeeded('machine');
+   // await this.syncTableIfNeeded('sale');
+  //  await this.syncTableIfNeeded('routine');
+  //  await this.syncTableIfNeeded('machine');
     await this.syncTableIfNeeded('cashiers');
-    await this.expenseService.getExpensesWithCache(true).then((expenses) => {
-  const safeExpenses = expenses ?? [];
-  console.log('🧾 Gastos cargados manualmente:', safeExpenses);
-  this.store.dispatch(loadExpensesSuccess({ expenses: safeExpenses }));
-});
+    await this.syncTableIfNeeded('checkins');
+
+ 
 
 
   }

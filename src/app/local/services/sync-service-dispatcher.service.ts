@@ -13,6 +13,7 @@ import { loadExpensesSuccess } from 'src/app/state/expense/expense.actions';
 import { ExpenseService } from 'src/app/state/expense/expense.service';
 import { CheckinSyncService } from '../tables-sync/checkin-sync.service';
 import { CheckinService } from 'src/app/state/checkins/checkins.service';
+import { loadCheckinsSuccess } from 'src/app/state/checkins/checkins.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -56,18 +57,36 @@ export class SyncServiceDispatcher {
         break;
       }
       case 'expenses': {
-  alert('🔁 Despachando sincronización de expenses...');
-  const expenses = await this.expenseService.getExpensesWithCache(true);
-  console.log('📦 Gastos cargados desde el servicio:', expenses);
-  this.store.dispatch(loadExpensesSuccess({ expenses }));
-  break}
+        console.log('🔁 Despachando sincronización de expenses...');
+        const expenses = await this.expenseService.getExpensesWithCache(true);
+        console.log('📦 Gastos cargados desde el servicio:', expenses);
+        this.store.dispatch(loadExpensesSuccess({ expenses }));
+        break
+      }
   case 'checkins': {
+  console.log('🔁 Despachando sincronización de checkins...');
   const checkins = await this.checkinService.getCheckinsWithCache(true);
-  for (const item of checkins) {
-    await this.checkinSync.handleRemoteUpdate(item);
+  console.log('📦 Checkins cargados desde el servicio:', checkins);
+
+  this.store.dispatch(loadCheckinsSuccess({ checkins }));
+
+  // Además actualiza en cache local
+  const identity = await this.localStorage.loadIdentity();
+  if (identity) {
+    await this.localStorage.saveTableToLocalCache(
+      identity.userId,
+      identity.gymId,
+      'checkins',
+      checkins.map(c => ({
+        ...c,
+        updatedAt: c.updatedAt ?? new Date().toISOString()
+      }))
+    );
   }
+
   break;
 }
+
 
     default:
       console.warn('⚠️ Tabla no manejada en handleRemoteUpdate:', table);

@@ -47,10 +47,18 @@ async getVersionMapByGym(gymId: number): Promise<Map<string, string>> {
   const versionMap = new Map<string, string>();
 
   for (const v of versions) {
-    versionMap.set(v.table_name, v.updated_at);
+    const table = v.table_name?.trim().toLowerCase();
+    const updated = v.updated_at ?? new Date().toISOString();
+
+    if (table) {
+      versionMap.set(table, new Date(updated).toISOString());
+      console.log(`📌 Agregando '${table}' -> ${updated}`);
+    }
   }
+console.log('🧾 versionMap completo:', Array.from(versionMap.entries()));
 
   return versionMap;
 }
+
 
 }

@@ -85,6 +85,8 @@ export class ExpenseService {
   }
 
 async createExpense(expense: ExpenseModel): Promise<ExpenseModel> {
+    console.log('🧾 Cantidad enviada:', expense.amount, 'Tipo:', typeof expense.amount); // 👈 Agrega esto
+
   const mutation = `
     mutation CreateExpense($createExpense: CreateExpenseInput!) {
       createExpense(createExpense: $createExpense) {
@@ -131,14 +133,7 @@ const variables = { createExpense: input };
     if (!createdExpense) throw new Error('No se pudo crear el gasto');
 
 
-    // ✅ Reducimos el balance de la caja activa
-    const cajaActiva = await this.cashRegisterService.getCajaActiva();
-    if (cajaActiva) {
-      await this.cashRegisterService.updateBalanceAfterSale(cajaActiva.id, -createdExpense.amount);
-    } else {
-      console.warn('⚠️ No se encontró una caja activa para actualizar el balance');
-    }
-
+    
     return createdExpense;
 
   } catch (err) {

@@ -62,13 +62,24 @@ this.currentBalance$ = this.store.select(selectCurrentBalance).pipe(
           gymId,
           'cashRegisters'
         )) || [];
+        const cajaAbierta = updatedList.find(c => c.status === 'open');
 
-      const cajaAbierta = updatedList.find(c => c.status === 'open');
-      const currentBalance = cajaAbierta?.currentBalance || 0;
-      const cajaStatus = cajaAbierta ? 'open' : 'closed';
-this.store.dispatch(
-  setCajaState({ currentBalance, cajaStatus })
-);
+if (cajaAbierta) {
+const currentBalance = cajaAbierta?.currentBalance ?? 0;
+  const cajaStatus = 'open';
+const cashRegisterId = cajaAbierta?.id ?? 0;
+
+  this.store.dispatch(setCajaState({ currentBalance, cajaStatus, cashRegisterId }));
+} else {
+  const currentBalance = 0;
+  const cajaStatus = 'closed';
+  const cashRegisterId = 0; // 👈 usa 0 si tu store no permite null
+
+  this.store.dispatch(setCajaState({ currentBalance, cajaStatus, cashRegisterId }));
+}
+
+
+
 this.cdr.detectChanges(); // 👈s
     });
   }

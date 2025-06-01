@@ -21,11 +21,12 @@ export const userSessionReducer = createReducer(
     role: payload.role
   })),
 
-  on(setCajaState, (state, payload) => ({
-    ...state,
-    currentBalance: payload.currentBalance,
-    cajaStatus: payload.cajaStatus
-  })),
+ on(setCajaState, (state, payload) => ({
+  ...state,
+  currentBalance: payload.currentBalance,
+  cajaStatus: payload.cajaStatus,
+  cashRegisterId: payload.cashRegisterId // ✅ aquí agregas el campo
+})),
 
   on(clearUserSession, () => initialUserSessionState)
 );

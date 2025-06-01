@@ -366,7 +366,7 @@ async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
         gymId: identity.gymId,
         paymentMethod,
         cart: formattedCart,
-        cashRegisterId: cajaActiva!.id
+        cashRegisterId: 255
       }
     }).subscribe({
       next: async (response: any) => {
@@ -374,10 +374,7 @@ async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
           this.notificationService.mostrarSnackbar('✅ Venta registrada correctamente.', 'success');
 
           // 🔁 Actualizar balance local
-          await this._caja.updateBalanceAfterSale(
-            cajaActiva!.id,
-            response.data.createSale.totalAmount
-          );
+         await this._caja.updateBalanceAfterSale(cajaActiva!.id);
 
           // 🔁 Actualizar productos en caché y store
           for (const item of cart) {

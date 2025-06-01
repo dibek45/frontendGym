@@ -6,6 +6,7 @@ export interface UserSessionState {
   role: string | null;
   currentBalance: number;
   cajaStatus: 'open' | 'closed' | 'unknown';
+  cashRegisterId: number | null; // ✅ debe estar aquí también
 }
 
 export const initialUserSessionState: UserSessionState = {
@@ -15,5 +16,6 @@ export const initialUserSessionState: UserSessionState = {
   gymName: null,
   role: null,
   currentBalance: 0,
-  cajaStatus: 'unknown'
+  cajaStatus: 'unknown',  
+  cashRegisterId:  0 // ✅ debe estar aquí también
 };

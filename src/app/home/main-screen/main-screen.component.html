@@ -21,9 +21,9 @@
       <div class="kpi-card green ">
                 <p class="gastos">Gastos</p>
 
-        <p class="value-gastos">$
+        <p class="value-gastos">
           
-          {{ currentBalance | number:'1.2-2' }}
+          {{ totalGastos | currency:'MXN':'symbol' }}
         </p>
       </div>
     </div>

@@ -7,6 +7,7 @@ export interface ExpenseModel {
   category: string;
   createdBy: number;
   cashierId: number;
+  cashRegisterId: number;
   gymId: number;
   createdAt?: string;
   updatedAt?: string;

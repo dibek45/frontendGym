@@ -12,6 +12,10 @@ import { CashRegisterService } from 'src/app/state/point-of-sale/cash-register/c
 import { NotificationService } from 'src/app/shared/notification.service';
 import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 import { ExpenseService } from 'src/app/state/expense/expense.service';
+import { selectCashRegisterId } from 'src/app/state/user/session/user-session.selectors';
+import { AppState } from 'src/app/state/app.state';
+import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-modal-expense',
@@ -46,15 +50,22 @@ categorias = [
 
 categoriaSeleccionada = this.categorias[0]; // ← ya no da error
 
+cashRegisterId: number | null = null;
 
   constructor(private dialogRef: MatDialogRef<ModalExpenseComponent>,
       private cashRegisterService: CashRegisterService,
   private notificationService: NotificationService,
   private localStorage: LocalEncryptedStorageService,
     private expenseService: ExpenseService,
+    private store: Store<AppState>
 
   ) {}
 
+  ngOnInit(): void {
+  this.store.select(selectCashRegisterId).pipe(take(1)).subscribe(id => {
+    this.cashRegisterId = id;
+  });
+}
   selectCategoria(categoria: any) {
     this.categoriaSeleccionada = categoria;
   }
@@ -88,7 +99,9 @@ categoriaSeleccionada = this.categorias[0]; // ← ya no da error
       gymId: identity.gymId,
       tempId: Date.now().toString(), // opcional
       isSynced: false,
-      syncError: false
+      syncError: false,
+  cashRegisterId: this.cashRegisterId!, // <-- asegúrate de haberlo cargado del store
+
     };
 
     // 👇 Crear gasto y actualizar balance

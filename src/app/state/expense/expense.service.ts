@@ -116,7 +116,10 @@ const input = {
   category: expense.category,
   createdBy: String(expense.createdBy), // ⚠️ obligatorio si espera string
   cashierId: expense.cashierId,
-  gymId: expense.gymId
+  gymId: expense.gymId,
+  cashRegisterId: 255// ✅ asegúrate de tener este valor
+
+  
 };
 
 const variables = { createExpense: input };

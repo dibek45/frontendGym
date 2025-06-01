@@ -467,37 +467,39 @@ async crearCajaParaUsuarioActualSiNoExiste(): Promise<void> {
 
 
 // cash-register.service.ts
-async updateBalanceAfterSale(cashRegisterId: number, amountToAdd: number): Promise<void> {
-  console.log('🔁 updateBalanceAfterSale ejecutado con', { cashRegisterId, amountToAdd });
+async updateBalanceAfterSale(cashRegisterId: number): Promise<void> {
+  console.log('🔁 updateBalanceAfterSale iniciado para ID:', cashRegisterId);
 
   const identity = await this.localStorage.loadIdentity();
-  if (!identity) return;
+  if (!identity) {
+    console.warn('❌ No se pudo cargar la identidad');
+    return;
+  }
 
-  const tableKey = this.localStorage.getTableKey(identity.userId, identity.gymId, 'cashRegisters');
-  const list = await this.localStorage.loadTableFromLocalCache<CashRegister>(identity.userId, identity.gymId, 'cashRegisters') || [];
+  // 🔄 Obtenemos las cajas más recientes desde backend
+  const cashRegisters = await this.getCashRegistersFromBackend();
 
-  const updatedList = list.map(c => {
-    if (c.id === cashRegisterId) {
-      return {
-        ...c,
-        currentBalance: (c.currentBalance || 0) + amountToAdd,
-        updatedAt: new Date().toISOString()
-      };
-    }
-    return c;
-  });
+  // 💾 Guardamos los datos actualizados en caché local
+  await this.localStorage.saveTableToLocalCache(
+    identity.userId,
+    identity.gymId,
+    'cashRegisters',
+    cashRegisters
+  );
 
-  await this.localStorage.saveTableToLocalCache(identity.userId, identity.gymId, 'cashRegisters', updatedList);
-await this.localStorage.saveVersion(
-  Number(identity.userId),
-  Number(identity.gymId),
-  'cashRegisters',
-  new Date().toISOString()
-);
-const cashRegisters = await this.getCashRegistersFromBackend(); // <-- asegúrate de que este método exista y sea correcto
-this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters }));
+  await this.localStorage.saveVersion(
+    Number(identity.userId),
+    Number(identity.gymId),
+    'cashRegisters',
+    new Date().toISOString()
+  );
 
+  // 📦 Actualizamos el store (NgRx)
+  this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters }));
+
+  console.log('✅ Caja actualizada desde backend y sincronizada localmente');
 }
+
 async getCashRegistersFromBackend(): Promise<CashRegister[]> {
   const identity = await this.localStorage.loadIdentity();
   if (!identity) return [];

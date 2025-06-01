@@ -16,7 +16,10 @@ export const setCajaState = createAction(
   props<{
     currentBalance: number;
     cajaStatus: 'open' | 'closed';
+    cashRegisterId: number;
   }>()
 );
+
+
 
 export const clearUserSession = createAction('[UserSession] Clear Session');

@@ -305,7 +305,11 @@ alert('[DEBUG] Tabla recibida en syncTableIfNeeded:'+table);
     const currentBalance = cajaAbierta?.currentBalance || 0;
     const cajaStatus = cajaAbierta ? 'open' : 'closed';
 
-    this.store.dispatch(setCajaState({ currentBalance, cajaStatus }));
+this.store.dispatch(setCajaState({ 
+  currentBalance, 
+  cajaStatus, 
+  cashRegisterId: cajaAbierta?.id ?? 0 
+}));
   }
 
   const elapsed = Date.now() - start;

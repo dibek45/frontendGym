@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Observable, of, map, take, filter } from 'rxjs';
 import { BarcodeFormat } from '@zxing/library';
-
+import { combineLatest } from 'rxjs';
 import { SmartSearchComponent } from 'src/app/shared/search/smart-search/smart-search.component';
 import { PlanModalComponent } from 'src/app/shared/card/plan-modal/plan-modal.component';
 import { CartService } from 'src/app/state/point-of-sale/cart/cart.service';
@@ -12,6 +12,7 @@ import { SpeechService } from 'src/app/shared/speech.service';
 import { ProductService } from 'src/app/state/product/product.service';
 import { MemberService } from 'src/app/state/member/member.service';
 import { Store } from '@ngrx/store';
+import { selectCashRegisterId } from 'src/app/state/user/session/user-session.selectors';
 
 import { loadPlansByGym } from 'src/app/state/plan/plan.actions';
 import { selectPlansByGymId } from 'src/app/state/plan/plan.selectors';
@@ -37,6 +38,9 @@ import { CheckinListComponent } from './components/checkin-list/checkin-list.com
 import { CheckinModalComponent } from './components/checkin-modal/checkin-modal.component';
 import { ModalExpenseComponent } from './components/expense/modal/modal-expense.component';
 import { ExpenseSyncService } from 'src/app/local/tables-sync/expense-sync.service';
+import { selectAllExpenses } from 'src/app/state/expense/expenses.selectors';
+import { selectCajaState } from 'src/app/state/user/session/user-session.selectors';
+import { AppState } from 'src/app/state/app.state';
 
 
 @Component({
@@ -59,13 +63,13 @@ export class MainScreenComponent {
   manualNumber: string | null = '';
   modalOpened: boolean | undefined;
   plans: any;
-
+public totalGastos: number = 0;
   allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX ];
 
   constructor(
     private router: Router,
     private dialog: MatDialog,
-    private store: Store,
+  private store: Store<AppState>, // 👈 esto es clave
     private _access: MemberService,
     private _notification: NotificationService,
     private speechService: SpeechService,
@@ -128,6 +132,30 @@ this.store.select(selectPlansByGymId(this.gymId))
 
     const products = await this.productService.getProductsWithCache();
     this.store.dispatch(loadedProducts({ products }));
+
+combineLatest([
+  this.store.select(selectCashRegisterId),
+  this.store.select(selectAllExpenses)
+]).pipe(
+  map(([cashRegisterId, expenses]) => {
+    console.log('🔍 cashRegisterId actual:', cashRegisterId);
+    console.log('🧾 Todos los gastos:', expenses);
+console.log('🧾 IDs de caja en los gastos:', expenses.map(e => e.cashRegisterId));
+
+    const filtrados = expenses.filter(e => e.cashRegisterId === cashRegisterId);
+    console.log('✅ Gastos de esta caja:', filtrados);
+
+    return filtrados.reduce((total, e) => total + e.amount, 0);
+  })
+).subscribe(total => {
+  console.log('💵 Total gastos calculado:', total);
+  this.totalGastos = total;
+});
+
+
+
+
+
   }
 
   listenUserUpdates() {

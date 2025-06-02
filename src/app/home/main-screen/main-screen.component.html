@@ -18,7 +18,7 @@
         <p class="label">Último check-in    </p>
       </div>
 
-      <div class="kpi-card green ">
+      <div class="kpi-card green " (click)="abrirModalGastos()" style="cursor: pointer">
                 <p class="gastos">Gastos</p>
 
         <p class="value-gastos">
@@ -67,31 +67,25 @@
       
       
   
-    <h3 class="section-title">Todo</h3>
-  
-    <div class="feed">
-      <div class="feed-card">
-        <mat-icon>directions_bike</mat-icon>
-        <div>
-          <p>Clase de spinning empieza en 30 min</p>
-          <small>11:30 a.m.</small>
-        </div>
-      </div>
-      <div class="feed-card">
-        <mat-icon>credit_card</mat-icon>
-        <div>
-          <p>Hoy se renovaron 4 membresías nuevas</p>
-          <small>9:20 a.m.</small>
-        </div>
-      </div>
-      <div class="feed-card">
-        <mat-icon color="warn">warning</mat-icon>
-        <div>
-          <p>Faltan 3 días para corte semanal de caja</p>
-          <small>8:00 a.m.</small>
-        </div>
-      </div>
+   <h3 class="section-title">Todo</h3>
+
+<div class="feed">
+  <div
+    class="feed-card"
+    *ngFor="let item of feed; let i = index"
+    (pointerdown)="startSwipe($event, i)"
+    (pointermove)="moveSwipe($event, i)"
+    (pointerup)="endSwipe(i)"
+    [ngStyle]="{ transform: item.transform, opacity: item.opacity }"
+  >
+    <mat-icon [color]="item.color || ''">{{ item.icon }}</mat-icon>
+    <div>
+      <p>{{ item.text }}</p>
+      <small>{{ item.time }}</small>
     </div>
+  </div>
+</div>
+
   </div>
   
 

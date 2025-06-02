@@ -41,6 +41,8 @@ import { ExpenseSyncService } from 'src/app/local/tables-sync/expense-sync.servi
 import { selectAllExpenses } from 'src/app/state/expense/expenses.selectors';
 import { selectCajaState } from 'src/app/state/user/session/user-session.selectors';
 import { AppState } from 'src/app/state/app.state';
+import { GastosDelDiaModalComponent } from './components/expense/gastos-del-dia-modal/gastos-del-dia-modal.component';
+import { ExpenseModel } from 'src/app/state/expense/expense.model';
 
 
 @Component({
@@ -65,6 +67,7 @@ export class MainScreenComponent {
   plans: any;
 public totalGastos: number = 0;
   allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX ];
+gastosDeHoy: ExpenseModel[] = [];
 
   constructor(
     private router: Router,
@@ -133,6 +136,8 @@ this.store.select(selectPlansByGymId(this.gymId))
     const products = await this.productService.getProductsWithCache();
     this.store.dispatch(loadedProducts({ products }));
 
+this.gastosDeHoy = []; // 👈 asegúrate de declarar esto en tu clase
+
 combineLatest([
   this.store.select(selectCashRegisterId),
   this.store.select(selectAllExpenses)
@@ -140,10 +145,17 @@ combineLatest([
   map(([cashRegisterId, expenses]) => {
     console.log('🔍 cashRegisterId actual:', cashRegisterId);
     console.log('🧾 Todos los gastos:', expenses);
-console.log('🧾 IDs de caja en los gastos:', expenses.map(e => e.cashRegisterId));
+    console.log('🧾 IDs de caja en los gastos:', expenses.map(e => e.cashRegisterId));
 
-    const filtrados = expenses.filter(e => e.cashRegisterId === cashRegisterId);
-    console.log('✅ Gastos de esta caja:', filtrados);
+    const hoy = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+    const filtrados = expenses.filter(e =>
+      e.cashRegisterId === cashRegisterId &&
+      e.expenseDate?.startsWith(hoy) // 👈 solo los de hoy
+    );
+
+    this.gastosDeHoy = filtrados; // 👈 los guardas para mostrarlos en modal
+    console.log('✅ Gastos de esta caja HOY:', filtrados);
 
     return filtrados.reduce((total, e) => total + e.amount, 0);
   })
@@ -370,6 +382,79 @@ this.dialog.open(ModalExpenseComponent, {
 });
 
   
+}
+
+feed = [
+  {
+    icon: 'directions_bike',
+    text: 'Clase de spinning empieza en 30 min',
+    time: '11:30 a.m.',
+    x: 0,
+    transform: '',
+    opacity: '1'
+  },
+  {
+    icon: 'credit_card',
+    text: 'Hoy se renovaron 4 membresías nuevas',
+    time: '9:20 a.m.',
+    x: 0,
+    transform: '',
+    opacity: '1'
+  },
+  {
+    icon: 'warning',
+    text: 'Faltan 3 días para corte semanal de caja',
+    time: '8:00 a.m.',
+    color: 'warn',
+    x: 0,
+    transform: '',
+    opacity: '1'
+  }
+];
+
+private swipeStartX = 0;
+
+startSwipe(event: PointerEvent, index: number) {
+  this.swipeStartX = event.clientX;
+}
+
+moveSwipe(event: PointerEvent, index: number) {
+  const deltaX = event.clientX - this.swipeStartX;
+  if (deltaX > 0) {
+    this.feed[index].x = deltaX;
+    this.feed[index].transform = `translateX(${deltaX}px)`;
+    this.feed[index].opacity = `${1 - deltaX / 300}`;
+  }
+}
+
+endSwipe(index: number) {
+  const swipeDistance = this.feed[index].x;
+  const screenWidth = window.innerWidth;
+
+  if (swipeDistance > screenWidth * 0.4) {
+    // animar salida antes de eliminar
+    this.feed[index].transform = `translateX(${screenWidth}px)`;
+    this.feed[index].opacity = '0';
+
+    setTimeout(() => this.feed.splice(index, 1), 300); // espera la animación
+  } else {
+    // volver a su lugar
+    this.feed[index].transform = 'translateX(0)';
+    this.feed[index].opacity = '1';
+    this.feed[index].x = 0;
+  }
+}
+
+
+abrirModalGastos() {
+  this.dialog.open(GastosDelDiaModalComponent, {
+    width: '90vw',
+    maxWidth: '600px',
+    height: 'auto',
+    data: {
+      gastos: this.gastosDeHoy|| []  // ← define esto antes (ver paso 4)
+    }
+  });
 }
 
 }

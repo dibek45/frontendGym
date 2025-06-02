@@ -319,7 +319,12 @@ console.log('🛒 Abriendo modal para producto:', product);
   
   
 async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
-  const formattedCart = cart.map(item => ({
+
+
+  const formattedCart = cart.map(item => (  alert(item.product.isMembership || false)
+,{
+
+    
     productId: Number(item.product.id),
     name: item.product.name,
     costo: item.product.price,
@@ -395,12 +400,14 @@ async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
           // 🖨️ Imprimir ticket
           resolve(); // ✅ fin exitoso
         } else {
-          console.error("⚠️ Respuesta inesperada:", response);
+console.error("⚠️ Error GraphQL detallado:", JSON.stringify(response.errors, null, 2));
           reject("Respuesta inesperada al crear venta");
         }
       },
       error: (error) => {
         console.error("❌ Error GraphQL:", error);
+            console.error("❌ GraphQL errornew:", JSON.stringify(error.error, null, 2)); // 👈 aquí va eso
+
         reject(error);
       }
     });

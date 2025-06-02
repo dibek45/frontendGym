@@ -279,7 +279,7 @@ const remoteUpdatedAt = versionMap.get(table.toLowerCase());
   const start = Date.now();
 
   await this.dispatcher.dispatch(table); // 👈 aquí es donde ya termina el sync
-alert('[DEBUG] Tabla recibida en syncTableIfNeeded:'+table);
+console.log('[DEBUG] Tabla recibida en syncTableIfNeeded:'+table);
 
   // 🔁 AGREGA ESTO justo después del dispatch:
   if (table === 'checkins') {

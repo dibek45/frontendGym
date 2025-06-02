@@ -12,6 +12,7 @@ import { MachineModel } from '../state/machine/machine.model';
 import { Sale } from '../state/point-of-sale/sale/sale.model';
 import { Casher } from '../state/point-of-sale/casher/cashier.model';
 import { ExpenseModel } from '../state/expense/expense.model';
+import { ExpenseSyncService } from '../local/tables-sync/expense-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,11 +28,11 @@ export class SocketService {
   public routineUpdated$ = new Subject<Routine>();
   public machineUpdated$ = new Subject<MachineModel>();
     public cashierUpdated$ = new Subject<Casher>();
-
 public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
 
 
-  constructor(private localStorage: LocalEncryptedStorageService) {
+  constructor(private localStorage: LocalEncryptedStorageService,private expenseSyncService:ExpenseSyncService
+) {
     this.socket = io('wss://api.dibeksolutions.com', {
       transports: ['websocket'],
     });
@@ -40,6 +41,7 @@ public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
       console.log('🟢 Conectado al servidor WebSocket');
       this.loadGymId(); // ✅ Cargar gymId desde identidad
     });
+  this.onExpenseUpdate(); // ✅ Agrega esta línea
 
     this.socket.on('pong', (data) => {
       console.log('📨 Respuesta del servidor:', data);
@@ -102,12 +104,15 @@ onCashierUpdate(callback: (data: Casher) => void) {
     }
   }
 
- onExpenseUpdate(callback: (data: ExpenseModel) => void) {
-  this.socket.on('expenseUpdated', (data) => {
+onExpenseUpdate() {
+  this.socket.on('expenseUpdated', (data: ExpenseModel) => {
     console.log('📡 Evento expenseUpdated recibido:', data);
     this.expenseUpdated$.next(data);
-    callback(data);
+
+    // 🔥 Actualiza caché local + store de Redux
+    this.expenseSyncService.handleRemoteUpdate(data);
   });
 }
+
 
 }

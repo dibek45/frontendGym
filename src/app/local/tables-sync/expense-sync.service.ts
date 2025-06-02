@@ -21,6 +21,8 @@ export class ExpenseSyncService {
       return;
     }
 
+  console.log('🧾 updatedExpense recibido:', updatedExpense); // 👈 AQUI
+
     const expenses = await this.localStorage.loadTableFromLocalCache<ExpenseModel>(
       identity.userId,
       identity.gymId,
@@ -36,10 +38,17 @@ export class ExpenseSyncService {
       console.log(`🆕 Gasto agregado localmente (ID ${updatedExpense.id})`);
     }
 
-    const enrichedExpenses = expenses.map(e => ({
-      ...e,
-      updatedAt: e.updatedAt ?? new Date().toISOString()
-    }));
+      const enrichedExpenses = expenses.map(e => {
+        if (e.cashRegisterId === undefined) {
+          console.warn('⚠️ Gasto sin cashRegisterId detectado:', e);
+        }
+
+  return {
+    ...e,
+    updatedAt: e.updatedAt ?? new Date().toISOString()
+  };
+});
+
 
     await this.localStorage.saveTableToLocalCache(
       identity.userId,

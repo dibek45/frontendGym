@@ -79,7 +79,6 @@ barcode: string = ''; // Variable para el código de barras
   }
   ngOnInit(): void {
 this.socketService.onCashRegisterUpdate((cashRegister: CashRegister) => {
-  alert("Evento recibido: cashRegisterUpdated biiien")
   console.log('📡 Evento recibido: cashRegisterUpdated', cashRegister);
   // 👉 Aquí puedes:
   // - Guardar en localForage
@@ -117,7 +116,7 @@ this.socketmetod();
     const gymId = identity.gymId;
     this.socketService.joinGymRoom(gymId);
     this.socketService.onCashRegisterUpdate((data) => {
-      alert('📦 Caja recibida globalmente:'+JSON.stringify(data));
+    //  alert('📦 Caja recibida globalmente:'+JSON.stringify(data));
     });
   }
 

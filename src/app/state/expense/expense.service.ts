@@ -66,6 +66,7 @@ export class ExpenseService {
           category
           createdBy
           cashierId
+          cashRegisterId
           gymId
           createdAt
           updatedAt
@@ -94,6 +95,7 @@ async createExpense(expense: ExpenseModel): Promise<ExpenseModel> {
         description
         amount
         paymentMethod
+        cashRegisterId
         expenseDate
         category
         createdBy

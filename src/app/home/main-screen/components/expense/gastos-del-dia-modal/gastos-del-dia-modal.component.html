@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Gastos de Hoy</h2>
+
+<mat-dialog-content *ngIf="tieneGastos; else sinGastos">
+  <div class="gasto-item" *ngFor="let gasto of data.gastos">
+    <div class="info">
+      <div class="descripcion">{{ gasto.description }}</div>
+      <div class="categoria">{{ gasto.category }}</div>
+    </div>
+    <div class="monto">{{ gasto.amount | currency: 'MXN' }}</div>
+  </div>
+
+  <!-- TOTAL de gastos -->
+  <div class="total-container">
+    <span>Total:</span>
+  <span class="total-amount">{{ total | currency: 'MXN' }}</span>
+
+  </div>
+</mat-dialog-content>
+
+<ng-template #sinGastos>
+  <p class="empty">No hay gastos registrados hoy.</p>
+</ng-template>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrar()">Cerrar</button>
+</mat-dialog-actions>

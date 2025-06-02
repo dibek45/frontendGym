@@ -1,0 +1,41 @@
+.gasto-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .descripcion {
+    font-weight: 500;
+  }
+
+  .categoria {
+    font-size: 13px;
+    color: #888;
+  }
+
+  .monto {
+    font-weight: bold;
+    min-width: 80px;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+.total-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-top: 1px solid #ccc;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.total-amount {
+  color: #2e7d32;
+}

@@ -38,7 +38,7 @@ export class ModalExpenseComponent {
 
   monto = 0;
   fecha = new Date();
-  descripcion = '';
+  descripcion = '-';
 
 categorias = [
   { nombre: 'Servicios', icon: 'bolt' },           // luz, agua, etc.

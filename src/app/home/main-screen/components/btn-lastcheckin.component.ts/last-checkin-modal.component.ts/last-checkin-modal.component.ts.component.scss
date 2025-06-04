@@ -1,0 +1,22 @@
+.modal-container {
+  text-align: center;
+  padding: 16px;
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin-top: 8px;
+    color: #666;
+  }
+}

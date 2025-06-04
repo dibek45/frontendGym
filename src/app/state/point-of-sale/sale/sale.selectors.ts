@@ -39,3 +39,7 @@ export const selectFilteredSales = createSelector(
   }
 );
 
+export const selectAllSales = createSelector(
+  selectSalesState,
+  (state: SaleState) => state.sales ?? []
+);

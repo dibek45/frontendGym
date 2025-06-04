@@ -1,0 +1,24 @@
+.kpi-card {
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #666;
+  text-align: center;
+
+  .value {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .label {
+    font-size: 0.9rem;
+    color: black;
+  }
+
+  &.gray {
+    background-color:white;
+  }
+
+  &.checado {
+    color: green;
+  }
+}

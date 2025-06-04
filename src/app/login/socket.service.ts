@@ -13,6 +13,7 @@ import { Sale } from '../state/point-of-sale/sale/sale.model';
 import { Casher } from '../state/point-of-sale/casher/cashier.model';
 import { ExpenseModel } from '../state/expense/expense.model';
 import { ExpenseSyncService } from '../local/tables-sync/expense-sync.service';
+import { CheckinModel } from '../state/checkins/checkins.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,8 @@ export class SocketService {
   public routineUpdated$ = new Subject<Routine>();
   public machineUpdated$ = new Subject<MachineModel>();
     public cashierUpdated$ = new Subject<Casher>();
+    public checkinUpdated$ = new Subject<CheckinModel>(); // importa CheckinModel
+
 public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
 
 
@@ -46,6 +49,9 @@ public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
     this.socket.on('pong', (data) => {
       console.log('📨 Respuesta del servidor:', data);
     });
+this.onSaleUpdate(); 
+this.onCheckinUpdate(); 
+
 
     
   }
@@ -64,7 +70,12 @@ public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
   onCashRegisterUpdate(callback: (data: any) => void) {
     this.socket.on('cashRegisterUpdated', callback);
   }
-
+onCheckinUpdate() {
+  this.socket.on('checkinUpdated', (data: CheckinModel) => {
+    console.log('📡 Evento checkinUpdated recibido:', data);
+    this.checkinUpdated$.next(data);
+  });
+}
 onCashRegisterDeleted(callback: (data: { id: number }) => void) {
   this.socket.on('cashRegisterDeleted', callback);
 }
@@ -114,5 +125,11 @@ onExpenseUpdate() {
   });
 }
 
+onSaleUpdate() {
+  this.socket.on('saleUpdated', (data: Sale) => {
+    console.log('📡 Evento saleUpdated recibido:', data);
+    this.saleUpdated$.next(data);
+  });
+}
 
 }

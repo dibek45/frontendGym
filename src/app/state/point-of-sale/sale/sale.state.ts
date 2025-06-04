@@ -1,4 +1,4 @@
-import { Sale } from './sale.model'; // Asegúrate de importar el modelo correcto
+import { Sale } from "./sale.model";
 
 // Define la estructura del estado de ventas
 export interface SaleState {

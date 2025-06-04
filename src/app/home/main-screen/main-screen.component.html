@@ -9,14 +9,14 @@
   
     <div class="kpis">
       
-      <div class="kpi-card blue">
-        <p class="value asistencias">48</p>
-        <p class="label">Asistencias hoy</p>
+     <div class="kpi-card blue" (click)="openCheckinModal(true)">
+      <p class="value asistencias">{{asistenciasHoy}}</p>
+      <p class="label">Asistencias hoy</p>
       </div>
-      <div class="kpi-card gray  ">
-        <p class="value checado">10:22 a.m.</p>
-        <p class="label">Último check-in    </p>
-      </div>
+
+     <app-btn-lastcheckin></app-btn-lastcheckin>
+
+
 
       <div class="kpi-card green " (click)="abrirModalGastos()" style="cursor: pointer">
                 <p class="gastos">Gastos</p>

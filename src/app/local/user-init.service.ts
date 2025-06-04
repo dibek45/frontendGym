@@ -12,6 +12,8 @@ import { loadCheckinsSuccess } from '../state/checkins/checkins.actions';
 import { ExpenseModel } from '../state/expense/expense.model';
 import { loadExpensesSuccess } from '../state/expense/expense.actions';
 import { Router } from '@angular/router';
+import { loadSalesSuccess } from '../state/point-of-sale/sale/sale.actions';
+import { SaleModel } from '../state/point-of-sale/cash-register/sale.model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,8 +82,14 @@ this.store.dispatch(setCajaState({
         console.log('💸 Expenses restaurados:', expenses.length);
       }
 
-      // Puedes agregar aquí también members, products, etc. si lo deseas
-
+      // ✅ Restaurar ventas
+      const sales = await this.localStorage.loadTableFromLocalCache<SaleModel>(
+        identity.userId, identity.gymId, 'sales'
+      );
+      if (sales?.length) {
+        this.store.dispatch(loadSalesSuccess({ sales }));
+        console.log('💰 Ventas restauradas:', sales.length);
+      }
     } else {
       console.warn('⚠️ No se encontró identity.json en almacenamiento local');
     }

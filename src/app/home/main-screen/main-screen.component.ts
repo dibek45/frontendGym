@@ -43,6 +43,9 @@ import { selectCajaState } from 'src/app/state/user/session/user-session.selecto
 import { AppState } from 'src/app/state/app.state';
 import { GastosDelDiaModalComponent } from './components/expense/gastos-del-dia-modal/gastos-del-dia-modal.component';
 import { ExpenseModel } from 'src/app/state/expense/expense.model';
+import { CheckinModel } from 'src/app/state/checkins/checkins.model';
+import { selectSyncedCheckins } from 'src/app/state/checkins/checkins.selectors';
+import { BtnLastCheckinComponent } from './components/btn-lastcheckin.component.ts/btn-lastcheckin.component.ts.component';
 
 
 @Component({
@@ -51,14 +54,17 @@ import { ExpenseModel } from 'src/app/state/expense/expense.model';
   styleUrls: ['./main-screen.component.scss'],
    standalone: true,
   imports: [CommonModule,MatIconModule,HttpClientModule,   CommonModule,
-    MatDialogModule,ZXingScannerModule,  
+    MatDialogModule,ZXingScannerModule, BtnLastCheckinComponent 
 ],
 })
 export class MainScreenComponent {
+  asistenciasHoy = 0;
+
   public gymId: number = 0;
   public plans$: Observable<any[]> = of([]);
   public currentBalance: number = 0;
   public showScanner: boolean = false;
+  últimoCheckin: CheckinModel | null = null;
 
   scannedId: string = '';
   timeout: any;
@@ -68,6 +74,7 @@ export class MainScreenComponent {
 public totalGastos: number = 0;
   allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX ];
 gastosDeHoy: ExpenseModel[] = [];
+public ultimoCheckinHora: string | null = null;
 
   constructor(
     private router: Router,
@@ -130,6 +137,7 @@ this.store.select(selectPlansByGymId(this.gymId))
 
 
 
+this.contarAsistenciasHoy();
 
 
 
@@ -150,8 +158,8 @@ combineLatest([
     const hoy = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
     const filtrados = expenses.filter(e =>
-      e.cashRegisterId === cashRegisterId &&
-      e.expenseDate?.startsWith(hoy) // 👈 solo los de hoy
+      e.cashRegisterId === cashRegisterId //&&
+   //   e.expenseDate?.startsWith(hoy) // 👈 solo los de hoy
     );
 
     this.gastosDeHoy = filtrados; // 👈 los guardas para mostrarlos en modal
@@ -164,6 +172,7 @@ combineLatest([
   this.totalGastos = total;
 });
 
+this.cargarUltimoCheckinGlobal();
 
 
 
@@ -365,15 +374,18 @@ combineLatest([
     console.log('Renovando a:', membresia);
   }
 
-  openCheckinModal() {
-this.dialog.open(CheckinModalComponent, {
-  width: '100vw',
-  height: '100vh',
-  maxWidth: '100vw',
-  panelClass: 'full-screen-modal'
-});
-
+openCheckinModal(onlyToday: boolean = false) {
+  this.dialog.open(CheckinModalComponent, {
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    panelClass: 'full-screen-modal',
+    data: {
+      selectedDate: onlyToday ? new Date() : null
+    }
+  });
 }
+
 
 openModalExpense() {
 this.dialog.open(ModalExpenseComponent, {
@@ -456,5 +468,48 @@ abrirModalGastos() {
     }
   });
 }
+
+
+cargarUltimoCheckinGlobal() {
+  this.store.select(selectSyncedCheckins).pipe(
+    take(1),
+    map((checkins: CheckinModel[]) => {
+      return checkins
+        .filter(c => c.timestamp)
+        .sort((a, b) => Number(b.timestamp) - Number(a.timestamp))[0] || null;
+    })
+  ).subscribe(checkin => {
+    this.últimoCheckin = checkin;
+
+    const rawTimestamp = checkin?.timestamp;
+    const parsedDate = rawTimestamp ? new Date(Number(rawTimestamp)) : null;
+
+    this.ultimoCheckinHora = parsedDate instanceof Date && !isNaN(parsedDate.getTime())
+      ? parsedDate.toLocaleTimeString('es-MX', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        })
+      : null;
+
+    console.log('⏱️ Timestamp:', rawTimestamp, '👉', this.ultimoCheckinHora);
+  });
+}
+
+
+
+contarAsistenciasHoy() {
+  const hoyStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+  this.store.select(selectSyncedCheckins).pipe(take(1)).subscribe((checkins: CheckinModel[]) => {
+    this.asistenciasHoy = checkins.filter(c => {
+      const fechaCheckin = new Date(Number(c.timestamp)).toISOString().split('T')[0];
+      return fechaCheckin === hoyStr;
+    }).length;
+
+    console.log('📊 Asistencias hoy:', this.asistenciasHoy);
+  });
+}
+
 
 }

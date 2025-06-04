@@ -14,6 +14,8 @@ import { ExpenseService } from 'src/app/state/expense/expense.service';
 import { CheckinSyncService } from '../tables-sync/checkin-sync.service';
 import { CheckinService } from 'src/app/state/checkins/checkins.service';
 import { loadCheckinsSuccess } from 'src/app/state/checkins/checkins.actions';
+import { loadSalesSuccess } from 'src/app/state/point-of-sale/sale/sale.actions';
+import { SalesService } from 'src/app/state/point-of-sale/sale/sales.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +30,8 @@ export class SyncServiceDispatcher {
     private cashierService:CashierService,
     private expenseService:ExpenseService,
      private checkinService: CheckinService,
-  private checkinSync: CheckinSyncService
+  private checkinSync: CheckinSyncService,
+  private saleService:SalesService
   ) {}
 
   async dispatch(table: string): Promise<void> {
@@ -86,6 +89,29 @@ export class SyncServiceDispatcher {
 
   break;
 }
+case 'sales': {
+  console.log('🔁 Despachando sincronización de sales...');
+  const sales = await this.saleService.getSalesWithCache(true);
+  console.log('📦 Ventas cargadas desde el servicio:', sales);
+
+  this.store.dispatch(loadSalesSuccess({ sales }));
+
+  const identity = await this.localStorage.loadIdentity();
+  if (identity) {
+    await this.localStorage.saveTableToLocalCache(
+      identity.userId,
+      identity.gymId,
+      'sales',
+      sales.map(s => ({
+        ...s,
+        updatedAt: s.updatedAt ?? new Date().toISOString()
+      }))
+    );
+  }
+
+  break;
+}
+
 
 
     default:

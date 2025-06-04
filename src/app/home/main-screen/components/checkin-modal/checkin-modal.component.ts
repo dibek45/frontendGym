@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Input, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CheckinListComponent } from '../checkin-list/checkin-list.component'; // ajusta la ruta
 import { MatIconModule } from '@angular/material/icon';
 
@@ -12,9 +12,17 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./checkin-modal.component.scss']
 })
 export class CheckinModalComponent {
-  constructor(public dialogRef: MatDialogRef<CheckinModalComponent>) {}
+selectedDate: Date | null = null;
+
+  constructor(
+    public dialogRef: MatDialogRef<CheckinModalComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { selectedDate?: Date } | null
+  ) {
+this.selectedDate = data?.selectedDate ?? null;
+  }
 
   close() {
     this.dialogRef.close();
   }
+
 }

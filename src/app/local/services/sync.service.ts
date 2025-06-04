@@ -49,6 +49,8 @@ export class SyncService {
     this.subscribeToCashRegisterUpdates();
     this.subscribeToMemberUpdates();
     this.subscribeToProductUpdates();
+    this.subscribeToSaleUpdates();     // 👈 FALTA
+this.subscribeToCheckinUpdates();  // 👈 FALTA
   }
 
   // 🔁 Actualización de cajas por socket
@@ -123,12 +125,6 @@ await this.localStorage.saveTableToLocalCache(userId, gymId, 'products', enriche
     });
   }
 
-
-
-
-
-
-
 private subscribeToSaleUpdates() {
   this.socketService.saleUpdated$.subscribe({
     next: async (updated: Sale) => {
@@ -152,6 +148,30 @@ private subscribeToSaleUpdates() {
 this.store.dispatch(loadSalesSuccess({ sales: updatedList }));
       console.log('✅ Venta actualizada localmente y en Redux');
     }
+  });
+}
+private subscribeToCheckinUpdates() {
+  this.socketService.checkinUpdated$.subscribe(async (updated: CheckinModel) => {
+    console.log('📨 Checkin actualizado recibido por socket:', updated);
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) return;
+
+    const list = await this.localStorage.loadTableFromLocalCache<CheckinModel>(
+      identity.userId,
+      identity.gymId,
+      'checkins'
+    ) || [];
+
+    const updatedList = [...list.filter(c => c.id !== updated.id), updated].map(c => ({
+      ...c,
+      updatedAt: c.updatedAt ?? new Date().toISOString()
+    }));
+
+    await this.localStorage.saveTableToLocalCache(identity.userId, identity.gymId, 'checkins', updatedList);
+    await this.localStorage.saveVersion(identity.userId, identity.gymId, 'checkins', updated.updatedAt ?? new Date().toISOString());
+
+    this.store.dispatch(loadCheckinsSuccess({ checkins: updatedList }));
+    console.log('✅ Checkin actualizado localmente y en Redux');
   });
 }
 
@@ -341,6 +361,8 @@ private subscribeToExpenseUpdates() {
    // await this.syncTableIfNeeded('sale');
   //  await this.syncTableIfNeeded('routine');
   //  await this.syncTableIfNeeded('machine');
+     await this.syncTableIfNeeded('sales'); // 👈 si ya la tienes como tabla en el backend
+
     await this.syncTableIfNeeded('cashiers');
     await this.syncTableIfNeeded('checkins');
 

@@ -13,4 +13,7 @@ export interface SaleModel {
   isSynced?: boolean;              // true si ya se sincronizó con backend
   syncError?: boolean;             // true si hubo error al sincronizar
   tempId?: string;                 // ID temporal antes de obtener el ID real
+
+  cashRegister?: { id: number };
+
 }

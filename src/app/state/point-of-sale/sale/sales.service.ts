@@ -3,14 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environment.prod';
-
+import * as CryptoJS from 'crypto-js';
+import localforage from 'localforage';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
 @Injectable({
   providedIn: 'root'
 })
 export class SalesService {
   private apiUrl = environment.apiUrl; // URL de la API GraphQL
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+        private localStorage: LocalEncryptedStorageService,
+    
+  ) {}
 
   getSales(gymId: number): Observable<any> {
     const query = `
@@ -112,4 +117,45 @@ query GetSales($gymId: Float!) {
       map(response => response.data.deleteSale.success)
     );
   }
+
+  async getSalesWithCache(forceBackend = false): Promise<any[]> {
+  const encrypted = await localforage.getItem<string>('identity.json');
+  if (!encrypted) return [];
+
+  const identity = JSON.parse(
+    CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta').toString(CryptoJS.enc.Utf8)
+  );
+
+  const key = `user-${identity.userId}/gym-${identity.gymId}/sales`;
+
+  if (!forceBackend) {
+    const cached = await localforage.getItem<string>(key);
+    if (cached) {
+      try {
+        const decrypted = CryptoJS.AES.decrypt(cached, 'clave-super-secreta').toString(CryptoJS.enc.Utf8);
+        return JSON.parse(decrypted);
+      } catch (err) {
+        console.error('❌ Error al leer caché de ventas:', err);
+      }
+    }
+  }
+
+  try {
+    const result = await this.getSales(identity.gymId).toPromise(); // 👈 usa el observable existente
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(result), 'clave-super-secreta').toString();
+    await localforage.setItem(key, encryptedData);
+
+    await this.localStorage.saveVersion(
+    identity.userId,
+    identity.gymId,
+    'sales',
+    new Date().toISOString()
+  );
+    return result;
+  } catch (err) {
+    console.error('❌ Error al obtener ventas desde el backend:', err);
+    return [];
+  }
+}
+
 }

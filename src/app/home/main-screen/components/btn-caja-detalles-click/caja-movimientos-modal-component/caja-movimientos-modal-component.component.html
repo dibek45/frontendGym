@@ -1,0 +1,24 @@
+<h2 class="titulo-modal">
+  <mat-icon style="vertical-align: middle;">account_balance_wallet</mat-icon>
+  Movimientos de la caja
+</h2>
+
+<div class="movimientos-scroll">
+  <div *ngFor="let m of data.movimientos" class="movimiento">
+    <div class="izquierda">
+      <div class="tipo">{{ m.tipo | titlecase }}</div>
+
+      <div class="descripcion">{{ m.descripcion || '...' }}</div>
+    </div>
+    <div class="derecha">
+<div class="monto" [ngClass]="{ 'positivo': m.amount > 0, 'negativo': m.amount < 0 }">
+        {{ m.amount | currency:'MXN' }}
+      </div>
+      <div class="fecha">{{ m.fecha | date:'short' }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="acciones">
+  <button mat-button mat-dialog-close>Cerrar</button>
+</div>

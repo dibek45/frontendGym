@@ -1,0 +1,5 @@
+<div class="modal-container">
+  <img [src]="data.member.img || 'assets/default-avatar.png'" alt="Imagen" class="avatar" />
+  <h3>{{ data.member.name }}</h3>
+  <p><strong>Hora:</strong> {{ data.checkin.timestamp | date:'shortTime' }}</p>
+</div>

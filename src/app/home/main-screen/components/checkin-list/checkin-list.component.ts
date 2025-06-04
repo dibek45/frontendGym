@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CheckinCardComponent } from '../checkin-card/checkin-card.component';
 import { FormsModule } from '@angular/forms';
@@ -35,23 +35,27 @@ import { loadedMembers } from 'src/app/state/member/member.actions';
   templateUrl: './checkin-list.component.html',
 })
 export class CheckinListComponent implements OnInit {
-  selectedDate: Date = new Date();
   filteredCheckins: FormattedCheckin[] = [];
+@Input() showFilter: boolean = true;
 
   checkins$: Observable<CheckinModel[]> = this.store.select(selectSyncedCheckins);
 members$: Observable<readonly MemberModel[]> = this.store.select(selectFilteredMembers);
+@Input() selectedDate: Date | null = null;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedDate']) {
+      this.loadFilteredCheckins();
+    }
+  }
   constructor(private store: Store<AppState>,
       private localStorage: LocalEncryptedStorageService
 
   ) {}
 
 async ngOnInit(): Promise<void> {
-  // Espera a que cargue el usuario para obtener gymId
   const identity = await this.localStorage.loadIdentity();
   if (!identity?.gymId || !identity?.userId) return;
 
-  // Carga los miembros desde caché local si no están en el store
   this.store.select(selectSyncedMembers).pipe(take(1)).subscribe(async members => {
     if (members.length === 0) {
       const cachedMembers = await this.localStorage.loadTableFromLocalCache<any>(
@@ -61,14 +65,20 @@ async ngOnInit(): Promise<void> {
       );
 
       if (cachedMembers?.length) {
-        console.log('✅ Despachando miembros desde caché manualmente:', cachedMembers);
-this.store.dispatch(loadedMembers({ members: cachedMembers }));
+        this.store.dispatch(loadedMembers({ members: cachedMembers }));
       }
     }
 
-    this.loadFilteredCheckins(); // Ahora sí procesar
+    // 🔥 Espera activamente a que checkins y members estén disponibles antes de filtrar
+    combineLatest([
+      this.checkins$.pipe(filter(c => c.length > 0), take(1)),
+      this.members$.pipe(filter(m => m.length > 0), take(1))
+    ]).subscribe(() => {
+      this.loadFilteredCheckins();
+    });
   });
 }
+
 
 
 
@@ -76,7 +86,8 @@ loadFilteredCheckins(): void {
   combineLatest([this.checkins$, this.members$])
     .pipe(
       map(([checkins, members]) => {
-        const selectedDateStr = this.selectedDate.toISOString().split('T')[0];
+const selectedDate = this.selectedDate ?? new Date(); // fallback si es null
+const selectedDateStr = selectedDate.toLocaleDateString('sv-SE');
         console.log('📆 Fecha seleccionada:', selectedDateStr);
         console.log('📥 Checkins:', checkins.map(c => ({ id: c.id, memberId: c.memberId, timestamp: c.timestamp })));
         console.log('🧍‍♂️ Members disponibles:', members.map(m => ({ id: m.id, name: m.name })));

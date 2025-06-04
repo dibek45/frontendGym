@@ -5,7 +5,7 @@
   </button>
 
   <!-- 💰 Monto centrado -->
-  <div class="balance-display">
+  <div class="balance-display" (click)="abrirMovimientosCaja()">
     <p class="value caja">
       {{ currentBalance$ | async | currency:'MXN':'symbol':'1.2-2' }}
     </p>

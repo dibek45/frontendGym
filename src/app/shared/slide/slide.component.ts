@@ -7,12 +7,18 @@ import { LocalEncryptedStorageService } from 'src/app/local/services/local-encry
 import { SocketService } from 'src/app/login/socket.service';
 import { CashRegisterSyncService } from 'src/app/local/tables-sync/cash-register-sync.service';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, Observable } from 'rxjs';
-import { selectCurrentBalance, selectUserSessionState } from 'src/app/state/user/session/user-session.selectors';
+import { combineLatest, distinctUntilChanged, map, Observable, take } from 'rxjs';
+import { selectAllExpenses, selectCurrentBalance, selectUserSessionState } from 'src/app/state/user/session/user-session.selectors';
 import { CashRegister } from 'src/app/state/point-of-sale/cash-register/cash-register.model';
 import { setCajaState } from 'src/app/state/user/session/user-session.actions';
 // si usas el servicio extra
 import { ChangeDetectorRef } from '@angular/core';
+import { CajaMovimientosModalComponent } from 'src/app/home/main-screen/components/btn-caja-detalles-click/caja-movimientos-modal-component/caja-movimientos-modal-component.component';
+import { ExpenseModel } from 'src/app/state/expense/expense.model';
+import { SaleModel } from 'src/app/state/point-of-sale/cash-register/sale.model';
+import { AppState } from 'src/app/state/app.state';
+import { selectAllSales, selectSalesState } from 'src/app/state/point-of-sale/sale/sale.selectors';
+import { Sale } from 'src/app/state/point-of-sale/sale/sale.model';
 
 @Component({
   selector: 'app-slide',
@@ -30,7 +36,7 @@ export class SlideComponent implements OnInit {
     private localStorage: LocalEncryptedStorageService,
     private socketService: SocketService,
     private cashRegisterSyncService: CashRegisterSyncService,
-    private store: Store,
+  private store: Store<AppState>,
       private cdr: ChangeDetectorRef // 👈 agrega esto
 
   ) {}
@@ -118,4 +124,70 @@ this.cdr.detectChanges(); // 👈s
       autoFocus: false
     });
   }
+
+
+abrirMovimientosCaja() {
+
+
+
+  this.store.select(selectSalesState).pipe(take(1)).subscribe(state => {
+  console.log('🔎 Estado completo de ventas:', state);
+});
+
+
+
+
+  this.store.select(selectUserSessionState).pipe(take(1)).subscribe(session => {
+    const cashRegisterId = session.cashRegisterId;
+    if (!cashRegisterId) return;
+
+    combineLatest([
+      this.store.select(selectAllExpenses),
+      this.store.select(selectAllSales).pipe(
+        map(ventas => ventas as unknown as SaleModel[]) // 👈 cast for compatibility
+      )
+    ])
+    .pipe(take(1))
+    .subscribe(([gastos, ventas]: [ExpenseModel[], SaleModel[]]) => {
+
+      console.log('🔍 Caja ID actual:', cashRegisterId);
+      console.log('🧾 Gastos en total:', gastos.length, gastos);
+      console.log('💰 Ventas en total:', ventas.length, ventas);
+
+      const movimientos = [
+        ...gastos
+          .filter(g => g.cashRegisterId === cashRegisterId)
+          .map(g => ({
+            tipo: 'gasto',
+            amount: g.amount,
+            descripcion: g.description || '',
+            fecha: new Date(g.expenseDate)
+          })),
+        ...ventas
+          .filter(v => v.cashRegister?.id === cashRegisterId)
+          .map(v => ({
+            tipo: 'venta',
+            amount: v.totalAmount,
+            descripcion: `Venta #${v.id}`,
+            fecha: new Date(v.date)
+          }))
+      ];
+
+      console.log('📦 Movimientos combinados:', movimientos);
+
+      const ordenados = movimientos.sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+
+      this.dialog.open(CajaMovimientosModalComponent, {
+        width: '90vw',
+        maxWidth: '600px',
+        data: { movimientos: ordenados },
+        position: {
+          top: '130px' // 🔼 para que no quede tan centrado
+        }
+      });
+    });
+  });
+}
+
+
 }

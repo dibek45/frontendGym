@@ -50,8 +50,7 @@ export class CashRegisterComponent {
   
   constructor(  private localStorage: LocalEncryptedStorageService,
         private router: Router 
-
-,    private store: Store,private cashRegisterService:CashRegisterService,  private cashRegisterSyncService: CashRegisterSyncService
+,       private store: Store,
   ) {
     this.cashRegisters$ = this.store.select(selectAllCashRegisters);
     this.cashers$ = this.store.select(selectAllCashiers);

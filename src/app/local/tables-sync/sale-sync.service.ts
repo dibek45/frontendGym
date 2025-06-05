@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as SaleActions from '../../state/point-of-sale/sale/sale.actions';
 import { LocalEncryptedStorageService } from '../services/local-encrypted-storage.service';
-import { SaleModel } from 'src/app/state/point-of-sale/cash-register/sale.model';
+import { Sale } from 'src/app/state/point-of-sale/sale/sale.model';
 
 @Injectable({ providedIn: 'root' })
 export class SaleSyncService {
@@ -13,7 +13,7 @@ export class SaleSyncService {
     private localStorage: LocalEncryptedStorageService
   ) {}
 
-  async handleRemoteUpdate(updatedSale: SaleModel): Promise<void> {
+  async handleRemoteUpdate(updatedSale: Sale): Promise<void> {
     const identity = await this.localStorage.loadIdentity();
     if (!identity) {
       console.warn('❌ No hay identidad local');
@@ -22,7 +22,7 @@ export class SaleSyncService {
 
     console.log('💰 updatedSale recibido:', updatedSale);
 
-    const sales = await this.localStorage.loadTableFromLocalCache<SaleModel>(
+    const sales = await this.localStorage.loadTableFromLocalCache<Sale>(
       identity.userId,
       identity.gymId,
       this.tableName

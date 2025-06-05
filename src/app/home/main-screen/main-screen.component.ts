@@ -106,7 +106,9 @@ public ultimoCheckinHora: string | null = null;
 
   async ngOnInit(): Promise<void> {
     this.socketService.joinGymRoom(1);
-    this.listenToCashRegisterUpdates();
+this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
+  // Aquí va toda tu lógica
+});
     this.listenProductUpdates();
     this.listenExpenseUpdates(); // ✅ <-- agregar esta línea
 
@@ -191,12 +193,7 @@ this.cargarUltimoCheckinGlobal();
     });
   }
 
-  listenToCashRegisterUpdates() {
-    this.socketService.onCashRegisterUpdate(async updatedCashRegister => {
-      await this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
-      await this.userInitService.restoreUserFromSactorage();
-    });
-  }
+  
 
   listenProductUpdates() {
     this.socketService.onProductUpdate(product => {

@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as SalesActions from './sale.actions';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 import { SalesService } from './sales.service';
 
 @Injectable()
 export class SalesEffects {
   constructor(private actions$: Actions, private salesService: SalesService) {}
 
-  // 🔹 Effect para cargar ventas desde GraphQL con `gymId`
-  loadSales$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(SalesActions.loadSales),
-      switchMap(action => {
-        console.log(`📌 Cargando ventas para gymId: ${action.gymId}`);
-
-        return this.salesService.getSales(action.gymId).pipe(
-          map(sales => {
-            console.log('📌 Ventas recibidas en Effects:', sales);
-            return SalesActions.loadSalesSuccess({ sales }); // 🔹 Guardamos en Redux
-          }),
-          catchError(error => {
-            console.error('❌ Error en la consulta de GraphQL:', error);
-            return of(SalesActions.loadSalesFailure({ error }));
-          })
-        );
-      })
+loadSales$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(SalesActions.loadSales),
+    tap(() => console.log('[Effect] loadSales triggered')),
+    switchMap(() =>
+      from(this.salesService.getSalesWithCache()).pipe(
+        tap(data => console.log('✅ Ventas cargadas desde getSalesWithCache:', data)),
+        map((sales) => {
+          console.log('✅ Ventas cargadas con efecto:', sales);
+          return SalesActions.loadSalesSuccess({ sales });
+        }),
+        catchError((error) =>
+          of(SalesActions.loadSalesFailure({ error: error.message }))
+        )
+      )
     )
-  );
+  )
+);
+
   
 
   // 🔹 Effect para crear una nueva venta

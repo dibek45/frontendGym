@@ -19,6 +19,8 @@ import { SaleModel } from 'src/app/state/point-of-sale/cash-register/sale.model'
 import { AppState } from 'src/app/state/app.state';
 import { selectAllSales, selectSalesState } from 'src/app/state/point-of-sale/sale/sale.selectors';
 import { Sale } from 'src/app/state/point-of-sale/sale/sale.model';
+import { CashRegisterActions } from 'src/app/state/point-of-sale/cash-register/cash-register.actions';
+import { selectAllCashRegisters } from 'src/app/state/point-of-sale/cash-register/cash-register.selectors';
 
 @Component({
   selector: 'app-slide',
@@ -45,50 +47,111 @@ export class SlideComponent implements OnInit {
 this.currentBalance$ = this.store.select(selectCurrentBalance).pipe(
   distinctUntilChanged()
 );
+
+
   this.store.select(selectUserSessionState).subscribe(state => {
     console.log('📦 Estado userSession:', state);
   });
 
-  this.listenToCashRegisterUpdates();
+  this.cargarDesdeLocalSiExiste();
+this.sincronizarCajaDesdeCashRegisters()
+
+  this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
+    console.log('📡 Recibido cashRegisterUpdated', updatedCashRegister);
+
+    await this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
+
+    const identity = await this.localStorage.loadIdentity();
+    if (!identity) return;
+
+    const data = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+      identity.userId,
+      identity.gymId,
+      'cashRegisters'
+    );
+
+    // 🧠 Buscar caja del cajero actual (usuario logueado) y abierta
+    const caja = data?.find(c =>
+      c.cashier?.userId === identity.userId && c.status?.toLowerCase() === 'open'
+    );
+
+    if (caja) {
+      this.store.dispatch(setCajaState({
+        currentBalance: caja.currentBalance ?? 0,
+        cajaStatus: 'open',
+        cashRegisterId: caja.id ?? 0,
+      }));
+      alert(`💵 Caja actualizada vía socket: $${caja.currentBalance}`);
+    }
+  });
+}
+private sincronizarCajaDesdeCashRegisters() {
+  combineLatest([
+    this.store.select(selectAllCashRegisters),
+    this.store.select(selectUserSessionState)
+  ])
+  .pipe(distinctUntilChanged())
+  .subscribe(([cashRegisters, session]) => {
+    const userId = session.userId;
+    if (!userId || !session.gymId) return;
+
+    const caja = cashRegisters.find(c => c.cashierId === userId && c.status === 'open');
+
+    if (caja) {
+      this.store.dispatch(setCajaState({
+        currentBalance: caja.currentBalance ?? 0,
+        cajaStatus: 'open',
+        cashRegisterId: caja.id ?? 0
+      }));
+      alert(`💰 Caja actualizada: $${caja.currentBalance}`);
+    } else {
+      this.store.dispatch(setCajaState({
+        currentBalance: 0,
+        cajaStatus: 'closed',
+        cashRegisterId: 0
+      }));
+    }
+  });
 }
 
 
-  listenToCashRegisterUpdates() {
-    this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
-      await this.cashRegisterSyncService.handleRemoteUpdate(updatedCashRegister);
+private async cargarDesdeLocalSiExiste() {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) return;
 
-      const identity = await this.localStorage.loadIdentity();
-      if (!identity) return;
+  const data = await this.localStorage.loadTableFromLocalCache<CashRegister>(
+    identity.userId,
+    identity.gymId,
+    'cashRegisters'
+  );
 
-      const { userId, gymId } = identity;
+  if (data && data.length > 0) {
+    console.log('🗂️ Cargando cajas desde localforage al store');
+    this.store.dispatch(CashRegisterActions.loadCashRegistersSuccess({ cashRegisters: data }));
 
-      const updatedList =
-        (await this.localStorage.loadTableFromLocalCache<CashRegister>(
-          userId,
-          gymId,
-          'cashRegisters'
-        )) || [];
-        const cajaAbierta = updatedList.find(c => c.status === 'open');
+    // 🔍 Buscar caja del cajero actual (userId) y abierta
+    const cajaDelCajero = data.find(caja => caja.cashier?.userId === identity.userId && caja.status?.toLowerCase() === 'open');
 
-if (cajaAbierta) {
-const currentBalance = cajaAbierta?.currentBalance ?? 0;
-  const cajaStatus = 'open';
-const cashRegisterId = cajaAbierta?.id ?? 0;
+    if (cajaDelCajero) {
+      const currentBalance = cajaDelCajero.currentBalance ?? 0;
+      const cashRegisterId = cajaDelCajero.id ?? 0;
+      const cajaStatus = 'open'; // ya la validamos
 
-  this.store.dispatch(setCajaState({ currentBalance, cajaStatus, cashRegisterId }));
-} else {
-  const currentBalance = 0;
-  const cajaStatus = 'closed';
-  const cashRegisterId = 0; // 👈 usa 0 si tu store no permite null
+      this.store.dispatch(setCajaState({ currentBalance, cashRegisterId, cajaStatus }));
+      alert(`✅ Caja encontrada para cajero: Balance $${currentBalance}`);
+    } else {
+      const currentBalance = 0;
+      const cashRegisterId = 0;
+      const cajaStatus = 'closed';
 
-  this.store.dispatch(setCajaState({ currentBalance, cajaStatus, cashRegisterId }));
-}
-
-
-
-this.cdr.detectChanges(); // 👈s
-    });
+      this.store.dispatch(setCajaState({ currentBalance, cashRegisterId, cajaStatus }));
+      alert('⚠️ No hay caja abierta asignada al cajero.');
+    }
   }
+}
+
+
+
 
   toggleMenu(): void {
     this.showMenu = !this.showMenu;

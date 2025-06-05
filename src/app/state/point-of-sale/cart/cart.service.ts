@@ -321,7 +321,7 @@ console.log('🛒 Abriendo modal para producto:', product);
 async onSubmit(paymentMethod: string, cart: CartItemModel[]): Promise<void> {
 
 
-  const formattedCart = cart.map(item => (  alert(item.product.isMembership || false)
+  const formattedCart = cart.map(item => (  console.log(item.product.isMembership || false)
 ,{
 
     

@@ -51,8 +51,6 @@ addCashRegister$ = createEffect(() =>
             console.log('✅ Cajas cargadas con efecto:', cashRegisters);
             return CashRegisterActions.loadCashRegistersSuccess({ cashRegisters });
           }),
-          
-          
           catchError((error) =>
             of(CashRegisterActions.loadCashRegistersFailure({ error: error.message }))
           )

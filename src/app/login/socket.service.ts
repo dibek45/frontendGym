@@ -14,6 +14,9 @@ import { Casher } from '../state/point-of-sale/casher/cashier.model';
 import { ExpenseModel } from '../state/expense/expense.model';
 import { ExpenseSyncService } from '../local/tables-sync/expense-sync.service';
 import { CheckinModel } from '../state/checkins/checkins.model';
+import { SaleSyncService } from '../local/tables-sync/sale-sync.service';
+import { CheckinSyncService } from '../local/tables-sync/checkin-sync.service';
+import { CashRegisterSyncService } from '../local/tables-sync/cash-register-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +37,13 @@ export class SocketService {
 public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
 
 
-  constructor(private localStorage: LocalEncryptedStorageService,private expenseSyncService:ExpenseSyncService
+  constructor(private localStorage: LocalEncryptedStorageService,
+    private expenseSyncService:ExpenseSyncService,
+      private salesSyncService: SaleSyncService,
+        private checkinSyncService: CheckinSyncService,
+        private cashRegisterSyncService:CashRegisterSyncService
+ 
+
 ) {
     this.socket = io('wss://api.dibeksolutions.com', {
       transports: ['websocket'],
@@ -44,13 +53,14 @@ public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
       console.log('🟢 Conectado al servidor WebSocket');
       this.loadGymId(); // ✅ Cargar gymId desde identidad
     });
-  this.onExpenseUpdate(); // ✅ Agrega esta línea
 
     this.socket.on('pong', (data) => {
       console.log('📨 Respuesta del servidor:', data);
     });
 this.onSaleUpdate(); 
 this.onCheckinUpdate(); 
+this.onExpenseUpdate(); // ✅ Agrega esta línea
+
 
 
     
@@ -66,14 +76,28 @@ this.onCheckinUpdate();
     this.socket.emit('joinGym', gymId);
     console.log(`📥 Solicitando unión a la sala: gym-${gymId}`);
   }
+onCashRegisterUpdate(callback: (data: CashRegister) => void) {
+  this.socket.on('cashRegisterUpdated', (data: CashRegister) => {
+    console.log('📡 Evento cashRegisterUpdated recibido:', data);
+    callback(data);
+  });
+}
 
-  onCashRegisterUpdate(callback: (data: any) => void) {
-    this.socket.on('cashRegisterUpdated', callback);
-  }
+
+
+
+
+
+
+
 onCheckinUpdate() {
   this.socket.on('checkinUpdated', (data: CheckinModel) => {
+    alert("chekin socket")
     console.log('📡 Evento checkinUpdated recibido:', data);
     this.checkinUpdated$.next(data);
+
+        this.checkinSyncService.handleRemoteUpdate(data); // 👈 esto faltaba
+
   });
 }
 onCashRegisterDeleted(callback: (data: { id: number }) => void) {
@@ -127,8 +151,11 @@ onExpenseUpdate() {
 
 onSaleUpdate() {
   this.socket.on('saleUpdated', (data: Sale) => {
-    console.log('📡 Evento saleUpdated recibido:', data);
+    alert('📡 Evento saleUpdated recibido:'+data);
     this.saleUpdated$.next(data);
+
+        this.salesSyncService.handleRemoteUpdate(data); // 👈 esto es lo que faltaba
+
   });
 }
 

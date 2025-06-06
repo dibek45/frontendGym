@@ -525,7 +525,7 @@ const hoyStr = new Date().toLocaleDateString('sv-SE'); // "2025-06-05"
         return false;
       }
 
-      const fechaCheckin = fecha.toISOString().split('T')[0];
+const fechaCheckin = fecha.toLocaleDateString('sv-SE');
       console.log(`🕒 Checkin ${c.id} es de ${fechaCheckin}`);
       return fechaCheckin === hoyStr;
     }).length;

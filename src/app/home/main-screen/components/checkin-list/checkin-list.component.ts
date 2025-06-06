@@ -86,37 +86,40 @@ loadFilteredCheckins(): void {
   combineLatest([this.checkins$, this.members$])
     .pipe(
       map(([checkins, members]) => {
-const selectedDate = this.selectedDate ?? new Date(); // fallback si es null
-const selectedDateStr = selectedDate.toLocaleDateString('sv-SE');
+        const selectedDate = this.selectedDate ?? new Date(); // fallback si es null
+        const selectedDateStr = selectedDate.toLocaleDateString('sv-SE');
         console.log('📆 Fecha seleccionada:', selectedDateStr);
         console.log('📥 Checkins:', checkins.map(c => ({ id: c.id, memberId: c.memberId, timestamp: c.timestamp })));
         console.log('🧍‍♂️ Members disponibles:', members.map(m => ({ id: m.id, name: m.name })));
 
-       const filtered = checkins.filter(c => {
-  const raw = c.timestamp;
-  if (!raw) {
-    console.warn(`⛔ Checkin ${c.id} sin timestamp`);
-    return false;
-  }
+        const filtered = checkins.filter(c => {
+          const raw = c.timestamp;
+          if (!raw) {
+            console.warn(`⛔ Checkin ${c.id} sin timestamp`);
+            return false;
+          }
 
-  const date = typeof raw === 'string' ? new Date(raw) : new Date(Number(raw));
-  if (isNaN(date.getTime())) {
-    console.warn(`⚠️ Fecha inválida en checkin ${c.id}:`, raw);
-    return false;
-  }
+          const date = typeof raw === 'string' ? new Date(raw) : new Date(Number(raw));
+          if (isNaN(date.getTime())) {
+            console.warn(`⚠️ Fecha inválida en checkin ${c.id}:`, raw);
+            return false;
+          }
 
-  const checkinDate = date.toISOString().split('T')[0];
-  const match = checkinDate === selectedDateStr;
-  console.log(`🧪 Checkin ${c.id}:`, { checkinDate, selectedDateStr, match });
+          // ✅ Usar toLocaleDateString para ambos
+          const checkinDateStr = date.toLocaleDateString('sv-SE');
+          const match = checkinDateStr === selectedDateStr;
+          console.log(`🧪 Checkin ${c.id}:`, { checkinDateStr, selectedDateStr, match });
 
-  return match;
-});
+          return match;
+        });
 
-console.log('🧮 Total después de filtro:', filtered.length);
+        console.log('🧮 Total después de filtro:', filtered.length);
 
-filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        filtered.sort(
+          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
 
-const formatted=this.formatCheckinsForUI(filtered, [...members])
+        const formatted = this.formatCheckinsForUI(filtered, [...members]);
 
         return formatted;
       })
@@ -126,6 +129,7 @@ const formatted=this.formatCheckinsForUI(filtered, [...members])
       console.log('✅ Resultado formateado:', formatted);
     });
 }
+
 
 
 
@@ -140,16 +144,22 @@ formatCheckinsForUI(checkins: CheckinModel[], members: MemberModel[]): Formatted
       console.warn('❌ No se encontró el miembro con ID:', c.memberId);
     }
 
-    const dateObj = typeof c.timestamp === 'string'
-      ? new Date(c.timestamp)
-      : new Date(Number(c.timestamp));
+    const rawTimestamp = c.timestamp;
+    console.log(`🕓 Raw timestamp para checkin ${c.id}:`, rawTimestamp);
+
+    const dateObj = typeof rawTimestamp === 'string'
+      ? new Date(rawTimestamp)
+      : new Date(Number(rawTimestamp));
+console.log(`🧪 typeof timestamp:`, typeof rawTimestamp, '| value:', rawTimestamp);
+
+    console.log(`📅 dateObj interpretado (${c.id}):`, dateObj.toString());
 
     if (isNaN(dateObj.getTime())) {
-      console.error('❌ Timestamp inválido:', c.timestamp);
+      console.error('❌ Timestamp inválido:', rawTimestamp);
       return {
         name: 'Sin nombre',
         img: 'https://via.placeholder.com/100',
-        time: '00:00',
+        time: '00:01',
         date: '0000-00-00',
         inside: false,
       };
@@ -158,10 +168,11 @@ formatCheckinsForUI(checkins: CheckinModel[], members: MemberModel[]): Formatted
     return {
       name: m?.name || 'Sin nombre',
       img: m?.img || 'https://via.placeholder.com/100',
-      time: dateObj.toLocaleTimeString('es-MX', {
+      time: new Intl.DateTimeFormat('es-MX', {
         hour: '2-digit',
         minute: '2-digit',
-      }),
+        hour12: true
+      }).format(dateObj),
       date: dateObj.toISOString().slice(0, 10),
       inside: !('checkOutTimestamp' in c),
     };

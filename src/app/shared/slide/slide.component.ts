@@ -138,7 +138,7 @@ private async cargarDesdeLocalSiExiste() {
       const cajaStatus = 'open'; // ya la validamos
 
       this.store.dispatch(setCajaState({ currentBalance, cashRegisterId, cajaStatus }));
-      alert(`✅ Caja encontrada para cajero: Balance $${currentBalance}`);
+      //alert(`✅ Caja encontrada para cajero: Balance $${currentBalance}`);
     } else {
       const currentBalance = 0;
       const cashRegisterId = 0;
@@ -217,28 +217,28 @@ abrirMovimientosCaja() {
       console.log('🧾 Gastos en total:', gastos.length, gastos);
       console.log('💰 Ventas en total:', ventas.length, ventas);
 
-      const movimientos = [
-        ...gastos
-          .filter(g => g.cashRegisterId === cashRegisterId)
-          .map(g => ({
-            tipo: 'gasto',
-            amount: g.amount,
-            descripcion: g.description || '',
-            fecha: new Date(g.expenseDate)
-          })),
-        ...ventas
-          .filter(v => v.cashRegister?.id === cashRegisterId)
-          .map(v => ({
-            tipo: 'venta',
-            amount: v.totalAmount,
-            descripcion: `Venta #${v.id}`,
-            fecha: new Date(v.date)
-          }))
-      ];
+   const movimientos = [
+  ...gastos
+    .filter(g => g.cashRegisterId === cashRegisterId)
+    .map(g => ({
+      tipo: 'gasto',
+      amount: g.amount,
+      descripcion: g.description || '',
+      fecha: new Date(g.expenseDate)
+    })),
+  ...ventas
+    .filter(v => v.cashRegister?.id === cashRegisterId || v.cashRegisterId === cashRegisterId)
+    .map(v => ({
+      tipo: 'venta',
+      amount: v.totalAmount,
+      descripcion: `#${v.id}`,
+fecha: v.saleDate ? new Date(v.saleDate) : new Date()
+    }))
+];
 
-      console.log('📦 Movimientos combinados:', movimientos);
+// 🔽 Ordenar todos por fecha descendente (más reciente primero)
+const ordenados = movimientos.sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
 
-      const ordenados = movimientos.sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
 
       this.dialog.open(CajaMovimientosModalComponent, {
         width: '90vw',

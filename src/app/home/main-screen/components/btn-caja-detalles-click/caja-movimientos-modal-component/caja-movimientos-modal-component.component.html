@@ -11,10 +11,22 @@
       <div class="descripcion">{{ m.descripcion || '...' }}</div>
     </div>
     <div class="derecha">
-<div class="monto" [ngClass]="{ 'positivo': m.amount > 0, 'negativo': m.amount < 0 }">
-        {{ m.amount | currency:'MXN' }}
-      </div>
-      <div class="fecha">{{ m.fecha | date:'short' }}</div>
+
+
+     <div class="monto"
+     [ngClass]="{
+       'positivo': m.tipo === 'venta' || m.tipo === 'ingreso',
+       'negativo': m.tipo === 'gasto' || m.tipo === 'retiro'
+     }">
+  {{ (m.tipo === 'gasto' || m.tipo === 'retiro') ? '-' : '+' }}
+  {{ m.amount | currency:'MXN':'symbol':'1.2-2' }}
+</div>
+
+
+<div class="fecha">
+  {{ m.fecha | date:'d MMM y, h:mm a':'':'es-MX' }}
+</div>
+
     </div>
   </div>
 </div>

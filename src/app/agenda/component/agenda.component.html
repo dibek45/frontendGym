@@ -7,16 +7,16 @@
 
 
 <!-- Subfiltros -->
-<div class="subfiltros" *ngIf="filtroActivo" style="position: relative; top: 100px;">
+<div class="subfiltros" *ngIf="filtroActivo">
   <button
     mat-stroked-button
     *ngFor="let sub of obtenerSubfiltros()"
     [class.sub-activo]="claseActiva === sub"
-    (click)="seleccionarClase(sub)"
-  >
+    (click)="seleccionarClase(sub)">
     {{ sub }}
   </button>
 </div>
+
 
 <!-- Mostrar solo si hay subfiltro -->
 <div *ngIf="claseActiva" class="agenda-container">

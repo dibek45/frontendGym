@@ -92,15 +92,29 @@ const selectedDateStr = selectedDate.toLocaleDateString('sv-SE');
         console.log('📥 Checkins:', checkins.map(c => ({ id: c.id, memberId: c.memberId, timestamp: c.timestamp })));
         console.log('🧍‍♂️ Members disponibles:', members.map(m => ({ id: m.id, name: m.name })));
 
-        const filtered = checkins.filter(c => {
-          if (!c.timestamp) return false;
+       const filtered = checkins.filter(c => {
+  const raw = c.timestamp;
+  if (!raw) {
+    console.warn(`⛔ Checkin ${c.id} sin timestamp`);
+    return false;
+  }
 
-          const date = new Date(Number(c.timestamp));
-          if (isNaN(date.getTime())) return false;
+  const date = typeof raw === 'string' ? new Date(raw) : new Date(Number(raw));
+  if (isNaN(date.getTime())) {
+    console.warn(`⚠️ Fecha inválida en checkin ${c.id}:`, raw);
+    return false;
+  }
 
-          const checkinDate = date.toISOString().split('T')[0];
-          return checkinDate === selectedDateStr;
-        });
+  const checkinDate = date.toISOString().split('T')[0];
+  const match = checkinDate === selectedDateStr;
+  console.log(`🧪 Checkin ${c.id}:`, { checkinDate, selectedDateStr, match });
+
+  return match;
+});
+
+console.log('🧮 Total después de filtro:', filtered.length);
+
+filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
 const formatted=this.formatCheckinsForUI(filtered, [...members])
 
@@ -119,21 +133,41 @@ const formatted=this.formatCheckinsForUI(filtered, [...members])
     this.loadFilteredCheckins();
   }
 
-  formatCheckinsForUI(checkins: CheckinModel[], members: MemberModel[]): FormattedCheckin[] {
-    return checkins.map(c => {
-      const m = members.find(m => String(m.id) === String(c.memberId));
+formatCheckinsForUI(checkins: CheckinModel[], members: MemberModel[]): FormattedCheckin[] {
+  return checkins.map(c => {
+    const m = members.find(m => String(m.id) === String(c.memberId));
+    if (!m) {
+      console.warn('❌ No se encontró el miembro con ID:', c.memberId);
+    }
+
+    const dateObj = typeof c.timestamp === 'string'
+      ? new Date(c.timestamp)
+      : new Date(Number(c.timestamp));
+
+    if (isNaN(dateObj.getTime())) {
+      console.error('❌ Timestamp inválido:', c.timestamp);
       return {
-        name: m?.name || 'Sin nombre',
-        img: m?.img || 'https://via.placeholder.com/100',
-        time: new Date(Number(c.timestamp)).toLocaleTimeString('es-MX', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        date: new Date(Number(c.timestamp)).toISOString().slice(0, 10),
-        inside: !('checkOutTimestamp' in c),
+        name: 'Sin nombre',
+        img: 'https://via.placeholder.com/100',
+        time: '00:00',
+        date: '0000-00-00',
+        inside: false,
       };
-    });
-  }
+    }
+
+    return {
+      name: m?.name || 'Sin nombre',
+      img: m?.img || 'https://via.placeholder.com/100',
+      time: dateObj.toLocaleTimeString('es-MX', {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      date: dateObj.toISOString().slice(0, 10),
+      inside: !('checkOutTimestamp' in c),
+    };
+  });
+}
+
   
 }
 

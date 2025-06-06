@@ -58,21 +58,22 @@ getStartOfWeek(date: Date): Date {
 
   // Para la gráfica
   gastosSemana$: Observable<DataPerDay[]> = this.expenses$.pipe(
-    map((expenses) => {
-      const grouped: { [date: string]: { amount: number; tickets: number } } = {};
-      for (const e of expenses) {
-        const date = e.expenseDate.split('T')[0];
-        if (!grouped[date]) grouped[date] = { amount: 0, tickets: 0 };
-        grouped[date].amount += e.amount;
-        grouped[date].tickets += 1;
-      }
-      return Object.entries(grouped).map(([date, val]) => ({
-        date,
-        amount: val.amount,
-        tickets: val.tickets,
-      }));
-    })
-  );
+  map((expenses) => {
+    const grouped: { [date: string]: { amount: number; tickets: number } } = {};
+    for (const e of expenses) {
+const date = new Date(e.expenseDate).toLocaleDateString('en-CA'); // ✅ local y en formato YYYY-MM-DD
+      if (!grouped[date]) grouped[date] = { amount: 0, tickets: 0 };
+      grouped[date].amount += e.amount;
+      grouped[date].tickets += 1;
+    }
+    return Object.entries(grouped).map(([date, val]) => ({
+      date,
+      amount: val.amount,
+      tickets: val.tickets,
+    }));
+  })
+);
+
 
   showActivityList = false;
 

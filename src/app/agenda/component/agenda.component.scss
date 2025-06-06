@@ -70,10 +70,10 @@
 .subfiltros {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  padding: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-top: 56px;
+  margin-bottom: 16px;
+  z-index: 2;
 }
 
 .subfiltros button {

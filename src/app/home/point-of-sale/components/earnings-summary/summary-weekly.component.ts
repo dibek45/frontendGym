@@ -76,7 +76,7 @@ export class SummaryWeeklyComponent implements OnChanges {
       const date = new Date(this.weekStartDate);
       date.setDate(this.weekStartDate.getDate() + i);
   
-      const dateString = date.toISOString().split('T')[0];
+const dateString = date.toLocaleDateString('en-CA');
       const record = this.dataPerDay.find(v => v.date === dateString);
   
       const amount = record?.amount ?? 0;

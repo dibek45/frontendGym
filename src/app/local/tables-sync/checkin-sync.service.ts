@@ -55,4 +55,20 @@ export class CheckinSyncService {
     );
     this.store.dispatch(CheckinActions.loadCheckinsSuccess({ checkins: enriched }));
   }
+async loadCheckins(): Promise<void> {
+  const identity = await this.localStorage.loadIdentity();
+  if (!identity) return;
+
+  const checkins = await this.localStorage.loadTableFromLocalCache<CheckinModel>(
+    identity.userId,
+    identity.gymId,
+    this.tableName
+  );
+
+  if (checkins) {
+    this.store.dispatch(CheckinActions.loadCheckinsSuccess({ checkins }));
+  }
+}
+
+
 }

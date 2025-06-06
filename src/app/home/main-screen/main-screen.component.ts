@@ -46,6 +46,7 @@ import { ExpenseModel } from 'src/app/state/expense/expense.model';
 import { CheckinModel } from 'src/app/state/checkins/checkins.model';
 import { selectSyncedCheckins } from 'src/app/state/checkins/checkins.selectors';
 import { BtnLastCheckinComponent } from './components/btn-lastcheckin.component.ts/btn-lastcheckin.component.ts.component';
+import { CheckinSyncService } from 'src/app/local/tables-sync/checkin-sync.service';
 
 
 @Component({
@@ -94,6 +95,7 @@ public ultimoCheckinHora: string | null = null;
     private userInitService: UserInsitService,
     private localStorage:LocalEncryptedStorageService,
     private expenseSyncService: ExpenseSyncService,
+    private checkinSyncService:CheckinSyncService
 
   ) {}
 
@@ -105,6 +107,8 @@ public ultimoCheckinHora: string | null = null;
   }
 
   async ngOnInit(): Promise<void> {
+
+    
     this.socketService.joinGymRoom(1);
 this.socketService.onCashRegisterUpdate(async (updatedCashRegister) => {
   // Aquí va toda tu lógica
@@ -139,7 +143,7 @@ this.store.select(selectPlansByGymId(this.gymId))
 
 
 
-this.contarAsistenciasHoy();
+
 
 
 
@@ -174,11 +178,12 @@ combineLatest([
   this.totalGastos = total;
 });
 
-this.cargarUltimoCheckinGlobal();
 
 
 
-
+this.store.select(selectSyncedCheckins).subscribe(() => {
+  this.contarAsistenciasHoy();
+});
   }
 
   listenUserUpdates() {
@@ -372,6 +377,8 @@ this.cargarUltimoCheckinGlobal();
   }
 
 openCheckinModal(onlyToday: boolean = false) {
+    this.checkinSyncService.loadCheckins(); // 👈 recarga desde caché o backend
+
   this.dialog.open(CheckinModalComponent, {
     width: '100vw',
     height: '100vh',
@@ -494,19 +501,43 @@ cargarUltimoCheckinGlobal() {
 }
 
 
-
 contarAsistenciasHoy() {
-  const hoyStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+const hoyStr = new Date().toLocaleDateString('sv-SE'); // "2025-06-05"
+  console.log('📅 Hoy es:', hoyStr);
 
   this.store.select(selectSyncedCheckins).pipe(take(1)).subscribe((checkins: CheckinModel[]) => {
+    console.log('📦 Checkins recibidos:', checkins);
+
     this.asistenciasHoy = checkins.filter(c => {
-      const fechaCheckin = new Date(Number(c.timestamp)).toISOString().split('T')[0];
+      let fecha: Date;
+
+      // Manejar distintos tipos de timestamp (string ISO o número)
+      if (typeof c.timestamp === 'string') {
+        fecha = isNaN(Number(c.timestamp))
+          ? new Date(c.timestamp) // ISO string
+          : new Date(Number(c.timestamp)); // epoch en string
+      } else {
+        fecha = new Date(c.timestamp);
+      }
+
+      if (isNaN(fecha.getTime())) {
+        console.warn('⛔ Timestamp inválido:', c.timestamp);
+        return false;
+      }
+
+      const fechaCheckin = fecha.toISOString().split('T')[0];
+      console.log(`🕒 Checkin ${c.id} es de ${fechaCheckin}`);
       return fechaCheckin === hoyStr;
     }).length;
 
     console.log('📊 Asistencias hoy:', this.asistenciasHoy);
   });
 }
+
+
+
+
+
 
 
 }

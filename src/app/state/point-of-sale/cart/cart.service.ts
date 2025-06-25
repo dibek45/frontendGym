@@ -434,4 +434,10 @@ console.error("⚠️ Error GraphQL detallado:", JSON.stringify(response.errors,
 
 
 
+  async printQrCode(data: string) {
+  await this.printerService.connectToPrinter();
+}
+
+
+
 }

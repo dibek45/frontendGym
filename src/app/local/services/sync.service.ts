@@ -7,11 +7,11 @@ import { loadExpensesSuccess } from 'src/app/state/expense/expense.actions';
 
 import { SocketService } from '../../login/socket.service';
 import { Casher } from '../../state/point-of-sale/casher/cashier.model';
-
+ 
 import {  CashRegister } from '../../state/point-of-sale/cash-register/cash-register.model';
 import { MemberModel } from '../../core/models/member.interface';
 import { ProductModel } from '../../core/models/product.interface';
-import { Routine } from '../../state/point-of-sale/routines/routines.model';
+import { Routine } from '../../state/routines/routines.model';
 import { MachineModel } from '../../state/machine/machine.model';
 
 import { CashRegisterActions } from '../../state/point-of-sale/cash-register/cash-register.actions';
@@ -20,7 +20,7 @@ import * as ProductActions from '../../state/product/product.actions';
 import { Sale } from '../../state/point-of-sale/sale/sale.model';
 import { loadSalesSuccess } from '../../state/point-of-sale/sale/sale.actions';
 
-import * as RoutineActions from '../../state/point-of-sale/routines/routines.actions';
+import * as RoutineActions from '../../state/routines/routines.actions';
 import * as MachineActions from '../../state/machine/machine.actions';
 
 import { loadedMembers } from '../../state/member/member.actions';
@@ -32,9 +32,12 @@ import { ExpenseModel } from 'src/app/state/expense/expense.model';
 import { ExpenseService } from 'src/app/state/expense/expense.service';
 import { loadCheckinsSuccess } from 'src/app/state/checkins/checkins.actions';
 import { CheckinModel } from 'src/app/state/checkins/checkins.model';
+import { Promotion } from 'src/app/state/promotions/promotion.model';
 
 @Injectable({ providedIn: 'root' })
 export class SyncService {
+
+  
   constructor(
     private localStorage: LocalEncryptedStorageService,
     private updateVersionService: UpdateVersionService,
@@ -51,6 +54,8 @@ export class SyncService {
     this.subscribeToProductUpdates();
     this.subscribeToSaleUpdates();     // 👈 FALTA
 this.subscribeToCheckinUpdates();  // 👈 FALTA
+  this.subscribeToRoutineUpdates(); // ✅ AGREGA ESTA LÍNEA
+
   }
 
   // 🔁 Actualización de cajas por socket
@@ -370,4 +375,7 @@ private subscribeToExpenseUpdates() {
 
 
   }
+
+
+
 }

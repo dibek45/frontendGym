@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routine } from 'src/app/state/point-of-sale/routines/routines.model';
+import { Routine } from 'src/app/state/routines/routines.model';
 
 @Component({
   selector: 'app-card-routine',

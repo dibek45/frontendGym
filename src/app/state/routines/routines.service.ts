@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Routine, ExerciseType } from './routines.model';
 import { environment } from 'src/environment.prod';
+import { LocalEncryptedStorageService } from 'src/app/local/services/local-encrypted-storage.service';
+import localforage from 'localforage';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +14,8 @@ import { environment } from 'src/environment.prod';
 export class RoutineService {
   private graphqlEndpoint = environment.apiUrl; // Replace with your actual GraphQL endpoint
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,    private localStorage: LocalEncryptedStorageService // 👈 aquí lo inyectas
+  ) {}
 
   //
   // **EXERCISE TYPES**
@@ -19,6 +23,7 @@ export class RoutineService {
 
   // Fetch all exercise types for a gym
   getExerciseTypesByGym(gymId: number): Observable<ExerciseType[]> {
+    alert("desde internet")
     const query = `
       query ExerciseTypesByGym($gymId: Float!) {
   exerciseTypesByGym(gymId: $gymId) {
@@ -26,8 +31,15 @@ export class RoutineService {
     name
     gymId
       routines {
-            id
-            description
+             id
+          name
+          description
+          link
+          path
+          count
+          exerciseTypeId
+          createdAt
+          updatedAt
             
           }
   }
@@ -48,51 +60,6 @@ export class RoutineService {
   // **ROUTINES**
   //
 
-  // Fetch all routines by exercise type ID
-  getRoutinesByType(exerciseTypeId: number): Observable<Routine[]> {
-    const query = `
-      query Routines($exerciseTypeId: Int) {
-        routines(exerciseTypeId: $exerciseTypeId) {
-          id
-          name
-          description
-          link
-          path
-          count
-          exerciseTypeId
-          createdAt
-          updatedAt
-        }
-      }
-    `;
-  
-    const variables = { exerciseTypeId };
-  
-    console.log("GraphQL Query:", query);
-    console.log("GraphQL Variables:", variables);
-  
-    return this.http
-      .post<{ data: { routines: Routine[] } }>(environment.apiUrl, {
-        query,
-        variables,
-      })
-      .pipe(
-        map((response) => {
-          console.log("GraphQL Response:", response);
-  
-          // Safely access and return the routines
-          if (response.data && response.data.routines) {
-            return response.data.routines.filter((routine) => routine.name !== null);
-          } else {
-            throw new Error("Invalid response structure from GraphQL.");
-          }
-        }),
-        catchError((error) => {
-          console.error("GraphQL Error:", error);
-          throw new Error("Failed to fetch routines by type. Please try again later.");
-        })
-      );
-  }
   
   // Add a new routine
   addRoutine(routine: Routine): Observable<Routine> {
@@ -228,4 +195,111 @@ export class RoutineService {
       );
   }
   
+
+async getExerciseTypesWithCache(forceBackend = false): Promise<{ data: ExerciseType[]; source: 'local' | 'backend' }> {
+  const encrypted = await localforage.getItem<string>('identity.json');
+  if (!encrypted) return { data: [], source: 'local' };
+
+  const identity = JSON.parse(
+    CryptoJS.AES.decrypt(encrypted, 'clave-super-secreta').toString(CryptoJS.enc.Utf8)
+  );
+  const key = `user-${identity.userId}/gym-${identity.gymId}/exerciseTypes`;
+
+  let data: ExerciseType[] = [];
+  let source: 'local' | 'backend' = 'local';
+
+  if (!forceBackend) {
+    const cached = await localforage.getItem<string>(key);
+    if (cached) {
+      try {
+        const decrypted = CryptoJS.AES.decrypt(cached, 'clave-super-secreta').toString(CryptoJS.enc.Utf8);
+        data = JSON.parse(decrypted);
+        data = this.ensureRoutineFields(data);
+        return { data, source };
+      } catch (err) {
+        console.error('❌ Error leyendo tipos desde caché:', err);
+      }
+    }
+  }
+
+  try {
+    data = await firstValueFrom(this.getExerciseTypesByGym(identity.gymId));
+    data = this.ensureRoutineFields(data);
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), 'clave-super-secreta').toString();
+    await localforage.setItem(key, encryptedData);
+    await this.localStorage.saveVersion(identity.userId, identity.gymId, 'exerciseTypes', new Date().toISOString());
+
+    source = 'backend';
+    return { data, source };
+  } catch (err) {
+    console.error('❌ Error desde backend al obtener tipos de ejercicio:', err);
+    return { data: [], source: 'backend' };
+  }
+}
+
+
+private ensureRoutineFields(types: ExerciseType[]): ExerciseType[] {
+  return types.map(t => ({
+    ...t,
+    routines: (t.routines || []).map(r => ({
+      ...r,
+      name: r.name || r.description?.split(' ')[0] || 'Sin nombre',
+      count: r.count ?? 0,
+      exerciseTypeId: r.exerciseTypeId ?? t.id,
+      createdAt: r.createdAt || new Date().toISOString(),
+      updatedAt: r.updatedAt || new Date().toISOString(),
+      link: r.link || '',
+      path: r.path || '',
+      img: r.img || ''
+    }))
+  }));
+}
+
+
+  // Fetch all routines by exercise type ID
+  getRoutinesByType(exerciseTypeId: number): Observable<Routine[]> {
+    alert("Datos de internet")
+    const query = `
+      query Routines($exerciseTypeId: Int) {
+        routines(exerciseTypeId: $exerciseTypeId) {
+          id
+          name
+          description
+          link
+          path
+          count
+          exerciseTypeId
+          createdAt
+          updatedAt
+        }
+      }
+    `;
+  
+    const variables = { exerciseTypeId };
+  
+    console.log("GraphQL Query:", query);
+    console.log("GraphQL Variables:", variables);
+  
+    return this.http
+      .post<{ data: { routines: Routine[] } }>(environment.apiUrl, {
+        query,
+        variables,
+      })
+      .pipe(
+        map((response) => {
+          console.log("GraphQL Response:", response);
+  
+          // Safely access and return the routines
+          if (response.data && response.data.routines) {
+            return response.data.routines.filter((routine) => routine.name !== null);
+          } else {
+            throw new Error("Invalid response structure from GraphQL.");
+          }
+        }),
+        catchError((error) => {
+          console.error("GraphQL Error:", error);
+          throw new Error("Failed to fetch routines by type. Please try again later.");
+        })
+      );
+  }
 }  

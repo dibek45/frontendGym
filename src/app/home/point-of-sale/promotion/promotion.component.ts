@@ -44,7 +44,7 @@ export class PromotionComponent {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(PromotionActions.loadPromotionTypes());
+this.store.dispatch(PromotionActions.loadPromotions());
   }
 
   selectTypeById(typeId: number) {

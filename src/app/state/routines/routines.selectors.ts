@@ -35,3 +35,11 @@ export const selectRoutineError = createSelector(
   selectRoutineState,
   (state) => state.routineError
 );
+export const selectFilteredRoutinesByType = (typeId: number, searchTerm: string) =>
+  createSelector(selectExerciseTypes, (types) => {
+    const type = types.find(t => t.id === typeId);
+    if (!type || !type.routines) return [];
+    return type.routines.filter(routine =>
+      routine.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });

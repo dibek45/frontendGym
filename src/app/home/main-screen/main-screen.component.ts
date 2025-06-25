@@ -47,6 +47,8 @@ import { CheckinModel } from 'src/app/state/checkins/checkins.model';
 import { selectSyncedCheckins } from 'src/app/state/checkins/checkins.selectors';
 import { BtnLastCheckinComponent } from './components/btn-lastcheckin.component.ts/btn-lastcheckin.component.ts.component';
 import { CheckinSyncService } from 'src/app/local/tables-sync/checkin-sync.service';
+import QRCode from 'qrcode'; // Asegúrate de tener esto en tu imports
+import { PrinterService } from 'src/app/printer.service';
 
 
 @Component({
@@ -84,7 +86,6 @@ public ultimoCheckinHora: string | null = null;
     private _access: MemberService,
     private _notification: NotificationService,
     private speechService: SpeechService,
-    private cartService: CartService,
     private productService: ProductService,
     private socketService: SocketService,
     private syncService: SyncService,
@@ -95,7 +96,10 @@ public ultimoCheckinHora: string | null = null;
     private userInitService: UserInsitService,
     private localStorage:LocalEncryptedStorageService,
     private expenseSyncService: ExpenseSyncService,
-    private checkinSyncService:CheckinSyncService
+    private checkinSyncService:CheckinSyncService,
+     private printerService: PrinterService,
+         private cartService: CartService,
+
 
   ) {}
 
@@ -534,6 +538,35 @@ const fechaCheckin = fecha.toLocaleDateString('sv-SE');
   });
 }
 
+
+
+async imprimirQrFake() {
+  alert("aqui")
+  const gymName = 'Mi Gym Ficticio';
+  const clientName = 'Juan Pérez';
+  const membershipDuration = '1 mes';
+  const renewalDate = new Date().toLocaleDateString();
+
+  const qrContenido = `https://tiempo.com.mx/m/${clientName.replace(' ', '_')}`;
+
+  try {
+    const base64QR = await QRCode.toDataURL(qrContenido, { width: 200 });
+    this.cartService.img = base64QR;
+
+    // 👇 Conexión a la impresora ANTES de imprimir
+    await this.printerService.connectToPrinter();
+
+    // 👇 Imprimir con QR
+    await this.printerService.printTicketWithQR(
+      gymName,
+      clientName,
+      membershipDuration,
+      renewalDate
+    );
+  } catch (err) {
+    console.error('❌ Error durante impresión con QR:', err);
+  }
+}
 
 
 

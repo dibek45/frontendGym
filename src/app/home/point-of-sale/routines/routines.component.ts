@@ -7,15 +7,16 @@ import {
   selectRoutinesByTypeId,
   selectExerciseTypeError,
   selectRoutineError,
-} from 'src/app/state/point-of-sale/routines/routines.selectors';
+  selectFilteredRoutinesByType,
+} from 'src/app/state/routines/routines.selectors';
 import {
   loadExerciseTypes,
   loadRoutinesByType,
   addRoutine,
   editRoutine,
   deleteRoutine,
-} from 'src/app/state/point-of-sale/routines/routines.actions';
-import { Routine, ExerciseType } from 'src/app/state/point-of-sale/routines/routines.model';
+} from 'src/app/state/routines/routines.actions';
+import { Routine, ExerciseType } from 'src/app/state/routines/routines.model';
 import { AddExerciseDialogComponent } from './add-exercise-dialog.component';
 import { EditExerciseDialogComponent } from './edit-exercise-dialog.component';
 import { HorizontalFilterButtonsComponent } from '../components/horizontal-filter-buttons-component/horizontal-filter-buttons-component.component';
@@ -34,21 +35,18 @@ export class RoutinesComponent implements OnInit {
   searchTerm = '';
 
 onCreateClick() {
-throw new Error('Method not implemented.');
+this.addExercise() 
 }
 onSearch(term: string) {
   this.searchTerm = term;
 
   if (this.selectedType) {
-    this.routines$ = this.store.select(selectRoutinesByTypeId(this.selectedType.id)).pipe(
-      map(routines =>
-        routines.filter(r =>
-          r.name.toLowerCase().includes(term.toLowerCase())
-        )
-      )
+    this.routines$ = this.store.select(
+      selectFilteredRoutinesByType(this.selectedType.id, term)
     );
   }
 }
+
 
   exerciseTypes$!: Observable<ExerciseType[]>; // Observable for exercise types
   exerciseTypeError$!: Observable<string | null>; // Observable for exercise type errors
@@ -57,15 +55,19 @@ onSearch(term: string) {
   selectedType: ExerciseType | null = null; // Currently selected exercise type
 
   constructor(private store: Store, private dialog: MatDialog) {}
+ngOnInit() {
+  console.log('🔁 Dispatch loadExerciseTypes');
+  this.store.dispatch(loadExerciseTypes({ gymId: 1 }));
 
-  ngOnInit() {
-    // Load exercise types on initialization
-    this.store.dispatch(loadExerciseTypes({ gymId: 1 })); // Static gymId, replace if dynamic
+  this.exerciseTypes$ = this.store.select(selectExerciseTypes);
+  this.exerciseTypeError$ = this.store.select(selectExerciseTypeError);
 
-    // Selectors for exercise types and errors
-    this.exerciseTypes$ = this.store.select(selectExerciseTypes);
-    this.exerciseTypeError$ = this.store.select(selectExerciseTypeError);
-  }
+  this.exerciseTypes$.subscribe(types => {
+    console.log('✅ Tipos de ejercicio recibidos en el componente:', types);
+  });
+}
+
+
 
 
 
@@ -119,25 +121,21 @@ onSearch(term: string) {
       })
     );
   }
-  selectType(type: { id: number; name: string }) {
-    this.exerciseTypes$.subscribe(types => {
-      const found = types.find(t => t.id === type.id);
-      if (found) {
-        this.selectedType = found;
-        this.store.dispatch(loadRoutinesByType({ exerciseTypeId: found.id }));
-  
-        this.routines$ = this.store.select(selectRoutinesByTypeId(found.id)).pipe(
-          map(routines =>
-            routines.filter(r =>
-              r.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-            )
-          )
-        );
-  
-        this.routineError$ = this.store.select(selectRoutineError);
-      }
-    });
-  }
+
+
+
+selectType(partial: { id: number; name: string }) {
+  this.exerciseTypes$.subscribe(types => {
+    const full = types.find(t => t.id === partial.id);
+    if (full) {
+      this.selectedType = full;
+      this.routines$ = this.store.select(
+        selectFilteredRoutinesByType(full.id, this.searchTerm)
+      );
+    }
+  });
+}
+
   
   
 }

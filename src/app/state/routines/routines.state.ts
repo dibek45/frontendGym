@@ -1,4 +1,4 @@
-import { CashMovement } from "../cash-movement/cash-movement.model";
+import { CashMovement } from "../point-of-sale/cash-movement/cash-movement.model";
 
 export interface CashMovementState {
   cashMovements: CashMovement[]; // Lista de movimientos de caja

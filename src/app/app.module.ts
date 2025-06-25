@@ -43,8 +43,8 @@ import { cashierReducer } from './state/point-of-sale/casher/cashier.reducer';
 import { categoryReducer } from './state/reducers/category.reducer';
 import { CategoryEffects } from './state/effects/category.effects';
 import { detailProductReducer } from './state/product/product.reducer';
-import { routinesReducer } from './state/point-of-sale/routines/routines.reducer';
-import { RoutinesEffects } from './state/point-of-sale/routines/routines.effects';
+import { routinesReducer } from './state/routines/routines.reducer';
+import { RoutinesEffects } from './state/routines/routines.effects';
 import { PromotionEffects } from './state/promotions/promotion.effects';
 import { promotionReducer } from './state/promotions/promotion.reducer';
 import { RoleEffects } from './state/roles/rol.effects';
@@ -118,17 +118,16 @@ import { ExpenseReducer } from './state/expense/expense.reducer';
   EffectsModule.forRoot([
     MemberEffects,
     ProductEffects,
-    CashRegisterEffects
-  ]),
-  EffectsModule.forFeature([
-    RoutinesEffects,
-    PromotionEffects,
+    CashRegisterEffects,
+      PromotionEffects, // ✅ promociones
+  RoutinesEffects,  // ✅ rutinas
+  MachineEffects ,   // ✅ máquinas
     CategoryEffects,
     RoleEffects,
     PermissionEffects,
     PlanEffects,
-    MachineEffects
   ]),
+  
 
   // ✅ Devtools
   StoreDevtoolsModule.instrument({

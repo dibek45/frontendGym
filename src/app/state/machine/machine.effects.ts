@@ -13,22 +13,30 @@ export class MachineEffects {
     private machineService: MachineService
   ) {}
 
-  loadMachines$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(MachineActions.loadMachines),
-      tap(({ gymId }) => console.log('[Effect] loadMachines DISPATCHED with gymId:', gymId)),
-      mergeMap(({ gymId }) =>
-        this.machineService.getMachinesByGym(gymId).pipe(
-          tap(machines => console.log('[Effect] getMachinesByGym RESPONSE:', machines)),
-          map(machines => MachineActions.loadMachinesSuccess({ machines })),
-          catchError(error => {
-            console.error('[Effect] loadMachines ERROR:', error);
-            return of(MachineActions.loadMachinesFailure({ error }));
-          })
-        )
-      )
-    )
-  );
+loadMachines$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(MachineActions.loadMachines),
+    tap(({ gymId }) =>
+      console.log('[Effect] loadMachines DISPATCHED with gymId:', gymId)
+    ),
+    mergeMap(async ({ gymId }) => {
+      try {
+        const { data, source } = await this.machineService.getMachinesWithCache();
+
+        if (source === 'backend') {
+          alert('🌐 Máquinas cargadas desde BACKEND');
+        }
+
+        console.log(`[Effect] getMachinesWithCache RESPONSE (${source}):`, data);
+        return MachineActions.loadMachinesSuccess({ machines: data });
+      } catch (error) {
+        console.error('[Effect] loadMachines ERROR:', error);
+        return MachineActions.loadMachinesFailure({ error });
+      }
+    })
+  )
+);
+
 
   createMachine$ = createEffect(() =>
     this.actions$.pipe(

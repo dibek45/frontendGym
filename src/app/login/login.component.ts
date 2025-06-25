@@ -11,6 +11,10 @@ import { FingerprintPersonaService } from '../shared/fingerprint.service';
 import { environment } from 'src/environment.prod';
 import { SocketService } from './socket.service';
 import { LocalEncryptedStorageService } from '../local/services/local-encrypted-storage.service';
+import { PrinterService } from '../printer.service';
+import { CartService } from '../state/point-of-sale/cart/cart.service';
+  import QRCode from 'qrcode'; // Asegúrate de tener esto en tu imports
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -29,11 +33,19 @@ export class LoginComponent {
     private http: HttpClient,
     private WebSocketService: FingerprintPersonaService,
     private localStorage: LocalEncryptedStorageService, // ✅ Inyectado
-    private socketService: SocketService
+     private printerService: PrinterService,
+         private cartService: CartService,
   ) {}
 
-  ngOnInit(): void {
-      this.socketService.sendPing('Hola desde Angular');
+  async ngOnInit(): Promise<void> {
+    alert("ONinit")
+await this.printerService.connectToPrinter();
+
+await this.printerService.printQRAndNombre(
+  'https://ejemplo.com/cliente/123',
+  'grande', // o 'chico'
+  'Juan Pérez'
+);
 
   //  alert(window.innerWidth);
   }
@@ -125,4 +137,57 @@ alert(`🟢 Identity guardado:\nUsuario: ${user.username}\nGym ID: ${user.gymId}
       }
     });
   }
+
+  async imprimirQrFake() {
+    alert("aqui")
+    const gymName = 'Mi Gym Ficticio';
+    const clientName = 'Juan Pérez';
+    const membershipDuration = '1 mes';
+    const renewalDate = new Date().toLocaleDateString();
+  
+    const qrContenido = `https://tiempo.com.mx/m/${clientName.replace(' ', '_')}`;
+  
+    try {
+      const base64QR = await QRCode.toDataURL(qrContenido, { width: 200 });
+      this.cartService.img = base64QR;
+  
+      // 👇 Conexión a la impresora ANTES de imprimir
+      await this.printerService.connectToPrinter();
+  
+      // 👇 Imprimir con QR
+      await this.printerService.printTicketWithQR(
+        gymName,
+        clientName,
+        membershipDuration,
+        renewalDate
+      );
+    } catch (err) {
+      console.error('❌ Error durante impresión con QR:', err);
+    }
+  }
+
+  // login.component.ts
+async onPrintQR() {
+  const gymName = 'Mi Gym Ficticio';
+  const clientName = 'Juan Pérez';
+  const membershipDuration = '1 mes';
+  const renewalDate = new Date().toLocaleDateString();
+  const qrContenido = `https://tiempo.com.mx/m/${clientName.replace(' ', '_')}`;
+
+  try {
+    const base64QR = await QRCode.toDataURL(qrContenido, { width: 200 });
+    this.cartService.img = base64QR;
+
+    await this.printerService.connectToPrinter(); // ✅ ahora sí con gesto de usuario
+    await this.printerService.printTicketWithQR(
+      gymName,
+      clientName,
+      membershipDuration,
+      renewalDate
+    );
+  } catch (err) {
+    console.error('❌ Error durante impresión con QR:', err);
+  }
+}
+
 }

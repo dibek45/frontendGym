@@ -16,6 +16,12 @@ import { CheckinService } from 'src/app/state/checkins/checkins.service';
 import { loadCheckinsSuccess } from 'src/app/state/checkins/checkins.actions';
 import { loadSalesSuccess } from 'src/app/state/point-of-sale/sale/sale.actions';
 import { SalesService } from 'src/app/state/point-of-sale/sale/sales.service';
+import { loadExerciseTypesSuccess, loadRoutinesSuccess } from 'src/app/state/routines/routines.actions';
+import { RoutineService } from 'src/app/state/routines/routines.service';
+import { PromotionService } from 'src/app/state/promotions/promotion.service';
+import { MachineService } from 'src/app/state/machine/machine.service';
+import {  PromotionActions} from 'src/app/state/promotions/promotion.actions';
+import { loadMachinesSuccess } from 'src/app/state/machine/machine.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +37,11 @@ export class SyncServiceDispatcher {
     private expenseService:ExpenseService,
      private checkinService: CheckinService,
   private checkinSync: CheckinSyncService,
-  private saleService:SalesService
+  private saleService:SalesService,
+  private routineService: RoutineService,
+private promotionService: PromotionService,
+    private machineService: MachineService // ✅ nuevo
+
   ) {}
 
   async dispatch(table: string): Promise<void> {
@@ -89,6 +99,29 @@ export class SyncServiceDispatcher {
 
   break;
 }
+case 'routines': {
+const result = await this.routineService.getExerciseTypesWithCache(true);
+
+// Carga los tipos de ejercicio al store
+this.store.dispatch(loadExerciseTypesSuccess({ exerciseTypes: result.data }));
+
+// Extrae todas las rutinas de cada tipo (vienen anidadas)
+const allRoutines = result.data.flatMap(t => t.routines || []);
+
+// Carga todas las rutinas directamente
+this.store.dispatch(loadRoutinesSuccess({ routines: allRoutines }));
+
+// Muestra en consola o alerta si fue local o backend
+if (result.source === 'backend') {
+  alert('🔄 Tipos y rutinas cargadas desde internet');
+} else {
+  console.log('📦 Tipos y rutinas cargadas desde cache');
+}
+
+
+  break;
+}
+
 case 'sales': {
   console.log('🔁 Despachando sincronización de sales...');
   const sales = await this.saleService.getSalesWithCache(true);
@@ -110,9 +143,23 @@ case 'sales': {
   }
 
   break;
+  
 }
 
 
+
+      case 'promotions': {
+const { data: promotions, source } = await this.promotionService.getPromotionsWithCache(true);
+this.store.dispatch(PromotionActions.loadPromotionsSuccess({ promotions }));
+        break;
+      }
+
+      case 'machines': {
+const { data, source } = await this.machineService.getMachinesWithCache();
+this.store.dispatch(loadMachinesSuccess({ machines: data }));
+
+        break;
+      }
 
     default:
       console.warn('⚠️ Tabla no manejada en handleRemoteUpdate:', table);

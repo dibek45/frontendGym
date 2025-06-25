@@ -14,7 +14,10 @@ export const PromotionActions = createActionGroup({
       }[];
     }>(),
     'Load Promotion Types Failure': props<{ error: any }>(),
-  
+  'Sync Promotion': props<{ promotion: Promotion }>(),
+'Sync Promotion Success': props<{ tempId: string; updatedPromotion: Promotion }>(),
+'Sync Promotion Failure': props<{ tempId: string; error: string }>(),
+
     'Load Promotions': emptyProps(), // Load all promotions
     'Load Promotions Success': props<{ promotions: Promotion[] }>(), // On success
     'Load Promotions Failure': props<{ error: any }>(), // On failure
@@ -29,4 +32,6 @@ export const PromotionActions = createActionGroup({
     'Set Search Term': props<{ searchTerm: string }>(),
 
   },
+  
 });
+

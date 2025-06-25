@@ -4,6 +4,24 @@ import { Routine, ExerciseType } from './routines.model';
 //
 // **ExerciseType Actions**
 //
+export const loadRoutines = createAction(
+  '[Routine] Load Routines'
+);
+// Sincronización de rutina local → backend
+export const syncRoutine = createAction(
+  '[Routine] Sync Routine',
+  props<{ routine: Routine }>()
+);
+
+export const syncRoutineSuccess = createAction(
+  '[Routine] Sync Routine Success',
+  props<{ tempId: string, updatedRoutine: Routine }>()
+);
+
+export const syncRoutineFailure = createAction(
+  '[Routine] Sync Routine Failure',
+  props<{ tempId: string, error: string }>()
+);
 
 // Load all exercise types by gym ID
 export const loadExerciseTypes = createAction(

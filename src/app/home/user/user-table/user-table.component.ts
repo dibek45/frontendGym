@@ -8,11 +8,7 @@ import { AppState } from 'src/app/state/app.state';
 import { FingerprintPersonaService } from 'src/app/shared/fingerprint.service';
 import { selectUser } from 'src/app/state/user/user.selectors';
 
-import {
-  selectSyncedMembers,
-  selectUnsyncedMembers,
-  selectMembersWithSyncError
-} from 'src/app/state/member/member.selectors';
+
 import { NotificationService } from 'src/app/shared/notification.service';
 import { loadedMembers, loadMembers, setSearchTerm, syncMember } from 'src/app/state/member/member.actions';
 import { loadPlansByGym } from 'src/app/state/plan/plan.actions';

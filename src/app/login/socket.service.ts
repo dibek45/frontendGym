@@ -7,7 +7,7 @@ import {  CashRegister } from '../state/point-of-sale/cash-register/cash-registe
 import { MemberModel } from '../core/models/member.interface';
 import { ProductModel } from '../core/models/product.interface';
 import { SaleModel } from '../state/point-of-sale/cash-register/sale.model';
-import { Routine } from '../state/point-of-sale/routines/routines.model';
+import { Routine } from '../state/routines/routines.model';
 import { MachineModel } from '../state/machine/machine.model';
 import { Sale } from '../state/point-of-sale/sale/sale.model';
 import { Casher } from '../state/point-of-sale/casher/cashier.model';
@@ -17,6 +17,10 @@ import { CheckinModel } from '../state/checkins/checkins.model';
 import { SaleSyncService } from '../local/tables-sync/sale-sync.service';
 import { CheckinSyncService } from '../local/tables-sync/checkin-sync.service';
 import { CashRegisterSyncService } from '../local/tables-sync/cash-register-sync.service';
+import { RoutineSyncService } from '../local/tables-sync/routine-sync.service';
+import { PromotionSyncService } from '../local/tables-sync/promotion-sync.service';
+import { Promotion } from '../state/promotions/promotion.model';
+import { MachineSyncService } from '../local/tables-sync/machine-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,13 +39,18 @@ export class SocketService {
     public checkinUpdated$ = new Subject<CheckinModel>(); // importa CheckinModel
 
 public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
+public promotionUpdated$ = new Subject<Promotion>();
 
 
   constructor(private localStorage: LocalEncryptedStorageService,
     private expenseSyncService:ExpenseSyncService,
       private salesSyncService: SaleSyncService,
         private checkinSyncService: CheckinSyncService,
-        private cashRegisterSyncService:CashRegisterSyncService
+        private cashRegisterSyncService:CashRegisterSyncService,
+          private routineSyncService: RoutineSyncService, // ✅ nuevo
+  private promotionSyncService: PromotionSyncService, // ✅ nuevo
+    private machineSyncService: MachineSyncService // 👈 no olvides inyectarlo
+
  
 
 ) {
@@ -60,6 +69,10 @@ public saleUpdated$ = new Subject<Sale>(); // 👈 Importa desde sale/sale.model
 this.onSaleUpdate(); 
 this.onCheckinUpdate(); 
 this.onExpenseUpdate(); // ✅ Agrega esta línea
+this.onMachineUpdate();
+this.onRoutineUpdate();
+this.onPromotionUpdate();
+
 
 
 
@@ -83,16 +96,9 @@ onCashRegisterUpdate(callback: (data: CashRegister) => void) {
   });
 }
 
-
-
-
-
-
-
-
 onCheckinUpdate() {
   this.socket.on('checkinUpdated', (data: CheckinModel) => {
-    alert("chekin socket")
+   // alert("chekin socket")
     console.log('📡 Evento checkinUpdated recibido:', data);
     this.checkinUpdated$.next(data);
 
@@ -129,7 +135,13 @@ onCashierUpdate(callback: (data: Casher) => void) {
     });
   }
 
-
+onMachineUpdate() {
+  this.socket.on('machineUpdated', (data: MachineModel) => {
+    console.log('📡 Evento machineUpdated recibido:', data);
+    this.machineUpdated$.next(data);
+    this.machineSyncService.handleRemoteUpdate(data); // ⚠️ Este servicio aún no existe
+  });
+}
 
   async loadGymId() {
     const identity = await this.localStorage.loadIdentity();
@@ -156,6 +168,22 @@ onSaleUpdate() {
 
         this.salesSyncService.handleRemoteUpdate(data); // 👈 esto es lo que faltaba
 
+  });
+}
+
+onRoutineUpdate() {
+  this.socket.on('routineUpdated', (data: Routine) => {
+    console.log('📡 Evento routineUpdated recibido:', data);
+    this.routineUpdated$.next(data);
+    this.routineSyncService.handleRemoteUpdate(data); // ✅ sincroniza
+  });
+}
+
+onPromotionUpdate() {
+  this.socket.on('promotionUpdated', (data: Promotion) => {
+    console.log('📡 Evento promotionUpdated recibido:', data);
+    this.promotionUpdated$.next(data);
+    this.promotionSyncService.handleRemoteUpdate(data); // ✅ sincroniza
   });
 }
 

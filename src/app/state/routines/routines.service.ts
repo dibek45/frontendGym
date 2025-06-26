@@ -88,9 +88,10 @@ export class RoutineService {
         path: routine.path || '',
         count: routine.count ?? 0, // Si es null o undefined, asigna 0
         exerciseTypeId: routine.exerciseTypeId ?? 0, // Si es null o undefined, asigna 0
+        gymId:1
       },
     };
-  
+  alert(routine.exerciseTypeId)
     console.log('Variables enviadas:', variables);
   
     try {

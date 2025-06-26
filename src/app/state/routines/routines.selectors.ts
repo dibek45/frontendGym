@@ -43,3 +43,10 @@ export const selectFilteredRoutinesByType = (typeId: number, searchTerm: string)
       routine.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+  
+
+
+  export const selectAllRoutines = createSelector(
+  selectRoutineState,
+  (state) => state.routines
+);

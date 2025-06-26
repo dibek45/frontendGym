@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LocalEncryptedStorageService } from '../../local/services/local-encrypted-storage.service';
 import { Routine } from 'src/app/state/routines/routines.model';
-import { loadRoutinesSuccess } from 'src/app/state/routines/routines.actions';
+import { loadExerciseTypesSuccess, loadRoutinesSuccess } from 'src/app/state/routines/routines.actions';
+import { RoutineService } from 'src/app/state/routines/routines.service';
 
 @Injectable({ providedIn: 'root' })
 export class RoutineSyncService {
   constructor(
     private localStorage: LocalEncryptedStorageService,
-    private store: Store
+    private store: Store,
+      private routineService: RoutineService // 👈 Inyecta esto
+
   ) {}
 
   async handleRemoteUpdate(updated: Routine) {
@@ -37,7 +40,8 @@ export class RoutineSyncService {
     await this.localStorage.saveVersion(userId, gymId, 'routines', updated.updatedAt?.toString() || new Date().toISOString());
 
     // ✅ Despachar con tipo correcto
-    this.store.dispatch(loadRoutinesSuccess({ routines: enrichedList }));
-    console.log('✅ Routine updated from socket and saved locally');
+const result = await this.routineService.getExerciseTypesWithCache(true);
+this.store.dispatch(loadExerciseTypesSuccess({ exerciseTypes: result.data }));
+console.log('✅ Routine updated from socket, saved locally, and store updated');    console.log('✅ Routine updated from socket and saved locally');
   }
 }

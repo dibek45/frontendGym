@@ -15,6 +15,7 @@ import {
   addRoutine,
   editRoutine,
   deleteRoutine,
+  loadExerciseTypesSuccess,
 } from 'src/app/state/routines/routines.actions';
 import { Routine, ExerciseType } from 'src/app/state/routines/routines.model';
 import { AddExerciseDialogComponent } from './add-exercise-dialog.component';
@@ -23,6 +24,7 @@ import { HorizontalFilterButtonsComponent } from '../components/horizontal-filte
 import { CommonModule } from '@angular/common';
 import { CtnCreateSearchComponent } from '../components/components/ctn-create-search/ctn-create-search.component';
 import { CardRoutineComponent } from '../components/card-routine/card-routine.component';
+import { RoutineService } from 'src/app/state/routines/routines.service';
 
 @Component({
   selector: 'app-routines',
@@ -54,7 +56,10 @@ onSearch(term: string) {
   routineError$!: Observable<string | null>; // Observable for routine errors
   selectedType: ExerciseType | null = null; // Currently selected exercise type
 
-  constructor(private store: Store, private dialog: MatDialog) {}
+  constructor(private store: Store, private dialog: MatDialog,
+      private routineService: RoutineService
+
+  ) {}
 ngOnInit() {
   console.log('🔁 Dispatch loadExerciseTypes');
   this.store.dispatch(loadExerciseTypes({ gymId: 1 }));
@@ -65,35 +70,45 @@ ngOnInit() {
   this.exerciseTypes$.subscribe(types => {
     console.log('✅ Tipos de ejercicio recibidos en el componente:', types);
   });
+
+  this.loadRoutinesFromCache(); // 👈 nuevo
 }
 
 
+async loadRoutinesFromCache() {
+  const result = await this.routineService.getExerciseTypesWithCache();
+  console.log('📦 Rutinas cargadas desde localforage:', result);
+this.store.dispatch(loadExerciseTypesSuccess({ exerciseTypes: result.data }));
+}
 
 
+addExercise() {
+  const dialogRef = this.dialog.open(AddExerciseDialogComponent, {
+    width: '300px',
+  });
 
-  addExercise() {
-    // Open dialog to add a new routine
-    const dialogRef = this.dialog.open(AddExerciseDialogComponent, {
-      width: '300px',
-    });
+  dialogRef.afterClosed().subscribe((result: Routine) => {
+    if (result && this.selectedType) {
+      this.store.dispatch(
+        addRoutine({
+          routine: {
+            ...result,
+            exerciseTypeId: this.selectedType.id,
+            count: 0,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        })
+      );
 
-    dialogRef.afterClosed().subscribe((result: Routine) => {
-      if (result && this.selectedType) {
-        // Dispatch action to add a routine
-        this.store.dispatch(
-          addRoutine({
-            routine: {
-              ...result,
-              exerciseTypeId: this.selectedType.id,
-              count: 0,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          })
-        );
-      }
-    });
-  }
+      // 🔁 Reasigna para forzar actualización de la vista
+      this.routines$ = this.store.select(
+        selectFilteredRoutinesByType(this.selectedType.id, this.searchTerm)
+      );
+    }
+  });
+}
+
 
   editExercise(routine: Routine) {
     // Open dialog to edit an existing routine
